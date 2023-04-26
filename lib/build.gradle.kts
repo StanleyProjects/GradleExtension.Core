@@ -13,7 +13,6 @@ plugins {
 }
 
 dependencies {
-//    implementation("org.gradle:gradle-core:6.1.1")
     implementation("org.gradle:gradle-core-api:6.1.1")
 }
 
@@ -40,7 +39,9 @@ fun Project.version(): String {
 fun Project.version(vararg postfix: String): String {
     val prefix = version.toString()
     check(prefix.isNotEmpty())
-    return postfix.filter { it.isNotEmpty() }.joinToString(separator = "-", prefix = "$prefix-")
+    return postfix.filter { it.isNotEmpty() }
+        .also { check(it.isNotEmpty()) }
+        .joinToString(separator = "-", prefix = "$prefix-")
 }
 
 tasks.getByName<JavaCompile>("compileJava") {
@@ -63,10 +64,27 @@ tasks.getByName<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestKot
 }
 
 "snapshot".also { variant ->
+    val version = project.version(variant.toUpperCase())
     task<Jar>("assemble".join(variant, "Jar")) {
         dependsOn(compileKotlinTask)
         archiveBaseName.set(Maven.artifactId)
-        archiveVersion.set(project.version(variant.toUpperCase()))
+        archiveVersion.set(version)
         from(compileKotlinTask.destinationDirectory.asFileTree)
+    }
+    task("assemble".join(variant, "Pom")) {
+        doLast {
+            val target = File(buildDir, "libs").let {
+                it.mkdirs()
+                it.resolve("${Maven.artifactId}-$version.pom")
+            }
+            if (target.exists()) target.delete()
+            val text = MavenUtil.pom(
+                groupId = Maven.groupId,
+                artifactId = Maven.artifactId,
+                version = version,
+                packaging = "jar"
+            )
+            target.writeText(text)
+        }
     }
 }
