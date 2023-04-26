@@ -9,3 +9,6 @@ buildscript {
 task<Delete>("clean") {
     delete = setOf(buildDir, "buildSrc/build")
 }
+
+// todo ktlint
+// todo license
