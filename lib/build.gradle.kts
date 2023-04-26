@@ -1,3 +1,8 @@
+import java.util.*
+import java.time.Instant
+import java.time.format.DateTimeFormatter
+import java.time.LocalDateTime
+
 version = "0.0.2"
 
 repositories {
@@ -73,17 +78,42 @@ tasks.getByName<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestKot
     }
     task("assemble".join(variant, "Pom")) {
         doLast {
-            val target = File(buildDir, "libs").let {
-                it.mkdirs()
-                it.resolve("${Maven.artifactId}-$version.pom")
+            val target = buildDir.resolve("libs/${Maven.artifactId}-$version.pom")
+            if (target.exists()) {
+                target.delete()
+            } else {
+                target.parentFile?.mkdirs()
             }
-            if (target.exists()) target.delete()
             val text = MavenUtil.pom(
                 groupId = Maven.groupId,
                 artifactId = Maven.artifactId,
                 version = version,
                 packaging = "jar"
             )
+            target.writeText(text)
+        }
+    }
+    task("assemble".join(variant, "MavenMetadata")) {
+        doLast {
+            val target = buildDir.resolve("xml/maven-metadata.xml")
+            if (target.exists()) {
+                target.delete()
+            } else {
+                target.parentFile?.mkdirs()
+            }
+            val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+            val text = """
+                <metadata>
+                    <groupId>${Maven.groupId}</groupId>
+                    <artifactId>${Maven.artifactId}</artifactId>
+                    <versioning>
+                        <versions>
+                            <version>$version</version>
+                        </versions>
+                        <lastUpdated>${formatter.format(LocalDateTime.now())}</lastUpdated>
+                    </versioning>
+                </metadata>
+            """.trimIndent()
             target.writeText(text)
         }
     }
