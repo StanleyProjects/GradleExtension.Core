@@ -1,12 +1,20 @@
 version = "0.0.1"
 
-repositories.mavenCentral()
+repositories {
+    mavenCentral()
+    maven("https://repo.gradle.org/gradle/libs-releases-local")
+}
 
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.gradle.jacoco") // todo
     id("io.gitlab.arturbosch.detekt") version Version.detekt // todo
     id("org.jetbrains.dokka") version Version.dokka // todo
+}
+
+dependencies {
+//    implementation("org.gradle:gradle-core:6.1.1")
+    implementation("org.gradle:gradle-core-api:6.1.1")
 }
 
 jacoco {
