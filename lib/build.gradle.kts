@@ -5,82 +5,17 @@ version = "0.0.2"
 
 repositories {
     mavenCentral()
-//    maven("https://repo.gradle.org/gradle/libs-releases-local")
 }
 
 plugins {
     id("org.jetbrains.kotlin.jvm")
-//    id("org.gradle.java-gradle-plugin")
-//    id("org.gradle.java-test-fixtures")
     id("org.gradle.jacoco")
     id("io.gitlab.arturbosch.detekt") version Version.detekt // todo
     id("org.jetbrains.dokka") version Version.dokka // todo
 }
 
 dependencies {
-//    implementation("org.gradle:gradle-core-api:6.1.1")
-//    implementation("org.gradle:gradle-core-api:7.6.1")
-//    implementation("org.gradle:gradle-api:7.6.1")
     implementation(gradleApi())
-    val version = "7.6.1"
-    val tree = fileTree("/opt/gradle-${version}/lib") {
-        setOf(
-            "api-metadata",
-            "base-annotations",
-            "base-services",
-            "base-services-groovy",
-            "bootstrap",
-//            "build-cache",
-//            "build-cache-base",
-//            "build-cache-packaging",
-//            "build-events",
-//            "build-operations",
-//            "build-option",
-            "cli",
-            "core",
-            "core-api",
-            "enterprise-logging",
-            "enterprise-operations",
-            "enterprise-workers",
-            "execution",
-            "file-collections",
-            "file-temp",
-            "file-watching",
-            "files",
-            "functional",
-            "hashing",
-            "installation-beacon",
-            "jvm-services",
-            "kotlin-dsl",
-            "kotlin-dsl-tooling-models",
-            "launcher",
-            "logging",
-            "logging-api",
-            "messaging",
-            "model-core",
-            "model-groovy",
-            "native",
-            "normalization-java",
-            "persistent-cache",
-            "problems",
-            "process-services",
-            "resources",
-            "runtime-api-info",
-            "snapshots",
-            "tooling-api",
-            "worker-processes",
-            "worker-services",
-            "wrapper-shared",
-        ).forEach { name ->
-            include("gradle-${name}-${version}.jar")
-        }
-    }
-//    println(tree.joinToString("\n") { it.absolutePath })
-//    implementation(tree)
-//    testImplementation("org.gradle:gradle-test-kit:6.1.1")
-//    testImplementation(testFixtures(project))
-//    testImplementation("org.apache.groovy:groovy:4.0.11")
-//    testImplementation("org.slf4j:slf4j-api:2.0.7")
     testImplementation("org.junit.jupiter:junit-jupiter-api:${Version.jupiter}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${Version.jupiter}")
 }
