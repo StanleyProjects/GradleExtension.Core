@@ -1,7 +1,7 @@
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-version = "0.0.3"
+version = "0.0.4"
 
 repositories {
     mavenCentral()
