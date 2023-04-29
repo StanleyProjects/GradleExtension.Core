@@ -67,8 +67,10 @@ tasks.getByName<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestKot
     kotlinOptions.jvmTarget = Version.jvmTarget
 }
 
-val taskUnitTest = tasks.getByName<Test>("test") {
+val taskUnitTest = task<Test>("checkUnitTest") {
     useJUnitPlatform()
+    testClassesDirs = sourceSets.test.get().output.classesDirs
+    classpath = sourceSets.test.get().runtimeClasspath
 }
 
 val taskCoverageReport = task<JacocoReport>("assembleCoverageReport") {
@@ -78,10 +80,8 @@ val taskCoverageReport = task<JacocoReport>("assembleCoverageReport") {
         html.required.set(true)
         xml.required.set(false)
     }
-//    sourceDirectories.setFrom(file("src/main/kotlin"))
-//    val dirs = fileTree(buildDir("tmp/kotlin-classes/${variant.name}"))
-//    classDirectories.setFrom(dirs)
-//    executionData(buildDir("outputs/unit_test_code_coverage/${variant.name}UnitTest/${taskUnitTest.name}.exec"))
+    classDirectories.setFrom(sourceSets.main.get().output.classesDirs)
+    executionData(taskUnitTest)
 }
 
 "snapshot".also { variant ->
