@@ -1,5 +1,4 @@
 import org.gradle.api.Project
-import sp.gx.core.entity.BuildSrc
 import java.io.File
 
 fun Project.buildDir(file: File): File {
@@ -26,13 +25,10 @@ fun Project.projectDir(path: String): File {
     return projectDir(File(path))
 }
 
-val Project.buildSrc: BuildSrc get() = BuildSrc(
-    projectDir = projectDir("buildSrc"),
-    buildDir = projectDir.resolve("build")
-)
+val Project.buildSrc: File get() = projectDir("buildSrc")
 
 fun Project.buildSrc(file: File): File {
-    return buildSrc.projectDir.resolve(file)
+    return buildSrc.resolve(file)
 }
 
 fun Project.buildSrc(path: String): File {
