@@ -12,4 +12,13 @@ internal class ProjectUtilTest {
         val expected = File(project.buildDir, issuer)
         assertEquals(expected, actual)
     }
+
+    @Test
+    fun rootDirTest() {
+        val project = ProjectBuilder.builder().build()
+        val issuer = "foo"
+        val actual = project.rootDir(issuer)
+        val expected = File(project.rootDir, issuer)
+        assertEquals(expected, actual)
+    }
 }

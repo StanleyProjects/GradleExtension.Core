@@ -80,6 +80,7 @@ val taskCoverageReport = task<JacocoReport>("assembleCoverageReport") {
         html.required.set(true)
         xml.required.set(false)
     }
+    sourceDirectories.setFrom(sourceSets.main.get().allSource)
     classDirectories.setFrom(sourceSets.main.get().output.classesDirs)
     executionData(taskUnitTest)
 }
