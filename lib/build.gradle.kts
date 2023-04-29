@@ -106,6 +106,12 @@ task<JacocoCoverageVerification>("checkCoverage") {
         archiveVersion.set(version)
         from(compileKotlinTask.destinationDirectory.asFileTree)
     }
+    task<Jar>("assemble".join(variant, "Source")) {
+        archiveBaseName.set(Maven.artifactId)
+        archiveVersion.set(version)
+        archiveClassifier.set("sources")
+        from(sourceSets.main.get().allSource)
+    }
     task("assemble".join(variant, "Pom")) {
         doLast {
             val target = buildDir.resolve("libs/${Maven.artifactId}-$version.pom")
