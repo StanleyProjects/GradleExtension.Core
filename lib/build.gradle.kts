@@ -84,6 +84,19 @@ val taskCoverageReport = task<JacocoReport>("assembleCoverageReport") {
     executionData(taskUnitTest)
 }
 
+task<JacocoCoverageVerification>("checkCoverage") {
+    dependsOn(taskCoverageReport)
+    violationRules {
+        rule {
+            limit {
+                minimum = BigDecimal(0.96)
+            }
+        }
+    }
+    classDirectories.setFrom(taskCoverageReport.classDirectories)
+    executionData(taskCoverageReport.executionData)
+}
+
 "snapshot".also { variant ->
     val version = project.version(variant.toUpperCase())
     task<Jar>("assemble".join(variant, "Jar")) {
