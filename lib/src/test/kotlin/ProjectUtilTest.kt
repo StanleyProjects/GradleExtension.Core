@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import java.io.File
 import org.gradle.testfixtures.ProjectBuilder
 
@@ -7,27 +8,30 @@ internal class ProjectUtilTest {
     @Test
     fun buildDirTest() {
         val project = ProjectBuilder.builder().build()
-        val issuer = "foo"
-        val actual = project.buildDir(issuer)
-        val expected = File(project.buildDir, issuer)
-        assertEquals(expected, actual)
+        val expected = "foo"
+        val unexpected = "bar"
+        assertNotEquals(unexpected, expected)
+        assertEquals(project.buildDir(expected), File(project.buildDir, expected))
+        assertNotEquals(project.buildDir(unexpected), File(project.buildDir, expected))
     }
 
     @Test
     fun rootDirTest() {
         val project = ProjectBuilder.builder().build()
-        val issuer = "foo"
-        val actual = project.rootDir(issuer)
-        val expected = File(project.rootDir, issuer)
-        assertEquals(expected, actual)
+        val expected = "foo"
+        val unexpected = "bar"
+        assertNotEquals(unexpected, expected)
+        assertEquals(project.rootDir(expected), File(project.rootDir, expected))
+        assertNotEquals(project.rootDir(unexpected), File(project.rootDir, expected))
     }
 
     @Test
     fun buildSrcTest() {
         val project = ProjectBuilder.builder().build()
-        val issuer = "foo"
-        val actual = project.buildSrc(issuer)
-        val expected = project.rootDir.resolve("buildSrc").resolve(issuer)
-        assertEquals(expected, actual)
+        val expected = "foo"
+        val unexpected = "bar"
+        assertNotEquals(unexpected, expected)
+        assertEquals(project.buildSrc(expected), project.rootDir.resolve("buildSrc").resolve(expected))
+        assertNotEquals(project.buildSrc(unexpected), project.rootDir.resolve("buildSrc").resolve(expected))
     }
 }
