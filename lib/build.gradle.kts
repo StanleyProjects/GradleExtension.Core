@@ -1,3 +1,4 @@
+import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -215,6 +216,20 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
                 </metadata>
             """.trimIndent()
             target.writeText(text)
+        }
+    }
+    task<org.jetbrains.dokka.gradle.DokkaTask>("assemble".join(variant, "Documentation")) {
+        outputDirectory.set(buildDir.resolve("documentation/$variant"))
+        moduleName.set(Repository.name)
+        moduleVersion.set(version)
+        dokkaSourceSets.getByName("main") {
+            val path = "src/$name/kotlin"
+            reportUndocumented.set(false)
+            sourceLink {
+                localDirectory.set(file(path))
+                remoteUrl.set(URL("${Repository.url()}/tree/${moduleVersion.get()}/lib/$path"))
+            }
+            jdkVersion.set(Version.jvmTarget.toInt())
         }
     }
 }
