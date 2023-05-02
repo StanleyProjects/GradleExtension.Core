@@ -11,7 +11,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.gradle.jacoco")
     id("io.gitlab.arturbosch.detekt") version Version.detekt
-    id("org.jetbrains.dokka") version Version.dokka // todo
+    id("org.jetbrains.dokka") version Version.dokka
 }
 
 dependencies {
@@ -134,6 +134,32 @@ setOf("main", "test").also { types ->
             classpath.setFrom(detektTask.classpath)
         }
     }
+}
+
+task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
+    val configs = setOf(
+        "common",
+        "documentation",
+    ).map { config ->
+        rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml").also {
+            check(it.exists() && !it.isDirectory)
+        }
+    }
+    jvmTarget = Version.jvmTarget
+    source = sourceSets.main.get().allSource
+    config.setFrom(configs)
+    reports {
+        html {
+            required.set(true)
+            outputLocation.set(buildDir.resolve("reports/analysis/documentation/html/index.html"))
+        }
+        md.required.set(false)
+        sarif.required.set(false)
+        txt.required.set(false)
+        xml.required.set(false)
+    }
+    val detektTask = tasks.getByName<io.gitlab.arturbosch.detekt.Detekt>("detektMain")
+    classpath.setFrom(detektTask.classpath)
 }
 
 "snapshot".also { variant ->
