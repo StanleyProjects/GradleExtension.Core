@@ -10,7 +10,7 @@ repositories {
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.gradle.jacoco")
-    id("io.gitlab.arturbosch.detekt") version Version.detekt // todo
+    id("io.gitlab.arturbosch.detekt") version Version.detekt
     id("org.jetbrains.dokka") version Version.dokka // todo
 }
 
@@ -96,6 +96,44 @@ task<JacocoCoverageVerification>("checkCoverage") {
     }
     classDirectories.setFrom(taskCoverageReport.classDirectories)
     executionData(taskCoverageReport.executionData)
+}
+
+setOf("main", "test").also { types ->
+    val configs = setOf(
+        "comments",
+        "common",
+        "complexity",
+        "coroutines",
+        "empty-blocks",
+        "exceptions",
+        "naming",
+        "performance",
+        "potential-bugs",
+        "style",
+    ).map { config ->
+        rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml").also {
+            check(it.exists() && !it.isDirectory)
+        }
+    }
+    types.forEach { type ->
+        task<io.gitlab.arturbosch.detekt.Detekt>("check".join("CodeQuality", type)) {
+            jvmTarget = Version.jvmTarget
+            source = sourceSets.getByName(type).allSource
+            config.setFrom(configs)
+            reports {
+                html {
+                    required.set(true)
+                    outputLocation.set(buildDir.resolve("reports/analysis/code/quality/$type/html/index.html"))
+                }
+                md.required.set(false)
+                sarif.required.set(false)
+                txt.required.set(false)
+                xml.required.set(false)
+            }
+            val detektTask = tasks.getByName<io.gitlab.arturbosch.detekt.Detekt>("detekt".join(type))
+            classpath.setFrom(detektTask.classpath)
+        }
+    }
 }
 
 "snapshot".also { variant ->
