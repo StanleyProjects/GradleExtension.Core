@@ -124,7 +124,7 @@ task<JacocoCoverageVerification>("checkCoverage") {
                 groupId = Maven.groupId,
                 artifactId = Maven.artifactId,
                 version = version,
-                packaging = "jar"
+                packaging = "jar",
             )
             target.writeText(text)
         }

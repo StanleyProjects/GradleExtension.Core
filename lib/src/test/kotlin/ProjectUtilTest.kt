@@ -1,8 +1,8 @@
-import org.junit.jupiter.api.Test
+import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Test
 import java.io.File
-import org.gradle.testfixtures.ProjectBuilder
 
 internal class ProjectUtilTest {
     @Test
