@@ -232,4 +232,21 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             jdkVersion.set(Version.jvmTarget.toInt())
         }
     }
+    task("assemble".join(variant, "Metadata")) {
+        doLast {
+            val target = buildDir.resolve("yml/metadata.yml")
+            if (target.exists()) {
+                target.delete()
+            } else {
+                target.parentFile?.mkdirs()
+            }
+            val text = """
+                repository:
+                 owner: '${Repository.owner}'
+                 name: '${Repository.name}'
+                version: '$version'
+            """.trimIndent()
+            target.writeText(text)
+        }
+    }
 }
