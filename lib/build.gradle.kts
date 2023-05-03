@@ -1,7 +1,8 @@
+import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-version = "0.0.4"
+version = "0.0.5"
 
 repositories {
     mavenCentral()
@@ -10,8 +11,8 @@ repositories {
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.gradle.jacoco")
-    id("io.gitlab.arturbosch.detekt") version Version.detekt // todo
-    id("org.jetbrains.dokka") version Version.dokka // todo
+    id("io.gitlab.arturbosch.detekt") version Version.detekt
+    id("org.jetbrains.dokka") version Version.dokka
 }
 
 dependencies {
@@ -98,6 +99,70 @@ task<JacocoCoverageVerification>("checkCoverage") {
     executionData(taskCoverageReport.executionData)
 }
 
+setOf("main", "test").also { types ->
+    val configs = setOf(
+        "comments",
+        "common",
+        "complexity",
+        "coroutines",
+        "empty-blocks",
+        "exceptions",
+        "naming",
+        "performance",
+        "potential-bugs",
+        "style",
+    ).map { config ->
+        rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml").also {
+            check(it.exists() && !it.isDirectory)
+        }
+    }
+    types.forEach { type ->
+        task<io.gitlab.arturbosch.detekt.Detekt>("check".join("CodeQuality", type)) {
+            jvmTarget = Version.jvmTarget
+            source = sourceSets.getByName(type).allSource
+            config.setFrom(configs)
+            reports {
+                html {
+                    required.set(true)
+                    outputLocation.set(buildDir.resolve("reports/analysis/code/quality/$type/html/index.html"))
+                }
+                md.required.set(false)
+                sarif.required.set(false)
+                txt.required.set(false)
+                xml.required.set(false)
+            }
+            val detektTask = tasks.getByName<io.gitlab.arturbosch.detekt.Detekt>("detekt".join(type))
+            classpath.setFrom(detektTask.classpath)
+        }
+    }
+}
+
+task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
+    val configs = setOf(
+        "common",
+        "documentation",
+    ).map { config ->
+        rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml").also {
+            check(it.exists() && !it.isDirectory)
+        }
+    }
+    jvmTarget = Version.jvmTarget
+    source = sourceSets.main.get().allSource
+    config.setFrom(configs)
+    reports {
+        html {
+            required.set(true)
+            outputLocation.set(buildDir.resolve("reports/analysis/documentation/html/index.html"))
+        }
+        md.required.set(false)
+        sarif.required.set(false)
+        txt.required.set(false)
+        xml.required.set(false)
+    }
+    val detektTask = tasks.getByName<io.gitlab.arturbosch.detekt.Detekt>("detektMain")
+    classpath.setFrom(detektTask.classpath)
+}
+
 "snapshot".also { variant ->
     val version = project.version(variant.toUpperCase())
     task<Jar>("assemble".join(variant, "Jar")) {
@@ -124,7 +189,7 @@ task<JacocoCoverageVerification>("checkCoverage") {
                 groupId = Maven.groupId,
                 artifactId = Maven.artifactId,
                 version = version,
-                packaging = "jar"
+                packaging = "jar",
             )
             target.writeText(text)
         }
@@ -149,6 +214,37 @@ task<JacocoCoverageVerification>("checkCoverage") {
                         <lastUpdated>${formatter.format(LocalDateTime.now())}</lastUpdated>
                     </versioning>
                 </metadata>
+            """.trimIndent()
+            target.writeText(text)
+        }
+    }
+    task<org.jetbrains.dokka.gradle.DokkaTask>("assemble".join(variant, "Documentation")) {
+        outputDirectory.set(buildDir.resolve("documentation/$variant"))
+        moduleName.set(Repository.name)
+        moduleVersion.set(version)
+        dokkaSourceSets.getByName("main") {
+            val path = "src/$name/kotlin"
+            reportUndocumented.set(false)
+            sourceLink {
+                localDirectory.set(file(path))
+                remoteUrl.set(URL("${Repository.url()}/tree/${moduleVersion.get()}/lib/$path"))
+            }
+            jdkVersion.set(Version.jvmTarget.toInt())
+        }
+    }
+    task("assemble".join(variant, "Metadata")) {
+        doLast {
+            val target = buildDir.resolve("yml/metadata.yml")
+            if (target.exists()) {
+                target.delete()
+            } else {
+                target.parentFile?.mkdirs()
+            }
+            val text = """
+                repository:
+                 owner: '${Repository.owner}'
+                 name: '${Repository.name}'
+                version: '$version'
             """.trimIndent()
             target.writeText(text)
         }
