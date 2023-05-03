@@ -1,3 +1,5 @@
+@file:Suppress("MissingPackageDeclaration")
+
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
@@ -16,6 +18,7 @@ internal class StringUtilTest {
     @Test
     fun taskErrorTest() {
         assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
             "".task("foo")
         }
     }
@@ -33,6 +36,7 @@ internal class StringUtilTest {
     @Test
     fun versionErrorTest() {
         assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
             "".version("foo")
         }
     }

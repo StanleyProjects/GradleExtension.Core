@@ -40,14 +40,16 @@ potential-bugs:
     active: true
     restrictToConfig: false
     ignoreFunctionCall: [
+      java.lang.StringBuilder.append,
+      kotlin.TODO,
       kotlin.collections.MutableList.add,
       kotlin.collections.MutableSet.add,
       kotlin.collections.MutableSet.addAll,
       kotlin.collections.removeAll,
       kotlin.error,
-      kotlin.TODO,
       kotlinx.coroutines.launch,
-      kotlinx.coroutines.withContext
+      kotlinx.coroutines.withContext,
+      org.junit.jupiter.api.Assertions.assertThrows
     ]
   ImplicitDefaultLocale:
     active: true
