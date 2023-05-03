@@ -40,4 +40,12 @@ internal class StringUtilTest {
             "".version("foo")
         }
     }
+
+    @Test
+    fun uppercaseFirstCharTest() {
+        assertEquals("Foo", "foo".uppercaseFirstChar())
+        assertEquals("Foo", "Foo".uppercaseFirstChar())
+        assertEquals("0", "0".uppercaseFirstChar())
+        assertEquals("", "".uppercaseFirstChar())
+    }
 }
