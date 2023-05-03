@@ -1,3 +1,5 @@
+@file:Suppress("MissingPackageDeclaration")
+
 import org.gradle.api.Project
 import java.io.File
 

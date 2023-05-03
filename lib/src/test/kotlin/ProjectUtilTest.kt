@@ -1,3 +1,5 @@
+@file:Suppress("MissingPackageDeclaration")
+
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
