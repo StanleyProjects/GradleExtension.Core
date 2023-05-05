@@ -30,4 +30,14 @@ object MavenUtil {
             "<$key>$value</$key>"
         }
     }
+
+    object Snapshot {
+        fun url(
+            groupId: String,
+            artifactId: String,
+            version: String,
+        ): String {
+            return "https://s01.oss.sonatype.org/content/repositories/snapshots/${groupId.replace('.', '/')}/${artifactId}/$version"
+        }
+    }
 }

@@ -249,4 +249,18 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             target.writeText(text)
         }
     }
+    task("check".join(variant, "Readme")) {
+        doLast {
+            val expected = setOf(
+                MarkdownUtil.url("Maven", MavenUtil.Snapshot.url(Maven.groupId, Maven.artifactId, version)),
+                MarkdownUtil.url("Documentation", GitHubUtil.pages(Repository.owner, Repository.name, "doc/$version")),
+                "implementation(\"${Maven.groupId}:${Maven.artifactId}:$version\")",
+            )
+            FileUtil.check(
+                file = rootDir.resolve("README.md"),
+                expected = expected,
+                report = buildDir.resolve("reports/analysis/readme/index.html")
+            )
+        }
+    }
 }
