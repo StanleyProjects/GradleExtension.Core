@@ -227,7 +227,8 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             reportUndocumented.set(false)
             sourceLink {
                 localDirectory.set(file(path))
-                remoteUrl.set(URL("${Repository.url()}/tree/${moduleVersion.get()}/lib/$path"))
+                val url = GitHubUtil.url(Repository.owner, Repository.name)
+                remoteUrl.set(URL("$url/tree/${moduleVersion.get()}/lib/$path"))
             }
             jdkVersion.set(Version.jvmTarget.toInt())
         }
