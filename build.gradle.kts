@@ -42,7 +42,7 @@ task("checkLicense") {
         FileUtil.check(
             file = rootDir.resolve("LICENSE"),
             expected = emptySet(), // todo author
-            report = buildDir.resolve("reports/analysis/license/index.html")
+            report = buildDir.resolve("reports/analysis/license/index.html"),
         )
     }
 }

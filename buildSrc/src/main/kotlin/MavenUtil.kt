@@ -37,7 +37,9 @@ object MavenUtil {
             artifactId: String,
             version: String,
         ): String {
-            return "https://s01.oss.sonatype.org/content/repositories/snapshots/${groupId.replace('.', '/')}/${artifactId}/$version"
+            val host = "https://s01.oss.sonatype.org"
+            val path = "$host/content/repositories/snapshots"
+            return "$path/${groupId.replace('.', '/')}/$artifactId/$version"
         }
     }
 }

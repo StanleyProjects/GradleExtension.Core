@@ -252,7 +252,16 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
     }
     task("check".join(variant, "Readme")) {
         doLast {
+            val badge = MarkdownUtil.image(
+                text = "version",
+                url = BadgeUtil.url(
+                    label = "version",
+                    message = version,
+                    color = "2962ff",
+                ),
+            )
             val expected = setOf(
+                badge,
                 MarkdownUtil.url("Maven", MavenUtil.Snapshot.url(Maven.groupId, Maven.artifactId, version)),
                 MarkdownUtil.url("Documentation", GitHubUtil.pages(Repository.owner, Repository.name, "doc/$version")),
                 "implementation(\"${Maven.groupId}:${Maven.artifactId}:$version\")",
@@ -260,7 +269,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             FileUtil.check(
                 file = rootDir.resolve("README.md"),
                 expected = expected,
-                report = buildDir.resolve("reports/analysis/readme/index.html")
+                report = buildDir.resolve("reports/analysis/readme/index.html"),
             )
         }
     }

@@ -5,7 +5,7 @@ object GitHubUtil {
         postfix: String,
     ): String {
         check(postfix.isNotEmpty())
-        return "https://${owner}.github.io/${name}/$postfix"
+        return "https://$owner.github.io/$name/$postfix"
     }
 
     fun url(
