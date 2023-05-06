@@ -30,4 +30,16 @@ object MavenUtil {
             "<$key>$value</$key>"
         }
     }
+
+    object Snapshot {
+        fun url(
+            groupId: String,
+            artifactId: String,
+            version: String,
+        ): String {
+            val host = "https://s01.oss.sonatype.org"
+            val path = "$host/content/repositories/snapshots"
+            return "$path/${groupId.replace('.', '/')}/$artifactId/$version"
+        }
+    }
 }

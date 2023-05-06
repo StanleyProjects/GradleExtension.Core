@@ -27,17 +27,12 @@ fun String.task(segment: String, vararg other: String): String {
     if (segment.isNotEmpty()) {
         builder.append(segment.uppercaseFirstChar())
     }
-    if (other.isEmpty()) {
-        return builder.toString()
+    for (it in other) {
+        if (it.isNotEmpty()) {
+            builder.append(it.uppercaseFirstChar())
+        }
     }
-    val postfix = other
-        .filter { it.isNotEmpty() }
-        .joinToString(separator = "") { it.uppercaseFirstChar() }
-    if (postfix.isEmpty()) {
-        return builder.toString()
-    }
-    return builder.append(postfix)
-        .toString()
+    return builder.toString()
 }
 
 /**
@@ -54,16 +49,22 @@ fun String.version(segment: String, vararg other: String): String {
         builder.append("-")
             .append(segment)
     }
-    if (other.isEmpty()) {
-        return builder.toString()
+    for (it in other) {
+        if (it.isNotEmpty()) {
+            builder.append("-")
+                .append(it)
+        }
     }
-    val postfix = other
-        .filter { it.isNotEmpty() }
-        .joinToString(separator = "-")
-    if (postfix.isEmpty()) {
-        return builder.toString()
-    }
-    return builder.append("-")
-        .append(postfix)
-        .toString()
+    return builder.toString()
+}
+
+/**
+ * @return [this] receiver string.
+ * @throws IllegalStateException if [this] receiver string is empty.
+ * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+ * @since 0.0.6
+ */
+fun String.filled(): String {
+    check(isNotEmpty())
+    return this
 }

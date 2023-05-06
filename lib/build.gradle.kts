@@ -2,7 +2,7 @@ import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-version = "0.0.5"
+version = "0.0.6"
 
 repositories {
     mavenCentral()
@@ -84,6 +84,12 @@ val taskCoverageReport = task<JacocoReport>("assembleCoverageReport") {
     sourceDirectories.setFrom(sourceSets.main.get().allSource)
     classDirectories.setFrom(sourceSets.main.get().output.classesDirs)
     executionData(taskUnitTest)
+    doLast {
+        val report = buildDir.resolve("reports/jacoco/$name/html/index.html")
+        if (report.exists()) {
+            println("Coverage report: ${report.absolutePath}")
+        }
+    }
 }
 
 task<JacocoCoverageVerification>("checkCoverage") {
@@ -227,7 +233,8 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             reportUndocumented.set(false)
             sourceLink {
                 localDirectory.set(file(path))
-                remoteUrl.set(URL("${Repository.url()}/tree/${moduleVersion.get()}/lib/$path"))
+                val url = GitHubUtil.url(Repository.owner, Repository.name)
+                remoteUrl.set(URL("$url/tree/${moduleVersion.get()}/lib/$path"))
             }
             jdkVersion.set(Version.jvmTarget.toInt())
         }
@@ -247,6 +254,29 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
                 version: '$version'
             """.trimIndent()
             target.writeText(text)
+        }
+    }
+    task("check".join(variant, "Readme")) {
+        doLast {
+            val badge = MarkdownUtil.image(
+                text = "version",
+                url = BadgeUtil.url(
+                    label = "version",
+                    message = version,
+                    color = "2962ff",
+                ),
+            )
+            val expected = setOf(
+                badge,
+                MarkdownUtil.url("Maven", MavenUtil.Snapshot.url(Maven.groupId, Maven.artifactId, version)),
+                MarkdownUtil.url("Documentation", GitHubUtil.pages(Repository.owner, Repository.name, "doc/$version")),
+                "implementation(\"${Maven.groupId}:${Maven.artifactId}:$version\")",
+            )
+            FileUtil.check(
+                file = rootDir.resolve("README.md"),
+                expected = expected,
+                report = buildDir.resolve("reports/analysis/readme/index.html"),
+            )
         }
     }
 }
