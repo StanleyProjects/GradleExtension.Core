@@ -75,6 +75,6 @@ fun String.version(segment: String, vararg other: String): String {
  * @since 0.0.6
  */
 fun String.filled(): String {
-    check(this.isNotEmpty())
+    check(isNotEmpty())
     return this
 }
