@@ -1,0 +1,19 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:////PointingToDeclaration/-gradle-extension.-core/[root]/index.html
+$dokka.location://buildDir/org.gradle.api.Project#java.io.File/PointingToDeclaration/-gradle-extension.-core/[root]/build-dir.html
+$dokka.location://buildDir/org.gradle.api.Project#kotlin.String/PointingToDeclaration/-gradle-extension.-core/[root]/build-dir.html
+$dokka.location://buildSrc/org.gradle.api.Project#/PointingToDeclaration/-gradle-extension.-core/[root]/build-src.html
+$dokka.location://buildSrc/org.gradle.api.Project#java.io.File/PointingToDeclaration/-gradle-extension.-core/[root]/build-src.html
+$dokka.location://buildSrc/org.gradle.api.Project#kotlin.String/PointingToDeclaration/-gradle-extension.-core/[root]/build-src.html
+$dokka.location://existing/java.io.File#/PointingToDeclaration/-gradle-extension.-core/[root]/existing.html
+$dokka.location://filled/kotlin.String#/PointingToDeclaration/-gradle-extension.-core/[root]/filled.html
+$dokka.location://projectDir/org.gradle.api.Project#java.io.File/PointingToDeclaration/-gradle-extension.-core/[root]/project-dir.html
+$dokka.location://projectDir/org.gradle.api.Project#kotlin.String/PointingToDeclaration/-gradle-extension.-core/[root]/project-dir.html
+$dokka.location://rootDir/org.gradle.api.Project#java.io.File/PointingToDeclaration/-gradle-extension.-core/[root]/root-dir.html
+$dokka.location://rootDir/org.gradle.api.Project#kotlin.String/PointingToDeclaration/-gradle-extension.-core/[root]/root-dir.html
+$dokka.location://task/kotlin.String#kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/-gradle-extension.-core/[root]/task.html
+$dokka.location://uppercaseFirstChar/kotlin.String#/PointingToDeclaration/-gradle-extension.-core/[root]/uppercase-first-char.html
+$dokka.location://version/kotlin.String#kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/-gradle-extension.-core/[root]/version.html
+
+
