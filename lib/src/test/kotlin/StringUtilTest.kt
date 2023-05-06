@@ -48,4 +48,20 @@ internal class StringUtilTest {
         assertEquals("0", "0".uppercaseFirstChar())
         assertEquals("", "".uppercaseFirstChar())
     }
+
+    @Test
+    fun filledTest() {
+        val expected = "foo"
+        check(expected.isNotEmpty())
+        assertEquals(expected, expected.filled())
+    }
+
+    @Test
+    fun filledNotTest() {
+        val expected = ""
+        check(expected.isEmpty())
+        assertThrows(IllegalStateException::class.java) {
+            expected.filled()
+        }
+    }
 }
