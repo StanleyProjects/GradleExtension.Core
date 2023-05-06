@@ -84,6 +84,12 @@ val taskCoverageReport = task<JacocoReport>("assembleCoverageReport") {
     sourceDirectories.setFrom(sourceSets.main.get().allSource)
     classDirectories.setFrom(sourceSets.main.get().output.classesDirs)
     executionData(taskUnitTest)
+    doLast {
+        val report = buildDir.resolve("reports/jacoco/$name/html/index.html")
+        if (report.exists()) {
+            println("Coverage report: ${report.absolutePath}")
+        }
+    }
 }
 
 task<JacocoCoverageVerification>("checkCoverage") {
