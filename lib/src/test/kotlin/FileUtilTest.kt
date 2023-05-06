@@ -1,3 +1,5 @@
+@file:Suppress("MissingPackageDeclaration")
+
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
@@ -16,6 +18,7 @@ internal class FileUtilTest {
         val file = File("foo")
         check(!file.exists())
         assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
             file.existing()
         }
     }

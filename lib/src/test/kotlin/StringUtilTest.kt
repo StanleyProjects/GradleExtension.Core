@@ -61,6 +61,7 @@ internal class StringUtilTest {
         val expected = ""
         check(expected.isEmpty())
         assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
             expected.filled()
         }
     }
