@@ -67,3 +67,14 @@ fun String.version(segment: String, vararg other: String): String {
         .append(postfix)
         .toString()
 }
+
+/**
+ * @return [this] receiver string.
+ * @throws IllegalStateException if [this] receiver string is empty.
+ * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+ * @since 0.0.6
+ */
+fun String.filled(): String {
+    check(this.isNotEmpty())
+    return this
+}
