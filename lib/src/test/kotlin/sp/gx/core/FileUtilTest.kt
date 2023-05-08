@@ -1,4 +1,4 @@
-@file:Suppress("MissingPackageDeclaration")
+package sp.gx.core
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows

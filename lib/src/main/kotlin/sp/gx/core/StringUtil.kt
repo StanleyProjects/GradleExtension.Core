@@ -1,4 +1,4 @@
-@file:Suppress("MissingPackageDeclaration")
+package sp.gx.core
 
 import java.lang.StringBuilder
 import java.util.Locale
