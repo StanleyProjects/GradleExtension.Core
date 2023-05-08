@@ -1,0 +1,19 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:sp.gx.core////PointingToDeclaration/-gradle-extension.-core/sp.gx.core/index.html
+$dokka.location:sp.gx.core//buildDir/org.gradle.api.Project#java.io.File/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/build-dir.html
+$dokka.location:sp.gx.core//buildDir/org.gradle.api.Project#kotlin.String/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/build-dir.html
+$dokka.location:sp.gx.core//buildSrc/org.gradle.api.Project#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/build-src.html
+$dokka.location:sp.gx.core//buildSrc/org.gradle.api.Project#java.io.File/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/build-src.html
+$dokka.location:sp.gx.core//buildSrc/org.gradle.api.Project#kotlin.String/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/build-src.html
+$dokka.location:sp.gx.core//existing/java.io.File#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/existing.html
+$dokka.location:sp.gx.core//filled/kotlin.String#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/filled.html
+$dokka.location:sp.gx.core//projectDir/org.gradle.api.Project#java.io.File/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/project-dir.html
+$dokka.location:sp.gx.core//projectDir/org.gradle.api.Project#kotlin.String/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/project-dir.html
+$dokka.location:sp.gx.core//rootDir/org.gradle.api.Project#java.io.File/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/root-dir.html
+$dokka.location:sp.gx.core//rootDir/org.gradle.api.Project#kotlin.String/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/root-dir.html
+$dokka.location:sp.gx.core//task/kotlin.String#kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/task.html
+$dokka.location:sp.gx.core//uppercaseFirstChar/kotlin.String#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/uppercase-first-char.html
+$dokka.location:sp.gx.core//version/kotlin.String#kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/version.html
+sp.gx.core
+
