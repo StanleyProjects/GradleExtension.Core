@@ -42,7 +42,7 @@ internal class FileUtilTest {
     @Test
     fun filledNotTest() {
         val expected = File.createTempFile("foo", "bar")
-        expected.createNewFile()
+        check(expected.createNewFile())
         check(expected.exists())
         check(expected.length() == 0L)
         assertThrows(IllegalStateException::class.java) {
@@ -68,9 +68,9 @@ internal class FileUtilTest {
     @Test
     fun fileNotTest() {
         val expected = File.createTempFile("foo", "bar")
-        expected.delete()
+        check(expected.delete())
         check(!expected.exists())
-        expected.mkdir()
+        check(expected.mkdir())
         check(expected.exists())
         check(expected.isDirectory)
         check(!expected.isFile)
