@@ -2,7 +2,7 @@ import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-version = "0.1.0"
+version = "0.1.1"
 
 repositories {
     mavenCentral()
@@ -81,7 +81,7 @@ val taskCoverageReport = task<JacocoReport>("assembleCoverageReport") {
         html.required.set(true)
         xml.required.set(false)
     }
-    sourceDirectories.setFrom(sourceSets.main.get().allSource)
+    sourceDirectories.setFrom(file("src/main/kotlin"))
     classDirectories.setFrom(sourceSets.main.get().output.classesDirs)
     executionData(taskUnitTest)
     doLast {

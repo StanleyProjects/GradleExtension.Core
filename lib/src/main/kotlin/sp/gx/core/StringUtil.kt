@@ -19,14 +19,11 @@ fun String.uppercaseFirstChar(): String {
  * @throws IllegalStateException if receiver is empty.
  * @see [Iterable.joinToString]
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
- * @since 0.0.5
+ * @since 0.1.1
  */
-fun String.task(segment: String, vararg other: String): String {
-    check(isNotEmpty())
-    val builder = StringBuilder(this)
-    if (segment.isNotEmpty()) {
-        builder.append(segment.uppercaseFirstChar())
-    }
+fun camelCase(segment: String, vararg other: String): String {
+    check(segment.isNotEmpty())
+    val builder = StringBuilder(segment)
     for (it in other) {
         if (it.isNotEmpty()) {
             builder.append(it.uppercaseFirstChar())
@@ -40,15 +37,11 @@ fun String.task(segment: String, vararg other: String): String {
  * @throws IllegalStateException if receiver is empty.
  * @see [Iterable.joinToString]
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
- * @since 0.0.5
+ * @since 0.1.1
  */
-fun String.version(segment: String, vararg other: String): String {
-    check(isNotEmpty())
-    val builder = StringBuilder(this)
-    if (segment.isNotEmpty()) {
-        builder.append("-")
-            .append(segment)
-    }
+fun kebabCase(segment: String, vararg other: String): String {
+    check(segment.isNotEmpty())
+    val builder = StringBuilder(segment)
     for (it in other) {
         if (it.isNotEmpty()) {
             builder.append("-")
