@@ -14,6 +14,7 @@ fun File.existing(): File {
 }
 
 /**
+ * Usage:
  * ```
  * val foo = File("/tmp/bar").existing().file().filled()
  * ```
