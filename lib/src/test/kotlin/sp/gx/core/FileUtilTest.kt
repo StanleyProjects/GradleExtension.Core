@@ -42,7 +42,8 @@ internal class FileUtilTest {
     @Test
     fun filledNotTest() {
         val expected = File.createTempFile("foo", "bar")
-        check(expected.createNewFile())
+        @Suppress("IgnoredReturnValue")
+        expected.createNewFile()
         check(expected.exists())
         check(expected.length() == 0L)
         assertThrows(IllegalStateException::class.java) {
