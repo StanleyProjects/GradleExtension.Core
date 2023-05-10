@@ -6,38 +6,38 @@ import org.junit.jupiter.api.Test
 
 internal class StringUtilTest {
     @Test
-    fun taskTest() {
-        assertEquals("fooBarBaz", "foo".task("bar", "baz"))
-        assertEquals("fooBaz", "foo".task("", "baz"))
-        assertEquals("fooBar", "foo".task("bar", ""))
-        assertEquals("fooBar", "foo".task("bar"))
-        assertEquals("foo", "foo".task("", ""))
-        assertEquals("foo", "foo".task(""))
+    fun camelCaseTest() {
+        assertEquals("fooBarBaz", camelCase("foo", "bar", "baz"))
+        assertEquals("fooBaz", camelCase("foo", "", "baz"))
+        assertEquals("fooBar", camelCase("foo", "bar", ""))
+        assertEquals("fooBar", camelCase("foo", "bar"))
+        assertEquals("foo", camelCase("foo", "", ""))
+        assertEquals("foo", camelCase("foo", ""))
     }
 
     @Test
-    fun taskErrorTest() {
+    fun camelCaseErrorTest() {
         assertThrows(IllegalStateException::class.java) {
             @Suppress("IgnoredReturnValue")
-            "".task("foo")
+            camelCase("", "foo")
         }
     }
 
     @Test
-    fun versionTest() {
-        assertEquals("foo-bar-baz", "foo".version("bar", "baz"))
-        assertEquals("foo-baz", "foo".version("", "baz"))
-        assertEquals("foo-bar", "foo".version("bar", ""))
-        assertEquals("foo-bar", "foo".version("bar"))
-        assertEquals("foo", "foo".version("", ""))
-        assertEquals("foo", "foo".version(""))
+    fun kebabCaseTest() {
+        assertEquals("foo-bar-baz", kebabCase("foo", "bar", "baz"))
+        assertEquals("foo-baz", kebabCase("foo", "", "baz"))
+        assertEquals("foo-bar", kebabCase("foo", "bar", ""))
+        assertEquals("foo-bar", kebabCase("foo", "bar"))
+        assertEquals("foo", kebabCase("foo", "", ""))
+        assertEquals("foo", kebabCase("foo", ""))
     }
 
     @Test
-    fun versionErrorTest() {
+    fun kebabCaseErrorTest() {
         assertThrows(IllegalStateException::class.java) {
             @Suppress("IgnoredReturnValue")
-            "".version("foo")
+            kebabCase("", "foo")
         }
     }
 
