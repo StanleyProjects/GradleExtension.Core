@@ -2,7 +2,7 @@ import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-version = "0.1.0"
+version = "0.1.1"
 
 repositories {
     mavenCentral()
