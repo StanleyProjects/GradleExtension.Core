@@ -31,7 +31,7 @@ internal class FileUtilTest {
         check(expected.readBytes().isNotEmpty())
         check(expected.readText().isNotEmpty())
         val actual = expected.filled()
-        assertEquals(expected, actual.filled())
+        assertEquals(expected, actual)
         assertEquals(expected.absolutePath, actual.absolutePath)
         assertEquals(expected.length(), actual.length())
         assertEquals(expected.readBytes().size, actual.readBytes().size)
@@ -48,6 +48,35 @@ internal class FileUtilTest {
         assertThrows(IllegalStateException::class.java) {
             @Suppress("IgnoredReturnValue")
             expected.filled()
+        }
+    }
+
+    @Test
+    fun fileTest() {
+        val expected = File.createTempFile("foo", "bar")
+        check(expected.exists())
+        check(expected.isFile)
+        val actual = expected.file()
+        assertEquals(expected, actual)
+        assertEquals(expected.absolutePath, actual.absolutePath)
+        assertEquals(expected.length(), actual.length())
+        assertEquals(expected.readBytes().size, actual.readBytes().size)
+        assertEquals(expected.readText().length, actual.readText().length)
+        assertEquals(expected.readText(), actual.readText())
+    }
+
+    @Test
+    fun fileNotTest() {
+        val expected = File.createTempFile("foo", "bar")
+        expected.delete()
+        check(!expected.exists())
+        expected.mkdir()
+        check(expected.exists())
+        check(expected.isDirectory)
+        check(!expected.isFile)
+        assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            expected.file()
         }
     }
 }
