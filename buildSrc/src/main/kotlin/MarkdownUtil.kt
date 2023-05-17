@@ -1,14 +1,16 @@
+import java.net.URL
+
 object MarkdownUtil {
     fun url(
         text: String,
-        value: String,
+        value: URL,
     ): String {
         return "[$text]($value)"
     }
 
     fun image(
         text: String,
-        url: String,
+        url: URL,
     ): String {
         return "!" + url(text = text, value = url)
     }
