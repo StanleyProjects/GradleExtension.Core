@@ -25,30 +25,6 @@ jacoco {
     toolVersion = Version.jacoco
 }
 
-fun String.join(vararg postfix: String): String {
-    check(isNotEmpty())
-    return postfix.filter { it.isNotEmpty() }.joinToString(separator = "", prefix = this) {
-        it.capitalize()
-    }
-}
-
-@Deprecated(
-    level = DeprecationLevel.ERROR,
-    message = "Use Project.version property.",
-    replaceWith = ReplaceWith("version.toString()"),
-)
-fun Project.version(): String {
-    error("Use Project.version property.")
-}
-
-fun Project.version(vararg postfix: String): String {
-    val prefix = version.toString()
-    check(prefix.isNotEmpty())
-    return postfix.filter { it.isNotEmpty() }
-        .also { check(it.isNotEmpty()) }
-        .joinToString(separator = "-", prefix = "$prefix-")
-}
-
 tasks.getByName<JavaCompile>("compileJava") {
     targetCompatibility = Version.jvmTarget
 }
@@ -123,7 +99,7 @@ setOf("main", "test").also { types ->
         }
     }
     types.forEach { type ->
-        task<io.gitlab.arturbosch.detekt.Detekt>("check".join("CodeQuality", type)) {
+        task<io.gitlab.arturbosch.detekt.Detekt>(camelCase("check", "CodeQuality", type)) {
             jvmTarget = Version.jvmTarget
             source = sourceSets.getByName(type).allSource
             config.setFrom(configs)
@@ -137,7 +113,7 @@ setOf("main", "test").also { types ->
                 txt.required.set(false)
                 xml.required.set(false)
             }
-            val detektTask = tasks.getByName<io.gitlab.arturbosch.detekt.Detekt>("detekt".join(type))
+            val detektTask = tasks.getByName<io.gitlab.arturbosch.detekt.Detekt>(camelCase("detekt", type))
             classpath.setFrom(detektTask.classpath)
         }
     }
@@ -170,20 +146,20 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
 }
 
 "snapshot".also { variant ->
-    val version = project.version(variant.toUpperCase())
-    task<Jar>("assemble".join(variant, "Jar")) {
+    val version = kebabCase(version.toString(), variant.toUpperCase())
+    task<Jar>(camelCase("assemble", variant, "Jar")) {
         dependsOn(compileKotlinTask)
         archiveBaseName.set(Maven.artifactId)
         archiveVersion.set(version)
         from(compileKotlinTask.destinationDirectory.asFileTree)
     }
-    task<Jar>("assemble".join(variant, "Source")) {
+    task<Jar>(camelCase("assemble", variant, "Source")) {
         archiveBaseName.set(Maven.artifactId)
         archiveVersion.set(version)
         archiveClassifier.set("sources")
         from(sourceSets.main.get().allSource)
     }
-    task("assemble".join(variant, "Pom")) {
+    task(camelCase("assemble", variant, "Pom")) {
         doLast {
             val target = buildDir.resolve("libs/${Maven.artifactId}-$version.pom")
             if (target.exists()) {
@@ -200,7 +176,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             target.writeText(text)
         }
     }
-    task("assemble".join(variant, "MavenMetadata")) {
+    task(camelCase("assemble", variant, "MavenMetadata")) {
         doLast {
             val target = buildDir.resolve("xml/maven-metadata.xml")
             if (target.exists()) {
@@ -224,7 +200,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             target.writeText(text)
         }
     }
-    task<org.jetbrains.dokka.gradle.DokkaTask>("assemble".join(variant, "Documentation")) {
+    task<org.jetbrains.dokka.gradle.DokkaTask>(camelCase("assemble", variant, "Documentation")) {
         outputDirectory.set(buildDir.resolve("documentation/$variant"))
         moduleName.set(Repository.name)
         moduleVersion.set(version)
@@ -239,7 +215,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             jdkVersion.set(Version.jvmTarget.toInt())
         }
     }
-    task("assemble".join(variant, "Metadata")) {
+    task(camelCase("assemble", variant, "Metadata")) {
         doLast {
             val target = buildDir.resolve("yml/metadata.yml")
             if (target.exists()) {
@@ -256,7 +232,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             target.writeText(text)
         }
     }
-    task("check".join(variant, "Readme")) {
+    task(camelCase("check", variant, "Readme")) {
         doLast {
             val badge = MarkdownUtil.image(
                 text = "version",
