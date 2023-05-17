@@ -176,19 +176,13 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
     }
     task(camelCase("assemble", variant, "MavenMetadata")) {
         doLast {
-            val target = buildDir.resolve("xml/maven-metadata.xml")
-            if (target.exists()) {
-                check(target.isFile)
-                check(target.delete())
-            } else {
-                target.parentFile?.mkdirs()
-            }
-            val text = MavenUtil.metadata(
-                groupId = Maven.groupId,
-                artifactId = Maven.artifactId,
-                version = version,
+            buildDir.resolve("xml/maven-metadata.xml").assemble(
+                MavenUtil.metadata(
+                    groupId = Maven.groupId,
+                    artifactId = Maven.artifactId,
+                    version = version,
+                )
             )
-            target.writeText(text)
         }
     }
     task<org.jetbrains.dokka.gradle.DokkaTask>(camelCase("assemble", variant, "Documentation")) {
@@ -208,19 +202,14 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
     }
     task(camelCase("assemble", variant, "Metadata")) {
         doLast {
-            val target = buildDir.resolve("yml/metadata.yml")
-            if (target.exists()) {
-                target.delete()
-            } else {
-                target.parentFile?.mkdirs()
-            }
-            val text = """
-                repository:
-                 owner: '${Repository.owner}'
-                 name: '${Repository.name}'
-                version: '$version'
-            """.trimIndent()
-            target.writeText(text)
+            buildDir.resolve("yml/metadata.yml").assemble(
+                """
+                    repository:
+                     owner: '${Repository.owner}'
+                     name: '${Repository.name}'
+                    version: '$version'
+                """.trimIndent()
+            )
         }
     }
     task(camelCase("check", variant, "Readme")) {

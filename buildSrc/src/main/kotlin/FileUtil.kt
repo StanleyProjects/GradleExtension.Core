@@ -55,3 +55,14 @@ fun File.check(expected: Set<String>, report: File) {
     report.writeText(text)
     error("Problems were found while checking the \"$name\". See the report ${report.absolutePath}")
 }
+
+fun File.assemble(text: String) {
+    check(text.isNotEmpty())
+    if (exists()) {
+        check(isFile)
+        check(delete())
+    } else {
+        parentFile?.mkdirs()
+    }
+    writeText(text)
+}
