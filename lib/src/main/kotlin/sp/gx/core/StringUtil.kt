@@ -15,8 +15,8 @@ fun String.uppercaseFirstChar(): String {
 }
 
 /**
- * @return The string from all the not empty capitalized segments.
- * @throws IllegalStateException if receiver is empty.
+ * @return The string from first [segment] and all the not empty capitalized [other] segments.
+ * @throws IllegalStateException if [segment] is empty.
  * @see [Iterable.joinToString]
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
  * @since 0.1.1
@@ -34,7 +34,7 @@ fun camelCase(segment: String, vararg other: String): String {
 
 /**
  * @return The string from all the not empty segments separated using "-".
- * @throws IllegalStateException if receiver is empty.
+ * @throws IllegalStateException if [segment] is empty.
  * @see [Iterable.joinToString]
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
  * @since 0.1.1
@@ -53,7 +53,7 @@ fun kebabCase(segment: String, vararg other: String): String {
 
 /**
  * @return [this] receiver string.
- * @throws IllegalStateException if [this] receiver string is empty.
+ * @throws IllegalStateException if [this] receiver [String] is empty.
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
  * @since 0.0.6
  */
