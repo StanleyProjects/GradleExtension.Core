@@ -3,6 +3,11 @@ package sp.gx.core
 import java.io.File
 
 /**
+ * Usage:
+ * ```
+ * val file = File("/tmp/bar").existing()
+ * assertTrue(file.exists())
+ * ```
  * @return [this] receiver file.
  * @throws IllegalStateException if [this] receiver file does not exist.
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
@@ -16,7 +21,8 @@ fun File.existing(): File {
 /**
  * Usage:
  * ```
- * val foo = File("/tmp/bar").existing().file().filled()
+ * val file = File("/tmp/bar").file()
+ * assertTrue(file.isFile)
  * ```
  * @return [this] receiver [File].
  * @throws IllegalStateException if [this] receiver [File] is not a normal file.
@@ -29,6 +35,11 @@ fun File.file(): File {
 }
 
 /**
+ * Usage:
+ * ```
+ * val file = File("/tmp/bar").filled()
+ * assertTrue(file.length() > 0)
+ * ```
  * @return [this] receiver [File].
  * @throws IllegalStateException if [this] receiver [File] is empty.
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
