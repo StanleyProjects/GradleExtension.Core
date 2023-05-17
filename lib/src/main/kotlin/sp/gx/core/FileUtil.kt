@@ -51,6 +51,13 @@ fun File.filled(): File {
 }
 
 /**
+ * Usage:
+ * ```
+ * File("/tmp/bar").check(
+ *     expected = setOf("foo", "bar"),
+ *     report = File("/tmp/report"),
+ * )
+ * ```
  * @receiver The [File] whose contents will be checked.
  * @param expected The set of strings expected to be in [this] receiver [File].
  * @param report Where the test result will be written.
