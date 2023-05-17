@@ -1,8 +1,6 @@
 import java.net.URL
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
-version = "0.1.1"
+version = "0.2.0"
 
 repositories {
     mavenCentral()
@@ -23,30 +21,6 @@ dependencies {
 
 jacoco {
     toolVersion = Version.jacoco
-}
-
-fun String.join(vararg postfix: String): String {
-    check(isNotEmpty())
-    return postfix.filter { it.isNotEmpty() }.joinToString(separator = "", prefix = this) {
-        it.capitalize()
-    }
-}
-
-@Deprecated(
-    level = DeprecationLevel.ERROR,
-    message = "Use Project.version property.",
-    replaceWith = ReplaceWith("version.toString()"),
-)
-fun Project.version(): String {
-    error("Use Project.version property.")
-}
-
-fun Project.version(vararg postfix: String): String {
-    val prefix = version.toString()
-    check(prefix.isNotEmpty())
-    return postfix.filter { it.isNotEmpty() }
-        .also { check(it.isNotEmpty()) }
-        .joinToString(separator = "-", prefix = "$prefix-")
 }
 
 tasks.getByName<JavaCompile>("compileJava") {
@@ -118,12 +92,13 @@ setOf("main", "test").also { types ->
         "potential-bugs",
         "style",
     ).map { config ->
-        rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml").also {
-            check(it.exists() && !it.isDirectory)
-        }
+        rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml")
+            .existing()
+            .file()
+            .filled()
     }
     types.forEach { type ->
-        task<io.gitlab.arturbosch.detekt.Detekt>("check".join("CodeQuality", type)) {
+        task<io.gitlab.arturbosch.detekt.Detekt>(camelCase("check", "CodeQuality", type)) {
             jvmTarget = Version.jvmTarget
             source = sourceSets.getByName(type).allSource
             config.setFrom(configs)
@@ -137,7 +112,7 @@ setOf("main", "test").also { types ->
                 txt.required.set(false)
                 xml.required.set(false)
             }
-            val detektTask = tasks.getByName<io.gitlab.arturbosch.detekt.Detekt>("detekt".join(type))
+            val detektTask = tasks.getByName<io.gitlab.arturbosch.detekt.Detekt>(camelCase("detekt", type))
             classpath.setFrom(detektTask.classpath)
         }
     }
@@ -148,9 +123,10 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
         "common",
         "documentation",
     ).map { config ->
-        rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml").also {
-            check(it.exists() && !it.isDirectory)
-        }
+        rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml")
+            .existing()
+            .file()
+            .filled()
     }
     jvmTarget = Version.jvmTarget
     source = sourceSets.main.get().allSource
@@ -170,61 +146,43 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
 }
 
 "snapshot".also { variant ->
-    val version = project.version(variant.toUpperCase())
-    task<Jar>("assemble".join(variant, "Jar")) {
+    val version = kebabCase(version.toString(), variant.toUpperCase())
+    task<Jar>(camelCase("assemble", variant, "Jar")) {
         dependsOn(compileKotlinTask)
         archiveBaseName.set(Maven.artifactId)
         archiveVersion.set(version)
         from(compileKotlinTask.destinationDirectory.asFileTree)
     }
-    task<Jar>("assemble".join(variant, "Source")) {
+    task<Jar>(camelCase("assemble", variant, "Source")) {
         archiveBaseName.set(Maven.artifactId)
         archiveVersion.set(version)
         archiveClassifier.set("sources")
         from(sourceSets.main.get().allSource)
     }
-    task("assemble".join(variant, "Pom")) {
+    task(camelCase("assemble", variant, "Pom")) {
         doLast {
-            val target = buildDir.resolve("libs/${Maven.artifactId}-$version.pom")
-            if (target.exists()) {
-                target.delete()
-            } else {
-                target.parentFile?.mkdirs()
-            }
-            val text = MavenUtil.pom(
-                groupId = Maven.groupId,
-                artifactId = Maven.artifactId,
-                version = version,
-                packaging = "jar",
+            buildDir.resolve("libs/${Maven.artifactId}-$version.pom").assemble(
+                MavenUtil.pom(
+                    groupId = Maven.groupId,
+                    artifactId = Maven.artifactId,
+                    version = version,
+                    packaging = "jar",
+                ),
             )
-            target.writeText(text)
         }
     }
-    task("assemble".join(variant, "MavenMetadata")) {
+    task(camelCase("assemble", variant, "MavenMetadata")) {
         doLast {
-            val target = buildDir.resolve("xml/maven-metadata.xml")
-            if (target.exists()) {
-                target.delete()
-            } else {
-                target.parentFile?.mkdirs()
-            }
-            val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
-            val text = """
-                <metadata>
-                    <groupId>${Maven.groupId}</groupId>
-                    <artifactId>${Maven.artifactId}</artifactId>
-                    <versioning>
-                        <versions>
-                            <version>$version</version>
-                        </versions>
-                        <lastUpdated>${formatter.format(LocalDateTime.now())}</lastUpdated>
-                    </versioning>
-                </metadata>
-            """.trimIndent()
-            target.writeText(text)
+            buildDir.resolve("xml/maven-metadata.xml").assemble(
+                MavenUtil.metadata(
+                    groupId = Maven.groupId,
+                    artifactId = Maven.artifactId,
+                    version = version,
+                ),
+            )
         }
     }
-    task<org.jetbrains.dokka.gradle.DokkaTask>("assemble".join(variant, "Documentation")) {
+    task<org.jetbrains.dokka.gradle.DokkaTask>(camelCase("assemble", variant, "Documentation")) {
         outputDirectory.set(buildDir.resolve("documentation/$variant"))
         moduleName.set(Repository.name)
         moduleVersion.set(version)
@@ -239,24 +197,19 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             jdkVersion.set(Version.jvmTarget.toInt())
         }
     }
-    task("assemble".join(variant, "Metadata")) {
+    task(camelCase("assemble", variant, "Metadata")) {
         doLast {
-            val target = buildDir.resolve("yml/metadata.yml")
-            if (target.exists()) {
-                target.delete()
-            } else {
-                target.parentFile?.mkdirs()
-            }
-            val text = """
-                repository:
-                 owner: '${Repository.owner}'
-                 name: '${Repository.name}'
-                version: '$version'
-            """.trimIndent()
-            target.writeText(text)
+            buildDir.resolve("yml/metadata.yml").assemble(
+                """
+                    repository:
+                     owner: '${Repository.owner}'
+                     name: '${Repository.name}'
+                    version: '$version'
+                """.trimIndent(),
+            )
         }
     }
-    task("check".join(variant, "Readme")) {
+    task(camelCase("check", variant, "Readme")) {
         doLast {
             val badge = MarkdownUtil.image(
                 text = "version",
@@ -272,8 +225,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
                 MarkdownUtil.url("Documentation", GitHubUtil.pages(Repository.owner, Repository.name, "doc/$version")),
                 "implementation(\"${Maven.groupId}:${Maven.artifactId}:$version\")",
             )
-            FileUtil.check(
-                file = rootDir.resolve("README.md"),
+            rootDir.resolve("README.md").check(
                 expected = expected,
                 report = buildDir.resolve("reports/analysis/readme/index.html"),
             )

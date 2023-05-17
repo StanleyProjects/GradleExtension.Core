@@ -1,5 +1,10 @@
+import java.net.URL
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
 object MavenUtil {
     private const val MAVEN_APACHE_URL = "http://maven.apache.org"
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
 
     fun pom(
         modelVersion: String = "4.0.0",
@@ -31,15 +36,36 @@ object MavenUtil {
         }
     }
 
+    fun metadata(
+        groupId: String,
+        artifactId: String,
+        version: String,
+        dateTime: LocalDateTime = LocalDateTime.now(),
+    ): String {
+        return """
+            <metadata>
+                <groupId>$groupId</groupId>
+                <artifactId>$artifactId</artifactId>
+                <versioning>
+                    <versions>
+                        <version>$version</version>
+                    </versions>
+                    <lastUpdated>${dateTimeFormatter.format(dateTime)}</lastUpdated>
+                </versioning>
+            </metadata>
+            """.trimIndent()
+    }
+
     object Snapshot {
         fun url(
             groupId: String,
             artifactId: String,
             version: String,
-        ): String {
+        ): URL {
             val host = "https://s01.oss.sonatype.org"
             val path = "$host/content/repositories/snapshots"
-            return "$path/${groupId.replace('.', '/')}/$artifactId/$version"
+            val spec = "$path/${groupId.replace('.', '/')}/$artifactId/$version"
+            return URL(spec)
         }
     }
 }

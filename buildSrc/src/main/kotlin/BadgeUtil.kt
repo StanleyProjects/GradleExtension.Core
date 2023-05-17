@@ -1,3 +1,5 @@
+import java.net.URL
+
 object BadgeUtil {
     fun url(
         label: String,
@@ -5,8 +7,8 @@ object BadgeUtil {
         labelColor: String = "212121",
         color: String,
         style: String = "flat",
-    ): String {
-        return "https://img.shields.io/static/v1?" + mapOf(
+    ): URL {
+        val spec = "https://img.shields.io/static/v1?" + mapOf(
             "label" to label,
             "message" to message,
             "labelColor" to labelColor,
@@ -15,5 +17,6 @@ object BadgeUtil {
         ).toList().joinToString(separator = "&") { (key, value) ->
             "$key=$value"
         }
+        return URL(spec)
     }
 }

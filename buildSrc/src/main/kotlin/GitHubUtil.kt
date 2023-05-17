@@ -1,17 +1,19 @@
+import java.net.URL
+
 object GitHubUtil {
     fun pages(
         owner: String,
         name: String,
         postfix: String,
-    ): String {
+    ): URL {
         check(postfix.isNotEmpty())
-        return "https://$owner.github.io/$name/$postfix"
+        return URL("https://$owner.github.io/$name/$postfix")
     }
 
     fun url(
         owner: String,
         name: String,
-    ): String {
-        return "https://github.com/$owner/$name"
+    ): URL {
+        return URL("https://github.com/$owner/$name")
     }
 }
