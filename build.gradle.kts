@@ -39,8 +39,7 @@ task<JavaExec>("checkCodeStyle") {
 
 task("checkLicense") {
     doLast {
-        FileUtil.check(
-            file = rootDir.resolve("LICENSE"),
+        rootDir.resolve("LICENSE").check(
             expected = emptySet(), // todo author
             report = buildDir.resolve("reports/analysis/license/index.html"),
         )

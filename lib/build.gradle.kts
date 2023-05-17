@@ -272,8 +272,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
                 MarkdownUtil.url("Documentation", GitHubUtil.pages(Repository.owner, Repository.name, "doc/$version")),
                 "implementation(\"${Maven.groupId}:${Maven.artifactId}:$version\")",
             )
-            FileUtil.check(
-                file = rootDir.resolve("README.md"),
+            rootDir.resolve("README.md").check(
                 expected = expected,
                 report = buildDir.resolve("reports/analysis/readme/index.html"),
             )
