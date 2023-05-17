@@ -1,6 +1,5 @@
 package sp.gx.core
 
-import org.gradle.api.Project
 import java.io.File
 
 /**
@@ -49,9 +48,11 @@ fun File.check(expected: Set<String>, report: File) {
             when {
                 actual.isEmpty() -> setOf("the file does not contain text")
                 else -> {
-                    expected.mapNotNull { e ->
-                        "the file does not contain \"$e\" line".takeIf { _ ->
-                            actual.none { it.contains(e) }
+                    expected.mapNotNull { line ->
+                        if (actual.none { it.contains(line) }) {
+                            "the file does not contain \"$line\" line"
+                        } else {
+                            null
                         }
                     }.toSet()
                 }

@@ -167,7 +167,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
                     artifactId = Maven.artifactId,
                     version = version,
                     packaging = "jar",
-                )
+                ),
             )
         }
     }
@@ -178,7 +178,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
                     groupId = Maven.groupId,
                     artifactId = Maven.artifactId,
                     version = version,
-                )
+                ),
             )
         }
     }
@@ -205,7 +205,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
                      owner: '${Repository.owner}'
                      name: '${Repository.name}'
                     version: '$version'
-                """.trimIndent()
+                """.trimIndent(),
             )
         }
     }

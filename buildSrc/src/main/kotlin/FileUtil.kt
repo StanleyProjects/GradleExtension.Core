@@ -25,8 +25,10 @@ fun File.check(expected: Set<String>, report: File) {
                 actual.isEmpty() -> setOf("the file does not contain text")
                 else -> {
                     expected.mapNotNull { line ->
-                        "the file does not contain \"$line\" line".takeIf { _ ->
-                            actual.none { it.contains(line) }
+                        if (actual.none { it.contains(line) }) {
+                            "the file does not contain \"$line\" line"
+                        } else {
+                            null
                         }
                     }.toSet()
                 }
