@@ -21,26 +21,24 @@ fun File.check(expected: Set<String>, report: File) {
         isDirectory -> setOf("the file is a directory")
         else -> {
             val actual = readLines(Charsets.UTF_8)
-            when {
-                actual.isEmpty() -> setOf("the file does not contain text")
-                else -> {
-                    expected.mapNotNull { line ->
-                        if (actual.none { it.contains(line) }) {
-                            "the file does not contain \"$line\" line"
-                        } else {
-                            null
-                        }
-                    }.toSet()
-                }
+            if (actual.isEmpty()) {
+                setOf("the file does not contain text")
+            } else {
+                expected.mapNotNull { line ->
+                    if (actual.none { it.contains(line) }) {
+                        "the file does not contain \"$line\" line"
+                    } else {
+                        null
+                    }
+                }.toSet()
             }
         }
     }
-    when {
-        report.exists() -> {
-            check(report.isFile) { "report is not a file" }
-            check(report.delete())
-        }
-        else -> report.parentFile?.mkdirs() ?: error("report has no parent")
+    if (report.exists()) {
+        check(report.isFile) { "report is not a file" }
+        check(report.delete())
+    } else {
+        report.parentFile?.mkdirs() ?: error("report has no parent")
     }
     if (issues.isEmpty()) {
         val message = "All checks of the file along the \"$name\" were successful."
