@@ -92,9 +92,10 @@ setOf("main", "test").also { types ->
         "potential-bugs",
         "style",
     ).map { config ->
-        rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml").also {
-            check(it.exists() && !it.isDirectory)
-        }
+        rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml")
+            .existing()
+            .file()
+            .filled()
     }
     types.forEach { type ->
         task<io.gitlab.arturbosch.detekt.Detekt>(camelCase("check", "CodeQuality", type)) {
@@ -122,9 +123,10 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
         "common",
         "documentation",
     ).map { config ->
-        rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml").also {
-            check(it.exists() && !it.isDirectory)
-        }
+        rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml")
+            .existing()
+            .file()
+            .filled()
     }
     jvmTarget = Version.jvmTarget
     source = sourceSets.main.get().allSource
@@ -159,19 +161,14 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
     }
     task(camelCase("assemble", variant, "Pom")) {
         doLast {
-            val target = buildDir.resolve("libs/${Maven.artifactId}-$version.pom")
-            if (target.exists()) {
-                target.delete()
-            } else {
-                target.parentFile?.mkdirs()
-            }
-            val text = MavenUtil.pom(
-                groupId = Maven.groupId,
-                artifactId = Maven.artifactId,
-                version = version,
-                packaging = "jar",
+            buildDir.resolve("libs/${Maven.artifactId}-$version.pom").assemble(
+                MavenUtil.pom(
+                    groupId = Maven.groupId,
+                    artifactId = Maven.artifactId,
+                    version = version,
+                    packaging = "jar",
+                )
             )
-            target.writeText(text)
         }
     }
     task(camelCase("assemble", variant, "MavenMetadata")) {
