@@ -50,13 +50,26 @@ fun File.filled(): File {
     return this
 }
 
+/**
+ * Usage:
+ * ```
+ * val text = "foo"
+ * val file = File("/tmp/bar").assemble(text)
+ * assertEquals(text, file.readText())
+ * ```
+ * @receiver The [File] to which the [text] will be written.
+ * @throws IllegalStateException if [text] is empty.
+ * @throws IllegalStateException if [this] receiver [File] exists and not a file.
+ * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+ * @since 0.2.1
+ */
 fun File.assemble(text: String) {
     check(text.isNotEmpty())
     if (exists()) {
         check(isFile)
         check(delete())
     } else {
-        parentFile?.mkdirs()
+        parentFile?.mkdirs() ?: error("file has no parent")
     }
     writeText(text)
 }
