@@ -39,6 +39,19 @@ fun File.filled(): File {
     return this
 }
 
+/**
+ * @receiver The [File] whose contents will be checked.
+ * @param expected The set of strings expected to be in [this] receiver [File].
+ * @param report Where the test result will be written.
+ * @throws IllegalStateException if [this] receiver [File] does not exist.
+ * @throws IllegalStateException if [this] receiver [File] is a directory.
+ * @throws IllegalStateException if [this] receiver [File] is empty.
+ * @throws IllegalStateException if [this] receiver [File] does not contain text.
+ * @throws IllegalStateException if [report] exists and not a file.
+ * @throws IllegalStateException if problems are found while checking [this] receiver [File].
+ * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+ * @since 0.2.0
+ */
 fun File.check(expected: Set<String>, report: File) {
     val issues = when {
         !exists() -> setOf("the file does not exist")
