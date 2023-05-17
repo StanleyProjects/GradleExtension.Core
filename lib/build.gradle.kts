@@ -1,6 +1,4 @@
 import java.net.URL
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 version = "0.2.0"
 
@@ -180,23 +178,16 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
         doLast {
             val target = buildDir.resolve("xml/maven-metadata.xml")
             if (target.exists()) {
-                target.delete()
+                check(target.isFile)
+                check(target.delete())
             } else {
                 target.parentFile?.mkdirs()
             }
-            val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
-            val text = """
-                <metadata>
-                    <groupId>${Maven.groupId}</groupId>
-                    <artifactId>${Maven.artifactId}</artifactId>
-                    <versioning>
-                        <versions>
-                            <version>$version</version>
-                        </versions>
-                        <lastUpdated>${formatter.format(LocalDateTime.now())}</lastUpdated>
-                    </versioning>
-                </metadata>
-            """.trimIndent()
+            val text = MavenUtil.metadata(
+                groupId = Maven.groupId,
+                artifactId = Maven.artifactId,
+                version = version,
+            )
             target.writeText(text)
         }
     }

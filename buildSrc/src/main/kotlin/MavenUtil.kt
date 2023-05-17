@@ -36,6 +36,26 @@ object MavenUtil {
         }
     }
 
+    fun metadata(
+        groupId: String,
+        artifactId: String,
+        version: String,
+        dateTime: LocalDateTime = LocalDateTime.now(),
+    ): String {
+        return """
+            <metadata>
+                <groupId>$groupId</groupId>
+                <artifactId>$artifactId</artifactId>
+                <versioning>
+                    <versions>
+                        <version>$version</version>
+                    </versions>
+                    <lastUpdated>${dateTimeFormatter.format(dateTime)}</lastUpdated>
+                </versioning>
+            </metadata>
+            """.trimIndent()
+    }
+
     object Snapshot {
         fun url(
             groupId: String,
