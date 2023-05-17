@@ -42,6 +42,7 @@ potential-bugs:
     ignoreFunctionCall: [
       java.lang.StringBuilder.append,
       kotlin.TODO,
+      kotlin.also,
       kotlin.collections.MutableList.add,
       kotlin.collections.MutableSet.add,
       kotlin.collections.MutableSet.addAll,
