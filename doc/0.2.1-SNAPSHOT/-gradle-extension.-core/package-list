@@ -1,0 +1,14 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:sp.gx.core////PointingToDeclaration/-gradle-extension.-core/sp.gx.core/index.html
+$dokka.location:sp.gx.core//assemble/java.io.File#kotlin.String/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/assemble.html
+$dokka.location:sp.gx.core//camelCase/#kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/camel-case.html
+$dokka.location:sp.gx.core//check/java.io.File#kotlin.collections.Set[kotlin.String]#java.io.File/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/check.html
+$dokka.location:sp.gx.core//existing/java.io.File#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/existing.html
+$dokka.location:sp.gx.core//file/java.io.File#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/file.html
+$dokka.location:sp.gx.core//filled/java.io.File#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/filled.html
+$dokka.location:sp.gx.core//filled/kotlin.String#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/filled.html
+$dokka.location:sp.gx.core//kebabCase/#kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/kebab-case.html
+$dokka.location:sp.gx.core//uppercaseFirstChar/kotlin.String#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/uppercase-first-char.html
+sp.gx.core
+
