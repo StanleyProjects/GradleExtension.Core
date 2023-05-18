@@ -9,7 +9,7 @@ internal class MarkdownTest {
     fun urlTest() {
         val actual = Markdown.url(
             text = "foo",
-            value = URL("https://github.com")
+            value = URL("https://github.com"),
         )
         Assertions.assertEquals("[foo](https://github.com)", actual)
     }
@@ -19,7 +19,7 @@ internal class MarkdownTest {
         Assertions.assertThrows(IllegalStateException::class.java) {
             Markdown.url(
                 text = "",
-                value = URL("https://github.com")
+                value = URL("https://github.com"),
             )
         }
     }
@@ -28,7 +28,7 @@ internal class MarkdownTest {
     fun imageTest() {
         val actual = Markdown.image(
             text = "foo",
-            path = URL("https://github.com")
+            path = URL("https://github.com"),
         )
         Assertions.assertEquals("![foo](https://github.com)", actual)
     }
