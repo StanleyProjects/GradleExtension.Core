@@ -3,6 +3,11 @@ package sp.gx.core
 import java.io.File
 
 /**
+ * Usage:
+ * ```
+ * val file = File("/tmp/bar").existing()
+ * assertTrue(file.exists())
+ * ```
  * @return [this] receiver file.
  * @throws IllegalStateException if [this] receiver file does not exist.
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
@@ -16,7 +21,8 @@ fun File.existing(): File {
 /**
  * Usage:
  * ```
- * val foo = File("/tmp/bar").existing().file().filled()
+ * val file = File("/tmp/bar").file()
+ * assertTrue(file.isFile)
  * ```
  * @return [this] receiver [File].
  * @throws IllegalStateException if [this] receiver [File] is not a normal file.
@@ -29,6 +35,11 @@ fun File.file(): File {
 }
 
 /**
+ * Usage:
+ * ```
+ * val file = File("/tmp/bar").filled()
+ * assertTrue(file.length() > 0)
+ * ```
  * @return [this] receiver [File].
  * @throws IllegalStateException if [this] receiver [File] is empty.
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
@@ -40,56 +51,25 @@ fun File.filled(): File {
 }
 
 /**
- * @receiver The [File] whose contents will be checked.
- * @param expected The set of strings expected to be in [this] receiver [File].
- * @param report Where the test result will be written.
- * @throws IllegalStateException if [this] receiver [File] does not exist.
- * @throws IllegalStateException if [this] receiver [File] is a directory.
- * @throws IllegalStateException if [this] receiver [File] is empty.
- * @throws IllegalStateException if [this] receiver [File] does not contain text.
- * @throws IllegalStateException if [report] exists and not a file.
- * @throws IllegalStateException if problems are found while checking [this] receiver [File].
+ * Usage:
+ * ```
+ * val text = "foo"
+ * val file = File("/tmp/bar").assemble(text)
+ * assertEquals(text, file.readText())
+ * ```
+ * @receiver The [File] to which the [text] will be written.
+ * @throws IllegalStateException if [text] is empty.
+ * @throws IllegalStateException if [this] receiver [File] exists and not a file.
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
- * @since 0.2.0
+ * @since 0.2.1
  */
-fun File.check(expected: Set<String>, report: File) {
-    val issues = when {
-        !exists() -> setOf("the file does not exist")
-        isDirectory -> setOf("the file is a directory")
-        else -> {
-            val actual = readLines(Charsets.UTF_8)
-            if (actual.isEmpty()) {
-                setOf("the file does not contain text")
-            } else {
-                expected.mapNotNull { line ->
-                    if (actual.none { it.contains(line) }) {
-                        "the file does not contain \"$line\" line"
-                    } else {
-                        null
-                    }
-                }.toSet()
-            }
-        }
-    }
-    if (report.exists()) {
-        check(report.isFile) { "report is not a file" }
-        check(report.delete())
+fun File.assemble(text: String) {
+    check(text.isNotEmpty())
+    if (exists()) {
+        check(isFile)
+        check(delete())
     } else {
-        report.parentFile?.mkdirs() ?: error("report has no parent")
+        parentFile?.mkdirs() ?: error("file has no parent")
     }
-    if (issues.isEmpty()) {
-        val message = "All checks of the file along the \"$name\" were successful."
-        report.writeText(message)
-        @Suppress("ForbiddenMethodCall")
-        println(message)
-        return
-    }
-    val text = """
-        <html>
-        <h3>The following problems were found while checking the <code>$name</code>:</h3>
-        ${issues.joinToString(prefix = "<ul>", postfix = "</ul>", separator = "\n") { "<li>$it</li>" }}
-        </html>
-    """.trimIndent()
-    report.writeText(text)
-    error("Problems were found while checking the \"$name\". See the report ${report.absolutePath}")
+    writeText(text)
 }

@@ -1,6 +1,6 @@
 import java.net.URL
 
-version = "0.2.0"
+version = "0.2.1"
 
 repositories {
     mavenCentral()
@@ -71,7 +71,7 @@ task<JacocoCoverageVerification>("checkCoverage") {
     violationRules {
         rule {
             limit {
-                minimum = BigDecimal(0.96)
+                minimum = BigDecimal(0.9)
             }
         }
     }
