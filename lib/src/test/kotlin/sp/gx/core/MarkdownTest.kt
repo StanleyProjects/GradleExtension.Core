@@ -7,9 +7,9 @@ import java.net.URL
 internal class MarkdownTest {
     @Test
     fun urlTest() {
-        val actual = Markdown.url(
+        val actual = Markdown.link(
             text = "foo",
-            value = URL("https://github.com/foo"),
+            url = URL("https://github.com/foo"),
         )
         Assertions.assertEquals("[foo](https://github.com/foo)", actual)
     }
@@ -18,9 +18,9 @@ internal class MarkdownTest {
     fun urlErrorTest() {
         Assertions.assertThrows(IllegalStateException::class.java) {
             @Suppress("IgnoredReturnValue")
-            Markdown.url(
+            Markdown.link(
                 text = "",
-                value = URL("https://github.com/bar"),
+                url = URL("https://github.com/bar"),
             )
         }
     }
@@ -29,7 +29,7 @@ internal class MarkdownTest {
     fun imageTest() {
         val actual = Markdown.image(
             text = "foo",
-            path = URL("https://github.com/baz"),
+            url = URL("https://github.com/baz"),
         )
         Assertions.assertEquals("![foo](https://github.com/baz)", actual)
     }
