@@ -45,10 +45,10 @@ fun camelCase(segment: String, vararg other: String): String {
 /**
  * Usage:
  * ```
- * val version = camelCase("0.1", "bar", "baz")
+ * val version = kebabCase("0.1", "bar", "baz")
  * assertEquals("0.1-bar-baz", version)
  * ```
- * @return The string from all the not empty segments separated using "-".
+ * @return The string from first [segment] and all the not empty [other] segments separated using "-".
  * @throws IllegalStateException if [segment] is empty.
  * @see [Iterable.joinToString]
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
