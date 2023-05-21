@@ -1,4 +1,4 @@
-# 2023/05/21
+# 2023/03/22
 
 style:
   active: true
@@ -90,7 +90,8 @@ style:
   MultilineLambdaItParameter:
     active: true
   MultilineRawStringIndentation:
-    active: false
+    active: true
+    indentSize: 4
   NestedClassesVisibility:
     active: true
   NewLineAtEndOfFile:

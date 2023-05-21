@@ -53,7 +53,7 @@ object MavenUtil {
                     <lastUpdated>${dateTimeFormatter.format(dateTime)}</lastUpdated>
                 </versioning>
             </metadata>
-            """.trimIndent()
+        """.trimIndent()
     }
 
     object Snapshot {
