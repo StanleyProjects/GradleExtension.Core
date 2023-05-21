@@ -2,8 +2,6 @@ package sp.gx.core
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import org.w3c.dom.Element
-import org.w3c.dom.Node
 import org.xml.sax.InputSource
 import sp.gx.core.util.element
 import sp.gx.core.util.single
