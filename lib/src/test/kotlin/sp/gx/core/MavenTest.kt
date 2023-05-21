@@ -2,6 +2,13 @@ package sp.gx.core
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import org.w3c.dom.Element
+import org.w3c.dom.Node
+import org.xml.sax.InputSource
+import sp.gx.core.util.element
+import sp.gx.core.util.single
+import java.io.StringReader
+import javax.xml.parsers.DocumentBuilderFactory
 
 internal class MavenTest {
     @Test
@@ -17,24 +24,98 @@ internal class MavenTest {
     }
 
     @Test
+    fun pomErrorTest() {
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            Maven.pom(
+                modelVersion = "",
+                groupId = "",
+                artifactId = "",
+                version = "",
+                packaging = "",
+            )
+        }
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            Maven.pom(
+                modelVersion = "0",
+                groupId = "",
+                artifactId = "",
+                version = "",
+                packaging = "",
+            )
+        }
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            Maven.pom(
+                modelVersion = "0",
+                groupId = "foo",
+                artifactId = "",
+                version = "",
+                packaging = "",
+            )
+        }
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            Maven.pom(
+                modelVersion = "0",
+                groupId = "foo",
+                artifactId = "bar",
+                version = "",
+                packaging = "",
+            )
+        }
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            Maven.pom(
+                modelVersion = "0",
+                groupId = "foo",
+                artifactId = "bar",
+                version = "42",
+                packaging = "",
+            )
+        }
+    }
+
+    @Test
     fun metadataTest() {
         val actual = Maven.metadata(
             groupId = "foo",
             artifactId = "bar",
             version = "42",
         )
-        val expected = """
-            <metadata>
-                <groupId>foo</groupId>
-                <artifactId>bar</artifactId>
-                <versioning>
-                    <versions>
-                        <version>42</version>
-                    </versions>
-                    <lastUpdated>?</lastUpdated>
-                </versioning>
-            </metadata>
-        """.trimIndent()
-        Assertions.assertEquals(expected, actual)
+        val factory = DocumentBuilderFactory.newInstance()
+        val builder = factory.newDocumentBuilder()
+        val document = builder.parse(InputSource(StringReader(actual)))
+        val root = document.documentElement
+        Assertions.assertEquals("metadata", root.tagName)
+        Assertions.assertEquals("foo", root.single("groupId").textContent)
+        Assertions.assertEquals("bar", root.single("artifactId").textContent)
+        root.single("versioning").element().also { versioning ->
+            versioning.single("versions").element().also { versions ->
+                Assertions.assertEquals("42", versions.single("version").textContent)
+            }
+            Assertions.assertFalse(versioning.single("lastUpdated").textContent.isEmpty())
+        }
+    }
+
+    @Test
+    fun metadataErrorTest() {
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            Maven.metadata(
+                groupId = "",
+                artifactId = "",
+                version = "",
+            )
+        }
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            Maven.metadata(
+                groupId = "foo",
+                artifactId = "",
+                version = "",
+            )
+        }
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            Maven.metadata(
+                groupId = "foo",
+                artifactId = "bar",
+                version = "",
+            )
+        }
     }
 }
