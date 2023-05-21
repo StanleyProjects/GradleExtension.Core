@@ -40,6 +40,26 @@ object Maven {
         }
     }
 
+    /**
+     * Usage:
+     * ```
+     * val xml = Maven.pom(
+     *     groupId = "foo",
+     *     artifactId = "bar",
+     *     version = "42",
+     *     packaging = "jar",
+     * )
+     * assertEquals(XMLParser.parse(xml).getNode("project").getString("version"), "42")
+     * ```
+     * @throws IllegalStateException if [modelVersion] is empty.
+     * @throws IllegalStateException if [groupId] is empty.
+     * @throws IllegalStateException if [artifactId] is empty.
+     * @throws IllegalStateException if [version] is empty.
+     * @throws IllegalStateException if [packaging] is empty.
+     * @return The [String] XML in Maven [POM](https://maven.apache.org/pom.html) format.
+     * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+     * @since 0.2.3
+     */
     fun pom(
         modelVersion: String = "4.0.0",
         groupId: String,
@@ -76,6 +96,23 @@ object Maven {
         }
     }
 
+    /**
+     * Usage:
+     * ```
+     * val xml = Maven.metadata(
+     *     groupId = "foo",
+     *     artifactId = "bar",
+     *     version = "42",
+     * )
+     * assertEquals(XMLParser.parse(xml).getNode("metadata").getString("groupId"), "foo")
+     * ```
+     * @throws IllegalStateException if [groupId] is empty.
+     * @throws IllegalStateException if [artifactId] is empty.
+     * @throws IllegalStateException if [version] is empty.
+     * @return The [String] XML in Maven [metadata](https://maven.apache.org/repositories/metadata.html) format.
+     * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+     * @since 0.2.3
+     */
     fun metadata(
         groupId: String,
         artifactId: String,
@@ -100,7 +137,25 @@ object Maven {
         """.trimIndent()
     }
 
+    /**
+     * A set of functions and types for working with Maven snapshot [repositories](https://s01.oss.sonatype.org).
+     * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+     * @since 0.2.3
+     */
     object Snapshot {
+        /**
+         * Usage:
+         * ```
+         * val url = Maven.Snapshot.url(groupId = "foo", artifactId = "bar", version = "42")
+         * assertEquals(cURL.get(url).code, 200)
+         * ```
+         * @throws IllegalStateException if [groupId] is empty.
+         * @throws IllegalStateException if [artifactId] is empty.
+         * @throws IllegalStateException if [version] is empty.
+         * @return The [URL] to the Maven artifact.
+         * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+         * @since 0.2.3
+         */
         fun url(
             groupId: String,
             artifactId: String,
