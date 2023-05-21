@@ -14,7 +14,6 @@ plugins {
 }
 
 dependencies {
-    implementation(gradleApi())
     testImplementation("org.junit.jupiter:junit-jupiter-api:${Version.jupiter}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${Version.jupiter}")
 }
