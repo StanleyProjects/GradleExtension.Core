@@ -38,4 +38,40 @@ object Maven {
             }
         }
     }
+
+    fun pom(
+        modelVersion: String = "4.0.0",
+        groupId: String,
+        artifactId: String,
+        version: String,
+        packaging: String,
+    ): String {
+        check(modelVersion.isNotEmpty())
+        check(groupId.isNotEmpty())
+        check(artifactId.isNotEmpty())
+        check(version.isNotEmpty())
+        check(packaging.isNotEmpty())
+        val host = "http://maven.apache.org"
+        val url = "$host/POM/$modelVersion"
+        val project = setOf(
+            "xsi:schemaLocation" to "$url $host/xsd/maven-$modelVersion.xsd",
+            "xmlns" to url,
+            "xmlns:xsi" to "http://www.w3.org/2001/XMLSchema-instance",
+        ).joinToString(separator = " ") { (key, value) ->
+            "$key=\"$value\""
+        }
+        return setOf(
+            "modelVersion" to modelVersion,
+            "groupId" to groupId,
+            "artifactId" to artifactId,
+            "version" to version,
+            "packaging" to packaging,
+        ).joinToString(
+            prefix = "<project $project>",
+            separator = "",
+            postfix = "</project>",
+        ) { (key, value) ->
+            "<$key>$value</$key>"
+        }
+    }
 }
