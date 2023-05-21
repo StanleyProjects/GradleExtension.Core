@@ -1,5 +1,7 @@
 package sp.gx.core
 
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
 
 /**
@@ -73,5 +75,29 @@ object Maven {
         ) { (key, value) ->
             "<$key>$value</$key>"
         }
+    }
+
+    fun metadata(
+        groupId: String,
+        artifactId: String,
+        version: String,
+        dateTime: LocalDateTime = LocalDateTime.now(),
+        dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss"),
+    ): String {
+        check(groupId.isNotEmpty())
+        check(artifactId.isNotEmpty())
+        check(version.isNotEmpty())
+        return """
+            <metadata>
+                <groupId>$groupId</groupId>
+                <artifactId>$artifactId</artifactId>
+                <versioning>
+                    <versions>
+                        <version>$version</version>
+                    </versions>
+                    <lastUpdated>${dateTimeFormatter.format(dateTime)}</lastUpdated>
+                </versioning>
+            </metadata>
+            """.trimIndent()
     }
 }
