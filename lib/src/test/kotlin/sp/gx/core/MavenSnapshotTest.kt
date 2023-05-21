@@ -19,6 +19,7 @@ internal class MavenSnapshotTest {
     @Test
     fun urlErrorTest() {
         Assertions.assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
             Maven.Snapshot.url(
                 groupId = "",
                 artifactId = "",
@@ -26,6 +27,7 @@ internal class MavenSnapshotTest {
             )
         }
         Assertions.assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
             Maven.Snapshot.url(
                 groupId = "foo",
                 artifactId = "",
@@ -33,6 +35,7 @@ internal class MavenSnapshotTest {
             )
         }
         Assertions.assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
             Maven.Snapshot.url(
                 groupId = "foo",
                 artifactId = "bar",

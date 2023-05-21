@@ -16,9 +16,11 @@ internal class MavenArtifactTest {
     @Test
     fun constructorErrorTest() {
         Assertions.assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
             Maven.Artifact(group = "", id = "")
         }
         Assertions.assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
             Maven.Artifact(group = "foo", id = "")
         }
     }
@@ -36,6 +38,7 @@ internal class MavenArtifactTest {
         val groupId = "foo"
         val artifactId = "bar"
         val artifact = Maven.Artifact(group = groupId, id = artifactId)
+        @Suppress("IgnoredReturnValue")
         artifact.hashCode()
     }
 
