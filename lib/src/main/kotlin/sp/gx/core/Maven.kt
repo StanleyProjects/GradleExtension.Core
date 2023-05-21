@@ -1,5 +1,6 @@
 package sp.gx.core
 
+import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
@@ -99,5 +100,21 @@ object Maven {
                 </versioning>
             </metadata>
             """.trimIndent()
+    }
+
+    object Snapshot {
+        fun url(
+            groupId: String,
+            artifactId: String,
+            version: String,
+        ): URL {
+            check(groupId.isNotEmpty())
+            check(artifactId.isNotEmpty())
+            check(version.isNotEmpty())
+            val host = "https://s01.oss.sonatype.org"
+            val path = "$host/content/repositories/snapshots"
+            val spec = "$path/${groupId.replace('.', '/')}/$artifactId/$version"
+            return URL(spec)
+        }
     }
 }
