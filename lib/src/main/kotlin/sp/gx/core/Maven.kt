@@ -35,10 +35,8 @@ object Maven {
         }
 
         override fun equals(other: Any?): Boolean {
-            return when (other) {
-                is Artifact -> group == other.group && id == other.id
-                else -> false
-            }
+            if (other !is Artifact) return false
+            return group == other.group && id == other.id
         }
     }
 
@@ -99,7 +97,7 @@ object Maven {
                     <lastUpdated>${dateTimeFormatter.format(dateTime)}</lastUpdated>
                 </versioning>
             </metadata>
-            """.trimIndent()
+        """.trimIndent()
     }
 
     object Snapshot {
