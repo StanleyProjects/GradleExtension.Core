@@ -31,7 +31,7 @@ object GitHub {
     ): URL {
         check(owner.isNotEmpty())
         check(name.isNotEmpty())
-        return URI("https","$owner.github.io", null, null)
+        return URI("https", "$owner.github.io", null, null)
             .resolve(name)
             .toURL()
     }
@@ -42,7 +42,7 @@ object GitHub {
     ): URL {
         check(owner.isNotEmpty())
         check(name.isNotEmpty())
-        return URI("https","github.com", null, null)
+        return URI("https", "github.com", null, null)
             .resolve(owner)
             .resolve(name)
             .toURL()
