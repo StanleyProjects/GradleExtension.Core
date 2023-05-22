@@ -18,16 +18,12 @@ internal class GitHubTest {
     @Test
     fun pagesErrorTest() {
         Assertions.assertThrows(IllegalStateException::class.java) {
-            GitHub.pages(
-                owner = "",
-                name = "",
-            )
+            @Suppress("IgnoredReturnValue")
+            GitHub.pages(owner = "", name = "")
         }
         Assertions.assertThrows(IllegalStateException::class.java) {
-            GitHub.pages(
-                owner = "foo",
-                name = "",
-            )
+            @Suppress("IgnoredReturnValue")
+            GitHub.pages(owner = "foo", name = "")
         }
     }
 
@@ -44,16 +40,12 @@ internal class GitHubTest {
     @Test
     fun urlErrorTest() {
         Assertions.assertThrows(IllegalStateException::class.java) {
-            GitHub.url(
-                owner = "",
-                name = "",
-            )
+            @Suppress("IgnoredReturnValue")
+            GitHub.url(owner = "", name = "")
         }
         Assertions.assertThrows(IllegalStateException::class.java) {
-            GitHub.url(
-                owner = "foo",
-                name = "",
-            )
+            @Suppress("IgnoredReturnValue")
+            GitHub.url(owner = "foo", name = "")
         }
     }
 }

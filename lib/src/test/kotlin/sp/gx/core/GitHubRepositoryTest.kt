@@ -16,9 +16,11 @@ internal class GitHubRepositoryTest {
     @Test
     fun constructorErrorTest() {
         Assertions.assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
             GitHub.Repository(owner = "", name = "")
         }
         Assertions.assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
             GitHub.Repository(owner = "foo", name = "")
         }
     }
@@ -31,6 +33,7 @@ internal class GitHubRepositoryTest {
 
     @Test
     fun hashCodeTest() {
+        @Suppress("IgnoredReturnValue")
         GitHub.Repository(owner = "foo", name = "bar").hashCode()
     }
 
