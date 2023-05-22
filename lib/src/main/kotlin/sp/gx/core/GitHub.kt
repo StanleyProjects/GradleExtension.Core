@@ -1,6 +1,5 @@
 package sp.gx.core
 
-import java.net.URI
 import java.net.URL
 import java.util.Objects
 
@@ -31,9 +30,11 @@ object GitHub {
     ): URL {
         check(owner.isNotEmpty())
         check(name.isNotEmpty())
-        return URI("https", "$owner.github.io", null, null)
-            .resolve(name)
-            .toURL()
+        val spec = StringBuilder("https://$owner.github.io")
+            .append("/")
+            .append(name)
+            .toString()
+        return URL(spec)
     }
 
     fun url(
@@ -42,9 +43,12 @@ object GitHub {
     ): URL {
         check(owner.isNotEmpty())
         check(name.isNotEmpty())
-        return URI("https", "github.com", null, null)
-            .resolve(owner)
-            .resolve(name)
-            .toURL()
+        val spec = StringBuilder("https://github.com")
+            .append("/")
+            .append(owner)
+            .append("/")
+            .append(name)
+            .toString()
+        return URL(spec)
     }
 }
