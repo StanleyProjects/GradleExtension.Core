@@ -82,10 +82,50 @@ fun String.filled(): String {
     return this
 }
 
+/**
+ * Usage:
+ * ```
+ * val cased = colonCase("foo", "bar", "baz")
+ * assertEquals("foo:bar:baz", cased)
+ * ```
+ * @return The string from first [segment] and all the not empty [other] segments separated using ":".
+ * @throws IllegalStateException if [segment] is empty.
+ * @see [Iterable.joinToString]
+ * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+ * @since 0.3.0
+ */
 fun colonCase(segment: String, vararg other: String): String {
-    TODO()
+    check(segment.isNotEmpty())
+    val builder = StringBuilder(segment)
+    for (it in other) {
+        if (it.isNotEmpty()) {
+            builder.append(":")
+                .append(it)
+        }
+    }
+    return builder.toString()
 }
 
+/**
+ * Usage:
+ * ```
+ * val cased = colonCase("foo", "bar", "baz")
+ * assertEquals("foo/bar/baz", cased)
+ * ```
+ * @return The string from first [segment] and all the not empty [other] segments separated using "/".
+ * @throws IllegalStateException if [segment] is empty.
+ * @see [Iterable.joinToString]
+ * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+ * @since 0.3.0
+ */
 fun slashCase(segment: String, vararg other: String): String {
-    TODO()
+    check(segment.isNotEmpty())
+    val builder = StringBuilder(segment)
+    for (it in other) {
+        if (it.isNotEmpty()) {
+            builder.append("/")
+                .append(it)
+        }
+    }
+    return builder.toString()
 }
