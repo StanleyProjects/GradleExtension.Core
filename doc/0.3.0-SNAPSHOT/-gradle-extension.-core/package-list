@@ -1,0 +1,44 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:sp.gx.core////PointingToDeclaration/-gradle-extension.-core/sp.gx.core/index.html
+$dokka.location:sp.gx.core//assemble/java.io.File#kotlin.String/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/assemble.html
+$dokka.location:sp.gx.core//camelCase/#kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/camel-case.html
+$dokka.location:sp.gx.core//check/java.io.File#kotlin.collections.Set[kotlin.String]#java.io.File/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/check.html
+$dokka.location:sp.gx.core//colonCase/#kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/colon-case.html
+$dokka.location:sp.gx.core//existing/java.io.File#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/existing.html
+$dokka.location:sp.gx.core//file/java.io.File#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/file.html
+$dokka.location:sp.gx.core//filled/java.io.File#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/filled.html
+$dokka.location:sp.gx.core//filled/kotlin.String#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/filled.html
+$dokka.location:sp.gx.core//kebabCase/#kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/kebab-case.html
+$dokka.location:sp.gx.core//resolve/java.net.URL#kotlin.String/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/resolve.html
+$dokka.location:sp.gx.core//slashCase/#kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/slash-case.html
+$dokka.location:sp.gx.core//uppercaseFirstChar/kotlin.String#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/uppercase-first-char.html
+$dokka.location:sp.gx.core/Badge///PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-badge/index.html
+$dokka.location:sp.gx.core/Badge/url/#kotlin.String#kotlin.String#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-badge/url.html
+$dokka.location:sp.gx.core/GitHub.Repository///PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-git-hub/-repository/index.html
+$dokka.location:sp.gx.core/GitHub.Repository/Repository/#kotlin.String#kotlin.String/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-git-hub/-repository/-repository.html
+$dokka.location:sp.gx.core/GitHub.Repository/equals/#kotlin.Any?/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-git-hub/-repository/equals.html
+$dokka.location:sp.gx.core/GitHub.Repository/hashCode/#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-git-hub/-repository/hash-code.html
+$dokka.location:sp.gx.core/GitHub.Repository/name/#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-git-hub/-repository/name.html
+$dokka.location:sp.gx.core/GitHub.Repository/owner/#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-git-hub/-repository/owner.html
+$dokka.location:sp.gx.core/GitHub.Repository/toString/#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-git-hub/-repository/to-string.html
+$dokka.location:sp.gx.core/GitHub///PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-git-hub/index.html
+$dokka.location:sp.gx.core/GitHub/pages/#kotlin.String#kotlin.String/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-git-hub/pages.html
+$dokka.location:sp.gx.core/GitHub/url/#kotlin.String#kotlin.String/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-git-hub/url.html
+$dokka.location:sp.gx.core/Markdown///PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-markdown/index.html
+$dokka.location:sp.gx.core/Markdown/image/#kotlin.String#java.net.URL/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-markdown/image.html
+$dokka.location:sp.gx.core/Markdown/link/#kotlin.String#java.net.URL/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-markdown/link.html
+$dokka.location:sp.gx.core/Maven.Artifact///PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-maven/-artifact/index.html
+$dokka.location:sp.gx.core/Maven.Artifact/Artifact/#kotlin.String#kotlin.String/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-maven/-artifact/-artifact.html
+$dokka.location:sp.gx.core/Maven.Artifact/equals/#kotlin.Any?/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-maven/-artifact/equals.html
+$dokka.location:sp.gx.core/Maven.Artifact/group/#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-maven/-artifact/group.html
+$dokka.location:sp.gx.core/Maven.Artifact/hashCode/#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-maven/-artifact/hash-code.html
+$dokka.location:sp.gx.core/Maven.Artifact/id/#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-maven/-artifact/id.html
+$dokka.location:sp.gx.core/Maven.Artifact/toString/#/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-maven/-artifact/to-string.html
+$dokka.location:sp.gx.core/Maven.Snapshot///PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-maven/-snapshot/index.html
+$dokka.location:sp.gx.core/Maven.Snapshot/url/#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-maven/-snapshot/url.html
+$dokka.location:sp.gx.core/Maven///PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-maven/index.html
+$dokka.location:sp.gx.core/Maven/metadata/#kotlin.String#kotlin.String#kotlin.String#java.time.LocalDateTime#java.time.format.DateTimeFormatter/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-maven/metadata.html
+$dokka.location:sp.gx.core/Maven/pom/#kotlin.String#kotlin.String#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/-gradle-extension.-core/sp.gx.core/-maven/pom.html
+sp.gx.core
+
