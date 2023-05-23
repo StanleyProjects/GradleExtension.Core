@@ -1,10 +1,15 @@
+import sp.gx.core.assemble
+import sp.gx.core.camelCase
+import sp.gx.core.check
+import sp.gx.core.existing
+import sp.gx.core.file
+import sp.gx.core.filled
+import sp.gx.core.kebabCase
 import java.net.URL
 
 version = "0.3.0"
 
-repositories {
-    mavenCentral()
-}
+repositories.mavenCentral()
 
 plugins {
     id("org.jetbrains.kotlin.jvm")
@@ -18,9 +23,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${Version.jupiter}")
 }
 
-jacoco {
-    toolVersion = Version.jacoco
-}
+jacoco.toolVersion = Version.jacoco
 
 tasks.getByName<JavaCompile>("compileJava") {
     targetCompatibility = Version.jvmTarget
