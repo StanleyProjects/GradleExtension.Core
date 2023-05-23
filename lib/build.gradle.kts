@@ -1,4 +1,5 @@
 import sp.gx.core.Badge
+import sp.gx.core.GitHub
 import sp.gx.core.Markdown
 import sp.gx.core.Maven
 import sp.gx.core.assemble
@@ -15,6 +16,11 @@ version = "0.3.0"
 val maven = Maven.Artifact(
     group = "com.github.kepocnhh",
     id = rootProject.name,
+)
+
+val gh = GitHub.Repository(
+    owner = "StanleyProjects",
+    name = rootProject.name,
 )
 
 repositories.mavenCentral()
@@ -194,14 +200,14 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
     }
     task<org.jetbrains.dokka.gradle.DokkaTask>(camelCase("assemble", variant, "Documentation")) {
         outputDirectory.set(buildDir.resolve("documentation/$variant"))
-        moduleName.set(Repository.name)
+        moduleName.set(gh.name)
         moduleVersion.set(version)
         dokkaSourceSets.getByName("main") {
             val path = "src/$name/kotlin"
             reportUndocumented.set(false)
             sourceLink {
                 localDirectory.set(file(path))
-                val url = GitHubUtil.url(Repository.owner, Repository.name)
+                val url = GitHub.url(gh.owner, gh.name)
                 remoteUrl.set(URL("$url/tree/${moduleVersion.get()}/lib/$path"))
             }
             jdkVersion.set(Version.jvmTarget.toInt())
@@ -212,8 +218,8 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             buildDir.resolve("yml/metadata.yml").assemble(
                 """
                     repository:
-                     owner: '${Repository.owner}'
-                     name: '${Repository.name}'
+                     owner: '${gh.owner}'
+                     name: '${gh.name}'
                     version: '$version'
                 """.trimIndent(),
             )
@@ -232,7 +238,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             val expected = setOf(
                 badge,
                 Markdown.link("Maven", Maven.Snapshot.url(maven.group, maven.id, version)),
-                Markdown.link("Documentation", GitHubUtil.pages(Repository.owner, Repository.name, "doc/$version")),
+                Markdown.link("Documentation", URL(GitHub.pages(gh.owner, gh.name).toString() + "/doc/$version")), // todo resolve
                 "implementation(\"${maven.group}:${maven.id}:$version\")",
             )
             rootDir.resolve("README.md").check(
