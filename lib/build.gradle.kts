@@ -1,3 +1,5 @@
+import sp.gx.core.Badge
+import sp.gx.core.Markdown
 import sp.gx.core.assemble
 import sp.gx.core.camelCase
 import sp.gx.core.check
@@ -213,9 +215,9 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
     }
     task(camelCase("check", variant, "Readme")) {
         doLast {
-            val badge = MarkdownUtil.image(
+            val badge = Markdown.image(
                 text = "version",
-                url = BadgeUtil.url(
+                url = Badge.url(
                     label = "version",
                     message = version,
                     color = "2962ff",
@@ -223,8 +225,8 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             )
             val expected = setOf(
                 badge,
-                MarkdownUtil.url("Maven", MavenUtil.Snapshot.url(Maven.groupId, Maven.artifactId, version)),
-                MarkdownUtil.url("Documentation", GitHubUtil.pages(Repository.owner, Repository.name, "doc/$version")),
+                Markdown.link("Maven", MavenUtil.Snapshot.url(Maven.groupId, Maven.artifactId, version)),
+                Markdown.link("Documentation", GitHubUtil.pages(Repository.owner, Repository.name, "doc/$version")),
                 "implementation(\"${Maven.groupId}:${Maven.artifactId}:$version\")",
             )
             rootDir.resolve("README.md").check(
