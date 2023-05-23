@@ -1,4 +1,4 @@
-# 2022/06/12
+# 2023/05/23
 
 naming:
   active: true
@@ -30,7 +30,7 @@ naming:
     active: true
     functionPattern: '[a-z][a-zA-Z0-9]*'
     excludeClassPattern: '$^'
-    ignoreAnnotated: ['Composable']
+    ignoreAnnotated: ['Composable', 'Test']
     ignoreOverridden: true
   FunctionParameterNaming:
     active: true

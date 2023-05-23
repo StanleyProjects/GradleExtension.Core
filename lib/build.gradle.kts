@@ -1,10 +1,29 @@
+import sp.gx.core.Badge
+import sp.gx.core.GitHub
+import sp.gx.core.Markdown
+import sp.gx.core.Maven
+import sp.gx.core.assemble
+import sp.gx.core.camelCase
+import sp.gx.core.check
+import sp.gx.core.existing
+import sp.gx.core.file
+import sp.gx.core.filled
+import sp.gx.core.kebabCase
 import java.net.URL
 
-version = "0.2.4"
+version = "0.3.0"
 
-repositories {
-    mavenCentral()
-}
+val maven = Maven.Artifact(
+    group = "com.github.kepocnhh",
+    id = rootProject.name,
+)
+
+val gh = GitHub.Repository(
+    owner = "StanleyProjects",
+    name = rootProject.name,
+)
+
+repositories.mavenCentral()
 
 plugins {
     id("org.jetbrains.kotlin.jvm")
@@ -18,9 +37,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${Version.jupiter}")
 }
 
-jacoco {
-    toolVersion = Version.jacoco
-}
+jacoco.toolVersion = Version.jacoco
 
 tasks.getByName<JavaCompile>("compileJava") {
     targetCompatibility = Version.jvmTarget
@@ -29,7 +46,7 @@ tasks.getByName<JavaCompile>("compileJava") {
 val compileKotlinTask = tasks.getByName<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
     kotlinOptions {
         jvmTarget = Version.jvmTarget
-        freeCompilerArgs = freeCompilerArgs + setOf("-module-name", Maven.groupId + ":" + Maven.artifactId)
+        freeCompilerArgs = freeCompilerArgs + setOf("-module-name", maven.group + ":" + maven.id)
     }
 }
 
@@ -148,22 +165,22 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
     val version = kebabCase(version.toString(), variant.toUpperCase())
     task<Jar>(camelCase("assemble", variant, "Jar")) {
         dependsOn(compileKotlinTask)
-        archiveBaseName.set(Maven.artifactId)
+        archiveBaseName.set(maven.id)
         archiveVersion.set(version)
         from(compileKotlinTask.destinationDirectory.asFileTree)
     }
     task<Jar>(camelCase("assemble", variant, "Source")) {
-        archiveBaseName.set(Maven.artifactId)
+        archiveBaseName.set(maven.id)
         archiveVersion.set(version)
         archiveClassifier.set("sources")
         from(sourceSets.main.get().allSource)
     }
     task(camelCase("assemble", variant, "Pom")) {
         doLast {
-            buildDir.resolve("libs/${Maven.artifactId}-$version.pom").assemble(
-                MavenUtil.pom(
-                    groupId = Maven.groupId,
-                    artifactId = Maven.artifactId,
+            buildDir.resolve("libs/${kebabCase(maven.id, version)}.pom").assemble(
+                Maven.pom(
+                    groupId = maven.group,
+                    artifactId = maven.id,
                     version = version,
                     packaging = "jar",
                 ),
@@ -173,9 +190,9 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
     task(camelCase("assemble", variant, "MavenMetadata")) {
         doLast {
             buildDir.resolve("xml/maven-metadata.xml").assemble(
-                MavenUtil.metadata(
-                    groupId = Maven.groupId,
-                    artifactId = Maven.artifactId,
+                Maven.metadata(
+                    groupId = maven.group,
+                    artifactId = maven.id,
                     version = version,
                 ),
             )
@@ -183,14 +200,14 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
     }
     task<org.jetbrains.dokka.gradle.DokkaTask>(camelCase("assemble", variant, "Documentation")) {
         outputDirectory.set(buildDir.resolve("documentation/$variant"))
-        moduleName.set(Repository.name)
+        moduleName.set(gh.name)
         moduleVersion.set(version)
         dokkaSourceSets.getByName("main") {
             val path = "src/$name/kotlin"
             reportUndocumented.set(false)
             sourceLink {
                 localDirectory.set(file(path))
-                val url = GitHubUtil.url(Repository.owner, Repository.name)
+                val url = GitHub.url(gh.owner, gh.name)
                 remoteUrl.set(URL("$url/tree/${moduleVersion.get()}/lib/$path"))
             }
             jdkVersion.set(Version.jvmTarget.toInt())
@@ -201,8 +218,8 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             buildDir.resolve("yml/metadata.yml").assemble(
                 """
                     repository:
-                     owner: '${Repository.owner}'
-                     name: '${Repository.name}'
+                     owner: '${gh.owner}'
+                     name: '${gh.name}'
                     version: '$version'
                 """.trimIndent(),
             )
@@ -210,9 +227,9 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
     }
     task(camelCase("check", variant, "Readme")) {
         doLast {
-            val badge = MarkdownUtil.image(
+            val badge = Markdown.image(
                 text = "version",
-                url = BadgeUtil.url(
+                url = Badge.url(
                     label = "version",
                     message = version,
                     color = "2962ff",
@@ -220,9 +237,9 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             )
             val expected = setOf(
                 badge,
-                MarkdownUtil.url("Maven", MavenUtil.Snapshot.url(Maven.groupId, Maven.artifactId, version)),
-                MarkdownUtil.url("Documentation", GitHubUtil.pages(Repository.owner, Repository.name, "doc/$version")),
-                "implementation(\"${Maven.groupId}:${Maven.artifactId}:$version\")",
+                Markdown.link("Maven", Maven.Snapshot.url(maven.group, maven.id, version)),
+                Markdown.link("Documentation", URL(GitHub.pages(gh.owner, gh.name).toString() + "/doc/$version")), // todo resolve
+                "implementation(\"${maven.group}:${maven.id}:$version\")",
             )
             rootDir.resolve("README.md").check(
                 expected = expected,
