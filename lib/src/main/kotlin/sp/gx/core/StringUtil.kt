@@ -81,3 +81,11 @@ fun String.filled(): String {
     check(isNotEmpty())
     return this
 }
+
+fun colonCase(segment: String, vararg other: String): String {
+    TODO()
+}
+
+fun slashCase(segment: String, vararg other: String): String {
+    TODO()
+}
