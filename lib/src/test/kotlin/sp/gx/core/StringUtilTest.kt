@@ -65,4 +65,40 @@ internal class StringUtilTest {
             expected.filled()
         }
     }
+
+    @Test
+    fun colonCaseTest() {
+        assertEquals("foo:bar:baz", colonCase("foo", "bar", "baz"))
+        assertEquals("foo:baz", colonCase("foo", "", "baz"))
+        assertEquals("foo:bar", colonCase("foo", "bar", ""))
+        assertEquals("foo:bar", colonCase("foo", "bar"))
+        assertEquals("foo", colonCase("foo", "", ""))
+        assertEquals("foo", colonCase("foo", ""))
+    }
+
+    @Test
+    fun colonCaseErrorTest() {
+        assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            colonCase("", "bar")
+        }
+    }
+
+    @Test
+    fun slashCaseTest() {
+        assertEquals("foo/bar/baz", slashCase("foo", "bar", "baz"))
+        assertEquals("foo/baz", slashCase("foo", "", "baz"))
+        assertEquals("foo/bar", slashCase("foo", "bar", ""))
+        assertEquals("foo/bar", slashCase("foo", "bar"))
+        assertEquals("foo", slashCase("foo", "", ""))
+        assertEquals("foo", slashCase("foo", ""))
+    }
+
+    @Test
+    fun slashCaseErrorTest() {
+        assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            slashCase("", "bar")
+        }
+    }
 }
