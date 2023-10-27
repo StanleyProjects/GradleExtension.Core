@@ -300,7 +300,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
                 Markdown.link("Maven", Maven.Snapshot.url(maven.group, maven.id, version)),
                 Markdown.link(
                     "Documentation",
-                    GitHub.pages(gh.owner, gh.name).resolve("doc").resolve(version)
+                    GitHub.pages(gh.owner, gh.name).resolve("doc").resolve(version),
                 ), // todo slash case
                 "implementation(\"${colonCase(maven.group, maven.id, version)}\")",
             )
