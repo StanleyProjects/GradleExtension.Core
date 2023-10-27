@@ -11,7 +11,7 @@ import sp.gx.core.filled
 import sp.gx.core.kebabCase
 import java.net.URL
 
-version = "0.4.0"
+version = "0.4.1"
 
 val maven = Maven.Artifact(
     group = "com.github.kepocnhh",
