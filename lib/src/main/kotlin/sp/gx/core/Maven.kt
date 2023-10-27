@@ -22,8 +22,8 @@ object Maven {
      */
     class Artifact(val group: String, val id: String) {
         init {
-            check(group.isNotEmpty())
-            check(id.isNotEmpty())
+            check(group.isNotEmpty()) { "Group ID is empty!" }
+            check(id.isNotEmpty()) { "Artifact ID is empty!" }
         }
 
         override fun toString(): String {
@@ -67,11 +67,11 @@ object Maven {
         version: String,
         packaging: String,
     ): String {
-        check(modelVersion.isNotEmpty())
-        check(groupId.isNotEmpty())
-        check(artifactId.isNotEmpty())
-        check(version.isNotEmpty())
-        check(packaging.isNotEmpty())
+        check(modelVersion.isNotEmpty()) { "Model version is empty!" }
+        check(groupId.isNotEmpty()) { "Group ID is empty!" }
+        check(artifactId.isNotEmpty()) { "Artifact ID is empty!" }
+        check(version.isNotEmpty()) { "Version is empty!" }
+        check(packaging.isNotEmpty()) { "Packaging is empty!" }
         val host = "http://maven.apache.org"
         val url = "$host/POM/$modelVersion"
         val project = setOf(
@@ -150,9 +150,9 @@ object Maven {
         dateTime: LocalDateTime = LocalDateTime.now(),
         dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss"),
     ): String {
-        check(groupId.isNotEmpty())
-        check(artifactId.isNotEmpty())
-        check(version.isNotEmpty())
+        check(groupId.isNotEmpty()) { "Group ID is empty!" }
+        check(artifactId.isNotEmpty()) { "Artifact ID is empty!" }
+        check(version.isNotEmpty()) { "Version is empty!" }
         return """
             <metadata>
                 <groupId>$groupId</groupId>
@@ -220,9 +220,9 @@ object Maven {
             artifactId: String,
             version: String,
         ): URL {
-            check(groupId.isNotEmpty())
-            check(artifactId.isNotEmpty())
-            check(version.isNotEmpty())
+            check(groupId.isNotEmpty()) { "Group ID is empty!" }
+            check(artifactId.isNotEmpty()) { "Artifact ID is empty!" }
+            check(version.isNotEmpty()) { "Version is empty!" }
             val host = "https://s01.oss.sonatype.org"
             val path = "content/repositories/snapshots"
             val spec = "$host/$path/${groupId.replace('.', '/')}/$artifactId/$version"
