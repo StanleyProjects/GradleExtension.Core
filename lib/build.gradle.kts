@@ -230,13 +230,18 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
     }
     task(camelCase("assemble", variant, "MavenMetadata")) {
         doLast {
-            buildDir.resolve("xml/maven-metadata.xml").assemble(
+            val file = layout.buildDirectory.get()
+                .dir("xml")
+                .file("maven-metadata.xml")
+                .asFile
+            file.assemble(
                 Maven.metadata(
                     groupId = maven.group,
                     artifactId = maven.id,
                     version = version,
                 ),
             )
+            println("Maven metadata: ${file.absolutePath}")
         }
     }
     task<org.jetbrains.dokka.gradle.DokkaTask>(camelCase("assemble", variant, "Documentation")) {
