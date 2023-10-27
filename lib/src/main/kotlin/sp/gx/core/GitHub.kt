@@ -24,6 +24,36 @@ object GitHub {
             check(name.isNotEmpty())
         }
 
+        /**
+         * Usage:
+         * ```
+         * val repository = GitHub.Repository(owner = "foo", name = "bar")
+         * val expected = GitHub.url(owner = repository.owner, name = repository.name)
+         * assertEquals(expected, repository.url())
+         * ```
+         * @return The [URL] of this [GitHub.Repository].
+         * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+         * @since 0.4.2
+         */
+        fun url(): URL {
+            return url(owner = owner, name = name)
+        }
+
+        /**
+         * Usage:
+         * ```
+         * val repository = GitHub.Repository(owner = "foo", name = "bar")
+         * val expected = GitHub.pages(owner = repository.owner, name = repository.name)
+         * assertEquals(expected, repository.pages())
+         * ```
+         * @return The [URL] from the GitHub [pages](https://pages.github.com) of this [GitHub.Repository].
+         * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+         * @since 0.4.2
+         */
+        fun pages(): URL {
+            return pages(owner = owner, name = name)
+        }
+
         override fun toString(): String {
             return "Repository($owner/$name)"
         }
