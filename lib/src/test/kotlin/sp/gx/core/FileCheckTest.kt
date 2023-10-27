@@ -65,6 +65,22 @@ internal class FileCheckTest {
     }
 
     @Test
+    fun checkRegexesErrorTest() {
+        val file = File.createTempFile("foo", "bar")
+        file.appendText("foo")
+        check(file.readText().contains("foo"))
+        val unexpected = setOf("bar".toRegex(), "baz".toRegex())
+        val report = File.createTempFile("foo", "baz")
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            file.check(expected = emptySet(), regexes = unexpected, report = report)
+        }
+        Assertions.assertTrue(report.exists())
+        unexpected.forEach {
+            Assertions.assertTrue(report.readText().contains("the file does not match \"$it\" regex"))
+        }
+    }
+
+    @Test
     fun checkNoneTest() {
         val file = File.createTempFile("foo", "bar")
         check(file.delete())
