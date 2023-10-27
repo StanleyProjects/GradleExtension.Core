@@ -41,7 +41,6 @@ fun File.check(
     regexes: Set<Regex>,
     report: File,
 ) {
-    // todo task
     val issues = when {
         !exists() -> setOf("the file does not exist")
         isDirectory -> setOf("the file is a directory")
