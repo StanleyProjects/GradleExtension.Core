@@ -23,8 +23,15 @@ import java.io.File
  * @since 0.2.0
  */
 fun File.check(expected: Set<String>, report: File) {
+    check(expected = expected, regexes = emptySet(), report = report)
+}
+
+fun File.check(
+    expected: Set<String>,
+    regexes: Set<Regex>,
+    report: File,
+) {
     // todo task
-    // todo regexes
     val issues = when {
         !exists() -> setOf("the file does not exist")
         isDirectory -> setOf("the file is a directory")
@@ -33,13 +40,7 @@ fun File.check(expected: Set<String>, report: File) {
             if (actual.isEmpty()) {
                 setOf("the file does not contain text")
             } else {
-                expected.mapNotNull { line ->
-                    if (actual.none { it.contains(line) }) {
-                        "the file does not contain \"$line\" line"
-                    } else {
-                        null
-                    }
-                }.toSet()
+                checkLines(actual = actual, expected = expected) + checkRegexes(actual = actual, regexes = regexes)
             }
         }
     }
@@ -53,7 +54,7 @@ fun File.check(expected: Set<String>, report: File) {
         val message = "All checks of the file along the \"$name\" were successful."
         report.writeText(message)
         @Suppress("ForbiddenMethodCall")
-        (println(message))
+        println(message)
         return
     }
     val text = """
@@ -64,4 +65,24 @@ fun File.check(expected: Set<String>, report: File) {
     """.trimIndent()
     report.writeText(text)
     error("Problems were found while checking the \"$name\". See the report ${report.absolutePath}")
+}
+
+private fun checkLines(actual: List<String>, expected: Set<String>): Set<String> {
+    return expected.mapNotNull { line ->
+        if (actual.none { it.contains(line) }) {
+            "the file does not contain \"$line\" line"
+        } else {
+            null
+        }
+    }.toSet()
+}
+
+private fun checkRegexes(actual: List<String>, regexes: Set<Regex>): Set<String> {
+    return regexes.mapNotNull { regex ->
+        if (actual.none { regex matches it }) {
+            "the file does not match \"$regex\" regex"
+        } else {
+            null
+        }
+    }.toSet()
 }
