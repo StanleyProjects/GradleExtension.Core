@@ -5,5 +5,5 @@ object Version {
     const val jupiter = "5.9.3"
     const val jvmTarget = "17"
     const val kotlin = "1.9.10"
-    const val ktlint = "0.49.1"
+    const val ktlint = "0.50.0"
 }
