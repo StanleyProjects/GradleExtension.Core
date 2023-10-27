@@ -11,6 +11,7 @@ import sp.gx.core.file
 import sp.gx.core.filled
 import sp.gx.core.kebabCase
 import sp.gx.core.resolve
+import java.util.Locale
 
 version = "0.4.1"
 
@@ -198,7 +199,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
 }
 
 "snapshot".also { variant ->
-    val version = kebabCase(version.toString(), variant.toUpperCase())
+    val version = kebabCase(version.toString(), variant.uppercase(Locale.US))
     task<Jar>(camelCase("assemble", variant, "Jar")) {
         dependsOn(compileKotlinTask)
         archiveBaseName = maven.id
