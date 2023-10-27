@@ -13,7 +13,7 @@ import sp.gx.core.kebabCase
 import sp.gx.core.resolve
 import java.util.Locale
 
-version = "0.4.1"
+version = "0.4.2"
 
 val maven = Maven.Artifact(
     group = "com.github.kepocnhh",
