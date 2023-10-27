@@ -5,10 +5,10 @@ A few Gradle extensions.
 
 ## Snapshot
 
-![version](https://img.shields.io/static/v1?label=version&message=0.3.0-SNAPSHOT&labelColor=212121&color=2962ff&style=flat)
+![version](https://img.shields.io/static/v1?label=version&message=0.4.2-SNAPSHOT&labelColor=212121&color=2962ff&style=flat)
 
-- [Maven](https://s01.oss.sonatype.org/content/repositories/snapshots/com/github/kepocnhh/GradleExtension.Core/0.3.0-SNAPSHOT)
-- [Documentation](https://StanleyProjects.github.io/GradleExtension.Core/doc/0.3.0-SNAPSHOT)
+- [Maven](https://s01.oss.sonatype.org/content/repositories/snapshots/com/github/kepocnhh/GradleExtension.Core/0.4.2-SNAPSHOT)
+- [Documentation](https://StanleyProjects.github.io/GradleExtension.Core/doc/0.4.2-SNAPSHOT)
 
 ### Build
 ```
@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.kepocnhh:GradleExtension.Core:0.3.0-SNAPSHOT")
+    implementation("com.github.kepocnhh:GradleExtension.Core:0.4.2-SNAPSHOT")
 }
 ```
 
