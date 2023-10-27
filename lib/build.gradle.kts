@@ -11,7 +11,6 @@ import sp.gx.core.file
 import sp.gx.core.filled
 import sp.gx.core.kebabCase
 import sp.gx.core.resolve
-import java.net.URL
 
 version = "0.4.1"
 
@@ -48,7 +47,7 @@ tasks.getByName<JavaCompile>("compileJava") {
 val compileKotlinTask = tasks.getByName<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
     kotlinOptions {
         jvmTarget = Version.jvmTarget
-        freeCompilerArgs = freeCompilerArgs + setOf("-module-name", maven.group + ":" + maven.id)
+        freeCompilerArgs = freeCompilerArgs + setOf("-module-name", colonCase(maven.group, maven.id))
     }
 }
 
@@ -298,7 +297,10 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             val expected = setOf(
                 badge,
                 Markdown.link("Maven", Maven.Snapshot.url(maven.group, maven.id, version)),
-                Markdown.link("Documentation", GitHub.pages(gh.owner, gh.name).resolve("doc").resolve(version)), // todo slash case
+                Markdown.link(
+                    "Documentation",
+                    GitHub.pages(gh.owner, gh.name).resolve("doc").resolve(version)
+                ), // todo slash case
                 "implementation(\"${colonCase(maven.group, maven.id, version)}\")",
             )
             val report = layout.buildDirectory.get()
