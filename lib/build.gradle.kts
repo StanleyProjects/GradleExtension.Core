@@ -58,10 +58,21 @@ tasks.getByName<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestKot
     kotlinOptions.jvmTarget = Version.jvmTarget
 }
 
+// todo org.gradle.api.file.RegularFile:existing
+fun Test.getExecutionData(): File {
+    return layout.buildDirectory.get()
+        .dir("jacoco")
+        .file("$name.exec")
+        .asFile
+}
+
 val taskUnitTest = task<Test>("checkUnitTest") {
     useJUnitPlatform()
     testClassesDirs = sourceSets.test.get().output.classesDirs
     classpath = sourceSets.test.get().runtimeClasspath
+    doLast {
+        getExecutionData().existing().file().filled()
+    }
 }
 
 val taskCoverageReport = task<JacocoReport>("assembleCoverageReport") {
@@ -73,7 +84,7 @@ val taskCoverageReport = task<JacocoReport>("assembleCoverageReport") {
     }
     sourceDirectories.setFrom(file("src/main/kotlin"))
     classDirectories.setFrom(sourceSets.main.get().output.classesDirs)
-    executionData(taskUnitTest)
+    executionData(taskUnitTest.getExecutionData())
     doLast {
         val report = layout.buildDirectory.get()
             .dir("reports/jacoco/$name/html")

@@ -14,7 +14,7 @@ import java.io.File
  * @since 0.0.6
  */
 fun File.existing(): File {
-    check(exists())
+    check(exists()) // todo message
     return this
 }
 
@@ -30,7 +30,7 @@ fun File.existing(): File {
  * @since 0.1.1
  */
 fun File.file(): File {
-    check(isFile)
+    check(isFile) // todo message
     return this
 }
 
@@ -46,7 +46,7 @@ fun File.file(): File {
  * @since 0.1.1
  */
 fun File.filled(): File {
-    check(length() > 0)
+    check(length() > 0) // todo message
     return this
 }
 
