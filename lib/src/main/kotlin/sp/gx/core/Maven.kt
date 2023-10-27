@@ -67,6 +67,7 @@ object Maven {
         version: String,
         packaging: String,
     ): String {
+        // todo Maven.Artifact
         check(modelVersion.isNotEmpty())
         check(groupId.isNotEmpty())
         check(artifactId.isNotEmpty())
@@ -120,6 +121,7 @@ object Maven {
         dateTime: LocalDateTime = LocalDateTime.now(),
         dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss"),
     ): String {
+        // todo Maven.Artifact
         check(groupId.isNotEmpty())
         check(artifactId.isNotEmpty())
         check(version.isNotEmpty())
@@ -161,6 +163,7 @@ object Maven {
             artifactId: String,
             version: String,
         ): URL {
+            // todo Maven.Artifact
             check(groupId.isNotEmpty())
             check(artifactId.isNotEmpty())
             check(version.isNotEmpty())

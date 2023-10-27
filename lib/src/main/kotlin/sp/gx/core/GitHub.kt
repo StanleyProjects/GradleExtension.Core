@@ -54,6 +54,7 @@ object GitHub {
         owner: String,
         name: String,
     ): URL {
+        // todo GitHub.Repository
         check(owner.isNotEmpty())
         check(name.isNotEmpty())
         val spec = StringBuilder("https://$owner.github.io")
@@ -79,6 +80,7 @@ object GitHub {
         owner: String,
         name: String,
     ): URL {
+        // todo GitHub.Repository
         check(owner.isNotEmpty())
         check(name.isNotEmpty())
         val spec = StringBuilder("https://github.com")

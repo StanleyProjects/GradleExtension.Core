@@ -23,6 +23,7 @@ import java.io.File
  * @since 0.2.0
  */
 fun File.check(expected: Set<String>, report: File) {
+    // todo regexes
     val issues = when {
         !exists() -> setOf("the file does not exist")
         isDirectory -> setOf("the file is a directory")

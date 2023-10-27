@@ -64,6 +64,7 @@ fun File.filled(): File {
  * @since 0.2.1
  */
 fun File.assemble(text: String) {
+    // todo org.gradle.api.file.RegularFile
     check(text.isNotEmpty())
     if (exists()) {
         check(isFile)
@@ -73,3 +74,5 @@ fun File.assemble(text: String) {
     }
     writeText(text)
 }
+
+// todo task assembler
