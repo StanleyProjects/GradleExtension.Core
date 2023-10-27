@@ -13,6 +13,7 @@ import java.net.URL
  * @since 0.4.3
  */
 fun URL.resolve(segment: String, vararg other: String): URL {
+    check(segment.isNotEmpty()) { "First segment is empty!" }
     val builder = StringBuilder(toString())
         .append("/")
         .append(segment)
