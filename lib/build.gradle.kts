@@ -5,6 +5,7 @@ import sp.gx.core.Maven
 import sp.gx.core.assemble
 import sp.gx.core.camelCase
 import sp.gx.core.check
+import sp.gx.core.colonCase
 import sp.gx.core.existing
 import sp.gx.core.file
 import sp.gx.core.filled
@@ -297,12 +298,16 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             val expected = setOf(
                 badge,
                 Markdown.link("Maven", Maven.Snapshot.url(maven.group, maven.id, version)),
-                Markdown.link("Documentation", URL(GitHub.pages(gh.owner, gh.name).toString() + "/doc/$version")), // todo resolve
-                "implementation(\"${maven.group}:${maven.id}:$version\")",
+                Markdown.link("Documentation", GitHub.pages(gh.owner, gh.name).resolve("doc").resolve(version)), // todo slash case
+                "implementation(\"${colonCase(maven.group, maven.id, version)}\")",
             )
+            val report = layout.buildDirectory.get()
+                .dir("reports/analysis/readme")
+                .file("index.html")
+                .asFile
             rootDir.resolve("README.md").check(
                 expected = expected,
-                report = buildDir.resolve("reports/analysis/readme/index.html"),
+                report = report,
             )
         }
     }
