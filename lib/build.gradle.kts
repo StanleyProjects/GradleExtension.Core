@@ -269,7 +269,11 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
     }
     task(camelCase("assemble", variant, "Metadata")) {
         doLast {
-            buildDir.resolve("yml/metadata.yml").assemble(
+            val file = layout.buildDirectory.get()
+                .dir("yml")
+                .file("metadata.yml")
+                .asFile
+            file.assemble(
                 """
                     repository:
                      owner: '${gh.owner}'
@@ -277,6 +281,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
                     version: '$version'
                 """.trimIndent(),
             )
+            println("Metadata: ${file.absolutePath}")
         }
     }
     task(camelCase("check", variant, "Readme")) {
