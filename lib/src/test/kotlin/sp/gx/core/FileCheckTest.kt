@@ -13,9 +13,7 @@ internal class FileCheckTest {
             "bar",
             "baz",
         )
-        expected.forEach {
-            file.appendText(it)
-        }
+        file.writeText(expected.joinToString(separator = "\n"))
         expected.forEach {
             check(file.readText().contains(it))
         }
@@ -23,6 +21,28 @@ internal class FileCheckTest {
         file.check(expected = expected, report = report)
         Assertions.assertTrue(report.exists())
         Assertions.assertEquals("All checks of the file along the \"${file.name}\" were successful.", report.readText())
+    }
+
+    @Test
+    fun checkRegexesTest() {
+        val file = File.createTempFile("foo", "bar")
+        val expected = setOf(
+            "foo",
+            "bar",
+            "baz",
+            "123abc",
+            "afoo1234",
+        )
+        file.writeText(expected.joinToString(separator = "\n"))
+        expected.forEach {
+            check(file.readText().contains(it))
+        }
+        val report = File.createTempFile("foo", "baz")
+        val regexes = setOf(
+            "^1\\d+\\w+c${'$'}".toRegex(),
+            "f\\w+\\d+3".toRegex(),
+        )
+        file.check(expected = expected, regexes = regexes, report = report)
     }
 
     @Test

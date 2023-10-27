@@ -78,9 +78,9 @@ private fun checkLines(actual: List<String>, expected: Set<String>): Set<String>
 }
 
 private fun checkRegexes(actual: List<String>, regexes: Set<Regex>): Set<String> {
-    return regexes.mapNotNull { regex ->
-        if (actual.none { regex matches it }) {
-            "the file does not match \"$regex\" regex"
+    return regexes.mapNotNull {
+        if (actual.none(it::containsMatchIn)) {
+            "the file does not match \"$it\" regex"
         } else {
             null
         }
