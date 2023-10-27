@@ -9,6 +9,7 @@ import sp.gx.core.existing
 import sp.gx.core.file
 import sp.gx.core.filled
 import sp.gx.core.kebabCase
+import sp.gx.core.resolve
 import java.net.URL
 
 version = "0.4.1"
@@ -59,6 +60,7 @@ tasks.getByName<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestKot
 }
 
 // todo org.gradle.api.file.RegularFile:existing
+// todo org.gradle.api.file.RegularFile:filled
 fun Test.getExecutionData(): File {
     return layout.buildDirectory.get()
         .dir("jacoco")
@@ -214,18 +216,26 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
         }
     }
     task<org.jetbrains.dokka.gradle.DokkaTask>(camelCase("assemble", variant, "Documentation")) {
-        outputDirectory.set(buildDir.resolve("documentation/$variant"))
-        moduleName.set(gh.name)
-        moduleVersion.set(version)
+        outputDirectory = layout.buildDirectory.dir("documentation/$variant")
+        moduleName = gh.name
+        moduleVersion = version
         dokkaSourceSets.getByName("main") {
             val path = "src/$name/kotlin"
-            reportUndocumented.set(false)
+            reportUndocumented = false
             sourceLink {
-                localDirectory.set(file(path))
-                val url = GitHub.url(gh.owner, gh.name)
-                remoteUrl.set(URL("$url/tree/${moduleVersion.get()}/lib/$path"))
+                localDirectory = file(path)
+                remoteUrl = GitHub.url(gh.owner, gh.name).resolve("tree/${moduleVersion.get()}/lib/$path")
             }
-            jdkVersion.set(Version.jvmTarget.toInt())
+            jdkVersion = Version.jvmTarget.toInt()
+        }
+        doLast {
+            val index = outputDirectory.get()
+                .file("index.html")
+                .asFile
+                .existing()
+                .file()
+                .filled()
+            println("Documentation: ${index.absolutePath}")
         }
     }
     task(camelCase("assemble", variant, "Metadata")) {

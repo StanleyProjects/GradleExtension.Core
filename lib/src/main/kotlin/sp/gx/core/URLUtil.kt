@@ -13,6 +13,7 @@ import java.net.URL
  * @since 0.3.0
  */
 fun URL.resolve(relative: String): URL {
+    // todo slash case
     val spec = StringBuilder(toString())
         .append("/")
         .append(relative)
