@@ -13,12 +13,6 @@ import java.io.File
  * @receiver The [File] whose contents will be checked.
  * @param expected The set of strings expected to be in [this] receiver [File].
  * @param report Where the test result will be written.
- * @throws IllegalStateException if [this] receiver [File] does not exist.
- * @throws IllegalStateException if [this] receiver [File] is a directory.
- * @throws IllegalStateException if [this] receiver [File] is empty.
- * @throws IllegalStateException if [this] receiver [File] does not contain text.
- * @throws IllegalStateException if [report] exists and not a file.
- * @throws IllegalStateException if problems are found while checking [this] receiver [File].
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
  * @since 0.2.0
  */
@@ -26,6 +20,22 @@ fun File.check(expected: Set<String>, report: File) {
     check(expected = expected, regexes = emptySet(), report = report)
 }
 
+/**
+ * Usage:
+ * ```
+ * File("/tmp/bar").check(
+ *     expected = setOf("foo", "bar"),
+ *     expected = setOf("^f\\w\\d".toRegex()),
+ *     report = File("/tmp/report"),
+ * )
+ * ```
+ * @receiver The [File] whose contents will be checked.
+ * @param expected The set of strings expected to be in [this] receiver [File].
+ * @param regexes The set of [Regex] that will match the lines in [this] receiver [File].
+ * @param report Where the test result will be written.
+ * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+ * @since 0.4.4
+ */
 fun File.check(
     expected: Set<String>,
     regexes: Set<Regex>,
