@@ -1,5 +1,6 @@
 package sp.gx.core
 
+import org.gradle.api.file.RegularFile
 import java.io.File
 
 /**
@@ -64,15 +65,35 @@ fun File.filled(): File {
  * @since 0.2.1
  */
 fun File.assemble(text: String) {
-    // todo org.gradle.api.file.RegularFile
     check(text.isNotEmpty())
     if (exists()) {
-        check(isFile)
-        check(delete())
+        file()
+        check(delete()) { "Failed to delete \"$absolutePath\" file!" }
     } else {
-        parentFile?.mkdirs() ?: error("file has no parent")
+        parentFile?.mkdirs() ?: error("File \"$name\" has no parent!")
     }
     writeText(text)
+}
+
+/**
+ * Usage:
+ * ```
+ * val text = "foo"
+ * val file = layout.buildDirectory.get()
+ *     .dir("bar")
+ *     .file("baz")
+ *     .assemble(text)
+ * assertEquals(text, file.readText())
+ * ```
+ * @receiver The [RegularFile] to which the [text] will be written.
+ * @return The [File] of [this] receiver [RegularFile].
+ * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+ * @since 0.4.5
+ */
+fun RegularFile.assemble(text: String): File {
+    val file = asFile
+    file.assemble(text)
+    return file
 }
 
 // todo task assembler
