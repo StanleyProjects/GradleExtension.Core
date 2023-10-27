@@ -5,18 +5,22 @@ import java.net.URL
 /**
  * Usage:
  * ```
- * val url = URL("https://github.com").resolve("foo")
- * assertEquals(URL("https://github.com/foo"), url)
+ * val url = URL("https://github.com").resolve("foo", "", "bar")
+ * assertEquals(URL("https://github.com/foo/bar"), url)
  * ```
- * @return concatenated [this] and [relative] paths.
+ * @return concatenated [this], first [segment] and all the not empty [other] segments separated using "/".
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
- * @since 0.3.0
+ * @since 0.4.3
  */
-fun URL.resolve(relative: String): URL {
-    // todo slash case
-    val spec = StringBuilder(toString())
+fun URL.resolve(segment: String, vararg other: String): URL {
+    val builder = StringBuilder(toString())
         .append("/")
-        .append(relative)
-        .toString()
-    return URL(spec)
+        .append(segment)
+    for (it in other) {
+        if (it.isNotEmpty()) {
+            builder.append("/")
+                .append(it)
+        }
+    }
+    return URL(builder.toString())
 }
