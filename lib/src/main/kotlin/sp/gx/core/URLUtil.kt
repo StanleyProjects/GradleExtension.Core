@@ -10,7 +10,7 @@ import java.net.URL
  * ```
  * @return concatenated [this], first [segment] and all the not empty [other] segments separated using "/".
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
- * @since 0.4.3
+ * @since 0.4.4
  */
 fun URL.resolve(segment: String, vararg other: String): URL {
     check(segment.isNotEmpty()) { "First segment is empty!" }
