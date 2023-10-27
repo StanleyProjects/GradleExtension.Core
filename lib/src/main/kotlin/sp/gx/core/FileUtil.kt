@@ -73,5 +73,3 @@ fun File.assemble(text: String) {
     }
     writeText(text)
 }
-
-// todo task assembler
