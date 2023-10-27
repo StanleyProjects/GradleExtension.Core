@@ -26,12 +26,15 @@ internal class FileCheckTest {
     @Test
     fun checkRegexesTest() {
         val file = File.createTempFile("foo", "bar")
+        val year = 2023
+        val author = "John Doe"
         val expected = setOf(
             "foo",
             "bar",
             "baz",
             "123abc",
             "afoo1234",
+            "Copyright $year $author",
         )
         file.writeText(expected.joinToString(separator = "\n"))
         expected.forEach {
@@ -41,6 +44,7 @@ internal class FileCheckTest {
         val regexes = setOf(
             "^1\\d+\\w+c${'$'}".toRegex(),
             "f\\w+\\d+3".toRegex(),
+            "^Copyright 2\\d{3} $author${'$'}".toRegex(),
         )
         file.check(expected = expected, regexes = regexes, report = report)
     }
