@@ -61,8 +61,6 @@ tasks.getByName<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestKot
     kotlinOptions.jvmTarget = Version.jvmTarget
 }
 
-// todo org.gradle.api.file.RegularFile:existing
-// todo org.gradle.api.file.RegularFile:filled
 fun Test.getExecutionData(): File {
     return layout.buildDirectory.get()
         .dir("jacoco")

@@ -22,6 +22,23 @@ fun File.existing(): File {
 /**
  * Usage:
  * ```
+ * val file = layout.buildDirectory.get()
+ *     .dir("foo")
+ *     .file("bar")
+ *     .existing()
+ * assertTrue(file.exists())
+ * ```
+ * @return [File] of [this] receiver [RegularFile].
+ * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+ * @since 0.4.5
+ */
+fun RegularFile.existing(): File {
+    return asFile.existing()
+}
+
+/**
+ * Usage:
+ * ```
  * val file = File("/tmp/bar").file()
  * assertTrue(file.isFile)
  * ```
