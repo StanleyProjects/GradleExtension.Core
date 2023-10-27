@@ -201,19 +201,23 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
     val version = kebabCase(version.toString(), variant.toUpperCase())
     task<Jar>(camelCase("assemble", variant, "Jar")) {
         dependsOn(compileKotlinTask)
-        archiveBaseName.set(maven.id)
-        archiveVersion.set(version)
+        archiveBaseName = maven.id
+        archiveVersion = version
         from(compileKotlinTask.destinationDirectory.asFileTree)
     }
     task<Jar>(camelCase("assemble", variant, "Source")) {
-        archiveBaseName.set(maven.id)
-        archiveVersion.set(version)
-        archiveClassifier.set("sources")
+        archiveBaseName = maven.id
+        archiveVersion = version
+        archiveClassifier = "sources"
         from(sourceSets.main.get().allSource)
     }
     task(camelCase("assemble", variant, "Pom")) {
         doLast {
-            buildDir.resolve("libs/${kebabCase(maven.id, version)}.pom").assemble(
+            val file = layout.buildDirectory.get()
+                .dir("libs")
+                .file("${kebabCase(maven.id, version)}.pom")
+                .asFile
+            file.assemble(
                 Maven.pom(
                     groupId = maven.group,
                     artifactId = maven.id,
@@ -221,6 +225,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
                     packaging = "jar",
                 ),
             )
+            println("POM: ${file.absolutePath}")
         }
     }
     task(camelCase("assemble", variant, "MavenMetadata")) {
