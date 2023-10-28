@@ -51,8 +51,13 @@ task("checkLicense") {
             .file("index.html")
             .asFile
         rootDir.resolve("LICENSE").check(
-            expected = emptySet(), // todo author
+            expected = emptySet(),
             report = report,
         )
+        val author = "Stanley Wintergreen" // todo
+        val regex = "^Copyright 2\\d{3} $author${'$'}".toRegex()
+        rootDir.resolve("LICENSE").readLines().also {
+            if (it.none(regex::containsMatchIn)) TODO()
+        }
     }
 }
