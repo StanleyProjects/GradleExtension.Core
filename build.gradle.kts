@@ -9,7 +9,7 @@ buildscript {
 }
 
 task<Delete>("clean") {
-    delete = setOf(buildDir, "buildSrc/build")
+    delete = setOf(layout.buildDirectory.get(), "buildSrc/build")
 }
 
 repositories.mavenCentral()
@@ -26,7 +26,12 @@ dependencies {
 
 task<JavaExec>("checkCodeStyle") {
     classpath = ktlint
-    mainClass.set("com.pinterest.ktlint.Main")
+    mainClass = "com.pinterest.ktlint.Main"
+    val reporter = "html"
+    val output = layout.buildDirectory.get()
+        .dir("reports/analysis/code/style/html")
+        .file("index.html")
+        .asFile
     args(
         "build.gradle.kts",
         "settings.gradle.kts",
@@ -35,15 +40,24 @@ task<JavaExec>("checkCodeStyle") {
         "lib/src/main/kotlin/**/*.kt",
         "lib/src/test/kotlin/**/*.kt",
         "lib/build.gradle.kts",
-        "--reporter=html,output=${File(buildDir, "reports/analysis/code/style/html/index.html")}",
+        "--reporter=$reporter,output=${output.absolutePath}",
     )
 }
 
 task("checkLicense") {
     doLast {
+        val report = layout.buildDirectory.get()
+            .dir("reports/analysis/license")
+            .file("index.html")
+            .asFile
         rootDir.resolve("LICENSE").check(
-            expected = emptySet(), // todo author
-            report = buildDir.resolve("reports/analysis/license/index.html"),
+            expected = emptySet(),
+            report = report,
         )
+        val author = "Stanley Wintergreen" // todo
+        val regex = "^Copyright 2\\d{3} $author${'$'}".toRegex()
+        rootDir.resolve("LICENSE").readLines().also {
+            if (it.none(regex::containsMatchIn)) TODO()
+        }
     }
 }

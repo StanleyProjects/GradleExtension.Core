@@ -14,7 +14,7 @@ import java.io.File
  * @since 0.0.6
  */
 fun File.existing(): File {
-    check(exists())
+    check(exists()) { "Location \"$absolutePath\" does not exist!" }
     return this
 }
 
@@ -30,7 +30,7 @@ fun File.existing(): File {
  * @since 0.1.1
  */
 fun File.file(): File {
-    check(isFile)
+    check(isFile) { "Location \"$absolutePath\" is not a file!" }
     return this
 }
 
@@ -46,7 +46,7 @@ fun File.file(): File {
  * @since 0.1.1
  */
 fun File.filled(): File {
-    check(length() > 0)
+    check(length() > 0) { "File \"$absolutePath\" is empty!" }
     return this
 }
 
@@ -66,10 +66,10 @@ fun File.filled(): File {
 fun File.assemble(text: String) {
     check(text.isNotEmpty())
     if (exists()) {
-        check(isFile)
-        check(delete())
+        file()
+        check(delete()) { "Failed to delete \"$absolutePath\" file!" }
     } else {
-        parentFile?.mkdirs() ?: error("file has no parent")
+        parentFile?.mkdirs() ?: error("File \"$name\" has no parent!")
     }
     writeText(text)
 }

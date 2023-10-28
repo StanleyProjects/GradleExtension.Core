@@ -10,6 +10,7 @@ import java.util.Objects
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
  * @since 0.2.3
  */
+@Suppress("StringLiteralDuplication")
 object Maven {
     /**
      * Encapsulates data about an [artifact](https://maven.apache.org/repositories/artifacts.html).
@@ -22,8 +23,8 @@ object Maven {
      */
     class Artifact(val group: String, val id: String) {
         init {
-            check(group.isNotEmpty())
-            check(id.isNotEmpty())
+            check(group.isNotEmpty()) { "Group ID is empty!" }
+            check(id.isNotEmpty()) { "Artifact ID is empty!" }
         }
 
         override fun toString(): String {
@@ -67,11 +68,11 @@ object Maven {
         version: String,
         packaging: String,
     ): String {
-        check(modelVersion.isNotEmpty())
-        check(groupId.isNotEmpty())
-        check(artifactId.isNotEmpty())
-        check(version.isNotEmpty())
-        check(packaging.isNotEmpty())
+        check(modelVersion.isNotEmpty()) { "Model version is empty!" }
+        check(groupId.isNotEmpty()) { "Group ID is empty!" }
+        check(artifactId.isNotEmpty()) { "Artifact ID is empty!" }
+        check(version.isNotEmpty()) { "Version is empty!" }
+        check(packaging.isNotEmpty()) { "Packaging is empty!" }
         val host = "http://maven.apache.org"
         val url = "$host/POM/$modelVersion"
         val project = setOf(
@@ -99,6 +100,36 @@ object Maven {
     /**
      * Usage:
      * ```
+     * val artifact = Maven.Artifact(group = "foo", id = "bar")
+     * val xml = Maven.pom(
+     *     artifact = artifact,
+     *     version = "42",
+     *     packaging = "jar",
+     * )
+     * assertEquals(XMLParser.parse(xml).getNode("project").getString("version"), "42")
+     * ```
+     * @return The [String] XML in Maven [POM](https://maven.apache.org/pom.html) format.
+     * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+     * @since 0.4.3
+     */
+    fun pom(
+        modelVersion: String = "4.0.0",
+        artifact: Artifact,
+        version: String,
+        packaging: String,
+    ): String {
+        return pom(
+            modelVersion = modelVersion,
+            groupId = artifact.group,
+            artifactId = artifact.id,
+            version = version,
+            packaging = packaging,
+        )
+    }
+
+    /**
+     * Usage:
+     * ```
      * val xml = Maven.metadata(
      *     groupId = "foo",
      *     artifactId = "bar",
@@ -120,9 +151,9 @@ object Maven {
         dateTime: LocalDateTime = LocalDateTime.now(),
         dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss"),
     ): String {
-        check(groupId.isNotEmpty())
-        check(artifactId.isNotEmpty())
-        check(version.isNotEmpty())
+        check(groupId.isNotEmpty()) { "Group ID is empty!" }
+        check(artifactId.isNotEmpty()) { "Artifact ID is empty!" }
+        check(version.isNotEmpty()) { "Version is empty!" }
         return """
             <metadata>
                 <groupId>$groupId</groupId>
@@ -135,6 +166,35 @@ object Maven {
                 </versioning>
             </metadata>
         """.trimIndent()
+    }
+
+    /**
+     * Usage:
+     * ```
+     * val artifact = Maven.Artifact(group = "foo", id = "bar")
+     * val xml = Maven.metadata(
+     *     artifact = artifact,
+     *     version = "42",
+     * )
+     * assertEquals(XMLParser.parse(xml).getNode("metadata").getString("groupId"), "foo")
+     * ```
+     * @return The [String] XML in Maven [metadata](https://maven.apache.org/repositories/metadata.html) format.
+     * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+     * @since 0.4.3
+     */
+    fun metadata(
+        artifact: Artifact,
+        version: String,
+        dateTime: LocalDateTime = LocalDateTime.now(),
+        dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss"),
+    ): String {
+        return metadata(
+            groupId = artifact.group,
+            artifactId = artifact.id,
+            version = version,
+            dateTime = dateTime,
+            dateTimeFormatter = dateTimeFormatter,
+        )
     }
 
     /**
@@ -161,13 +221,35 @@ object Maven {
             artifactId: String,
             version: String,
         ): URL {
-            check(groupId.isNotEmpty())
-            check(artifactId.isNotEmpty())
-            check(version.isNotEmpty())
+            check(groupId.isNotEmpty()) { "Group ID is empty!" }
+            check(artifactId.isNotEmpty()) { "Artifact ID is empty!" }
+            check(version.isNotEmpty()) { "Version is empty!" }
             val host = "https://s01.oss.sonatype.org"
-            val path = "$host/content/repositories/snapshots"
-            val spec = "$path/${groupId.replace('.', '/')}/$artifactId/$version"
+            val path = "content/repositories/snapshots"
+            val spec = "$host/$path/${groupId.replace('.', '/')}/$artifactId/$version"
             return URL(spec)
+        }
+
+        /**
+         * Usage:
+         * ```
+         * val artifact = Maven.Artifact(group = "foo", id = "bar")
+         * val url = Maven.Snapshot.url(artifact = artifact, version = "42")
+         * assertEquals(cURL.get(url).code, 200)
+         * ```
+         * @return The [URL] to the Maven artifact.
+         * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+         * @since 0.4.3
+         */
+        fun url(
+            artifact: Artifact,
+            version: String,
+        ): URL {
+            return url(
+                groupId = artifact.group,
+                artifactId = artifact.id,
+                version = version,
+            )
         }
     }
 }

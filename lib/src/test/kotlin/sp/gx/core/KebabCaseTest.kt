@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 
 internal class KebabCaseTest {
     @Test
-    fun `check kebabCase`() {
+    fun checkKebabCase() {
         Assertions.assertEquals("foo-bar-baz", kebabCase("foo", "bar", "baz"))
         Assertions.assertEquals("foo-baz", kebabCase("foo", "", "baz"))
         Assertions.assertEquals("foo-bar", kebabCase("foo", "bar", ""))

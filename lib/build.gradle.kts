@@ -5,13 +5,15 @@ import sp.gx.core.Maven
 import sp.gx.core.assemble
 import sp.gx.core.camelCase
 import sp.gx.core.check
+import sp.gx.core.colonCase
 import sp.gx.core.existing
 import sp.gx.core.file
 import sp.gx.core.filled
 import sp.gx.core.kebabCase
-import java.net.URL
+import sp.gx.core.resolve
+import java.util.Locale
 
-version = "0.3.0"
+version = "0.4.5"
 
 val maven = Maven.Artifact(
     group = "com.github.kepocnhh",
@@ -33,6 +35,7 @@ plugins {
 }
 
 dependencies {
+    implementation(gradleApi())
     testImplementation("org.junit.jupiter:junit-jupiter-api:${Version.jupiter}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${Version.jupiter}")
 }
@@ -46,7 +49,7 @@ tasks.getByName<JavaCompile>("compileJava") {
 val compileKotlinTask = tasks.getByName<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
     kotlinOptions {
         jvmTarget = Version.jvmTarget
-        freeCompilerArgs = freeCompilerArgs + setOf("-module-name", maven.group + ":" + maven.id)
+        freeCompilerArgs = freeCompilerArgs + setOf("-module-name", colonCase(maven.group, maven.id))
     }
 }
 
@@ -58,27 +61,42 @@ tasks.getByName<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestKot
     kotlinOptions.jvmTarget = Version.jvmTarget
 }
 
+fun Test.getExecutionData(): File {
+    return layout.buildDirectory.get()
+        .dir("jacoco")
+        .file("$name.exec")
+        .asFile
+}
+
 val taskUnitTest = task<Test>("checkUnitTest") {
     useJUnitPlatform()
     testClassesDirs = sourceSets.test.get().output.classesDirs
     classpath = sourceSets.test.get().runtimeClasspath
+    jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED") // https://github.com/gradle/gradle/issues/18647
+    doLast {
+        getExecutionData().existing().file().filled()
+    }
 }
 
 val taskCoverageReport = task<JacocoReport>("assembleCoverageReport") {
     dependsOn(taskUnitTest)
     reports {
-        csv.required.set(false)
-        html.required.set(true)
-        xml.required.set(false)
+        csv.required = false
+        html.required = true
+        xml.required = false
     }
     sourceDirectories.setFrom(file("src/main/kotlin"))
     classDirectories.setFrom(sourceSets.main.get().output.classesDirs)
-    executionData(taskUnitTest)
+    executionData(taskUnitTest.getExecutionData())
     doLast {
-        val report = buildDir.resolve("reports/jacoco/$name/html/index.html")
-        if (report.exists()) {
-            println("Coverage report: ${report.absolutePath}")
-        }
+        val report = layout.buildDirectory.get()
+            .dir("reports/jacoco/$name/html")
+            .file("index.html")
+            .asFile
+            .existing()
+            .file()
+            .filled()
+        println("Coverage report: ${report.absolutePath}")
     }
 }
 
@@ -114,22 +132,34 @@ setOf("main", "test").also { types ->
             .filled()
     }
     types.forEach { type ->
-        task<io.gitlab.arturbosch.detekt.Detekt>(camelCase("check", "CodeQuality", type)) {
+        val postfix = when (type) {
+            "main" -> ""
+            "test" -> "UnitTest"
+            else -> error("Type \"$type\" is not supported!")
+        }
+        task<io.gitlab.arturbosch.detekt.Detekt>(camelCase("check", "CodeQuality", postfix)) {
             jvmTarget = Version.jvmTarget
             source = sourceSets.getByName(type).allSource
             config.setFrom(configs)
+            val report = layout.buildDirectory.get()
+                .dir("reports/analysis/code/quality/$type/html")
+                .file("index.html")
+                .asFile
             reports {
                 html {
-                    required.set(true)
-                    outputLocation.set(buildDir.resolve("reports/analysis/code/quality/$type/html/index.html"))
+                    required = true
+                    outputLocation = report
                 }
-                md.required.set(false)
-                sarif.required.set(false)
-                txt.required.set(false)
-                xml.required.set(false)
+                md.required = false
+                sarif.required = false
+                txt.required = false
+                xml.required = false
             }
             val detektTask = tasks.getByName<io.gitlab.arturbosch.detekt.Detekt>(camelCase("detekt", type))
             classpath.setFrom(detektTask.classpath)
+            doFirst {
+                println("Analysis report: ${report.absolutePath}")
+            }
         }
     }
 }
@@ -147,37 +177,48 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
     jvmTarget = Version.jvmTarget
     source = sourceSets.main.get().allSource
     config.setFrom(configs)
+    val report = layout.buildDirectory.get()
+        .dir("reports/analysis/documentation/html")
+        .file("index.html")
+        .asFile
     reports {
         html {
-            required.set(true)
-            outputLocation.set(buildDir.resolve("reports/analysis/documentation/html/index.html"))
+            required = true
+            outputLocation = report
         }
-        md.required.set(false)
-        sarif.required.set(false)
-        txt.required.set(false)
-        xml.required.set(false)
+        md.required = false
+        sarif.required = false
+        txt.required = false
+        xml.required = false
     }
     val detektTask = tasks.getByName<io.gitlab.arturbosch.detekt.Detekt>("detektMain")
     classpath.setFrom(detektTask.classpath)
+    doFirst {
+        println("Analysis report: ${report.absolutePath}")
+    }
 }
 
 "snapshot".also { variant ->
-    val version = kebabCase(version.toString(), variant.toUpperCase())
+    val version = kebabCase(version.toString(), variant.uppercase(Locale.US))
     task<Jar>(camelCase("assemble", variant, "Jar")) {
         dependsOn(compileKotlinTask)
-        archiveBaseName.set(maven.id)
-        archiveVersion.set(version)
+        archiveBaseName = maven.id
+        archiveVersion = version
         from(compileKotlinTask.destinationDirectory.asFileTree)
     }
     task<Jar>(camelCase("assemble", variant, "Source")) {
-        archiveBaseName.set(maven.id)
-        archiveVersion.set(version)
-        archiveClassifier.set("sources")
+        archiveBaseName = maven.id
+        archiveVersion = version
+        archiveClassifier = "sources"
         from(sourceSets.main.get().allSource)
     }
     task(camelCase("assemble", variant, "Pom")) {
         doLast {
-            buildDir.resolve("libs/${kebabCase(maven.id, version)}.pom").assemble(
+            val file = layout.buildDirectory.get()
+                .dir("libs")
+                .file("${kebabCase(maven.id, version)}.pom")
+                .asFile
+            file.assemble(
                 Maven.pom(
                     groupId = maven.group,
                     artifactId = maven.id,
@@ -185,37 +226,55 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
                     packaging = "jar",
                 ),
             )
+            println("POM: ${file.absolutePath}")
         }
     }
     task(camelCase("assemble", variant, "MavenMetadata")) {
         doLast {
-            buildDir.resolve("xml/maven-metadata.xml").assemble(
+            val file = layout.buildDirectory.get()
+                .dir("xml")
+                .file("maven-metadata.xml")
+                .asFile
+            file.assemble(
                 Maven.metadata(
                     groupId = maven.group,
                     artifactId = maven.id,
                     version = version,
                 ),
             )
+            println("Maven metadata: ${file.absolutePath}")
         }
     }
     task<org.jetbrains.dokka.gradle.DokkaTask>(camelCase("assemble", variant, "Documentation")) {
-        outputDirectory.set(buildDir.resolve("documentation/$variant"))
-        moduleName.set(gh.name)
-        moduleVersion.set(version)
+        outputDirectory = layout.buildDirectory.dir("documentation/$variant")
+        moduleName = gh.name
+        moduleVersion = version
         dokkaSourceSets.getByName("main") {
             val path = "src/$name/kotlin"
-            reportUndocumented.set(false)
+            reportUndocumented = false
             sourceLink {
-                localDirectory.set(file(path))
-                val url = GitHub.url(gh.owner, gh.name)
-                remoteUrl.set(URL("$url/tree/${moduleVersion.get()}/lib/$path"))
+                localDirectory = file(path)
+                remoteUrl = GitHub.url(gh.owner, gh.name).resolve("tree/${moduleVersion.get()}/lib/$path")
             }
-            jdkVersion.set(Version.jvmTarget.toInt())
+            jdkVersion = Version.jvmTarget.toInt()
+        }
+        doLast {
+            val index = outputDirectory.get()
+                .file("index.html")
+                .asFile
+                .existing()
+                .file()
+                .filled()
+            println("Documentation: ${index.absolutePath}")
         }
     }
     task(camelCase("assemble", variant, "Metadata")) {
         doLast {
-            buildDir.resolve("yml/metadata.yml").assemble(
+            val file = layout.buildDirectory.get()
+                .dir("yml")
+                .file("metadata.yml")
+                .asFile
+            file.assemble(
                 """
                     repository:
                      owner: '${gh.owner}'
@@ -223,6 +282,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
                     version: '$version'
                 """.trimIndent(),
             )
+            println("Metadata: ${file.absolutePath}")
         }
     }
     task(camelCase("check", variant, "Readme")) {
@@ -238,12 +298,19 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             val expected = setOf(
                 badge,
                 Markdown.link("Maven", Maven.Snapshot.url(maven.group, maven.id, version)),
-                Markdown.link("Documentation", URL(GitHub.pages(gh.owner, gh.name).toString() + "/doc/$version")), // todo resolve
-                "implementation(\"${maven.group}:${maven.id}:$version\")",
+                Markdown.link(
+                    "Documentation",
+                    GitHub.pages(gh.owner, gh.name).resolve("doc").resolve(version),
+                ), // todo slash case
+                "implementation(\"${colonCase(maven.group, maven.id, version)}\")",
             )
+            val report = layout.buildDirectory.get()
+                .dir("reports/analysis/readme")
+                .file("index.html")
+                .asFile
             rootDir.resolve("README.md").check(
                 expected = expected,
-                report = buildDir.resolve("reports/analysis/readme/index.html"),
+                report = report,
             )
         }
     }

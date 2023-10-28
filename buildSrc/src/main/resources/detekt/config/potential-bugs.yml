@@ -1,9 +1,10 @@
-# 2023/05/02
+# 2023/10/27
 
 potential-bugs:
   active: true
   AvoidReferentialEquality:
     active: true
+    forbiddenTypePatterns: ['*']
   CastToNullableType:
     active: true
   Deprecation:
@@ -22,8 +23,6 @@ potential-bugs:
       'java.util.LinkedHashMap',
       'java.util.HashMap'
     ]
-  DuplicateCaseInWhenExpression: # deprecated?
-    active: true
   ElseCaseInsteadOfExhaustiveWhen:
     active: true
   EqualsAlwaysReturnsTrueOrFalse:
@@ -73,6 +72,8 @@ potential-bugs:
   NullCheckOnMutableProperty:
     active: true
   NullableToStringCall:
+    active: true
+  PropertyUsedBeforeDeclaration:
     active: true
   UnconditionalJumpStatementInLoop:
     active: true

@@ -2,6 +2,7 @@ package sp.gx.core
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.net.URL
 
 internal class GitHubRepositoryTest {
     @Test
@@ -52,5 +53,25 @@ internal class GitHubRepositoryTest {
         Assertions.assertNotEquals(repository, GitHub.Repository(owner = "42", name = "bar"))
         Assertions.assertNotEquals(repository, GitHub.Repository(owner = "foo", name = "42"))
         Assertions.assertFalse(repository.equals(Unit))
+    }
+
+    @Test
+    fun pagesTest() {
+        val actual = GitHub.Repository(
+            owner = "foo",
+            name = "bar",
+        ).pages()
+        val expected = URL("https://foo.github.io/bar")
+        Assertions.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun urlTest() {
+        val actual = GitHub.Repository(
+            owner = "foo",
+            name = "bar",
+        ).url()
+        val expected = URL("https://github.com/foo/bar")
+        Assertions.assertEquals(expected, actual)
     }
 }

@@ -109,7 +109,7 @@ fun colonCase(segment: String, vararg other: String): String {
 /**
  * Usage:
  * ```
- * val cased = colonCase("foo", "bar", "baz")
+ * val cased = slashCase("foo", "bar", "baz")
  * assertEquals("foo/bar/baz", cased)
  * ```
  * @return The string from first [segment] and all the not empty [other] segments separated using "/".
