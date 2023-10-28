@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.net.URL
 
+@Suppress("StringLiteralDuplication")
 internal class URLUtilTest {
     @Test
     fun resolveTest() {

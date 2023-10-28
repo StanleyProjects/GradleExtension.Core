@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 
+@Suppress("StringLiteralDuplication")
 internal class RegularFileUtilTest {
     @Test
     fun existingTest() {
@@ -13,7 +14,7 @@ internal class RegularFileUtilTest {
         val regularFile = dir.file("foobar")
         val file = regularFile.asFile
         check(!file.exists())
-        checkNotNull(file.parentFile).mkdirs()
+        file.parentFile.mkdirs()
         file.writeText("barbaz")
         check(file.exists())
         assertEquals(file, regularFile.existing())

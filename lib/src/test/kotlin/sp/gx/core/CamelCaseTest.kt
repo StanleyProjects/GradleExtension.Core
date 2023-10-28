@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 
 internal class CamelCaseTest {
     @Test
-    fun `check camelCase`() {
+    fun checkCamelCase() {
         Assertions.assertEquals("fooBarBaz", camelCase("foo", "bar", "baz"))
         Assertions.assertEquals("fooBaz", camelCase("foo", "", "baz"))
         Assertions.assertEquals("fooBar", camelCase("foo", "bar", ""))

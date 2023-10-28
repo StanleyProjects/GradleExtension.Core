@@ -24,6 +24,7 @@ internal class FileCheckTest {
     }
 
     @Test
+    @Suppress("MagicNumber")
     fun checkRegexesTest() {
         val file = File.createTempFile("foo", "bar")
         val year = 2023

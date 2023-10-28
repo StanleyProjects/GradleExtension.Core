@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 
 internal class SlashCaseTest {
     @Test
-    fun `check slashCase`() {
+    fun checkSlashCase() {
         Assertions.assertEquals("foo/bar/baz", slashCase("foo", "bar", "baz"))
         Assertions.assertEquals("foo/baz", slashCase("foo", "", "baz"))
         Assertions.assertEquals("foo/bar", slashCase("foo", "bar", ""))
