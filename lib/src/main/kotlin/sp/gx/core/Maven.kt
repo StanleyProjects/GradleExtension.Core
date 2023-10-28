@@ -10,6 +10,7 @@ import java.util.Objects
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
  * @since 0.2.3
  */
+@Suppress("StringLiteralDuplication")
 object Maven {
     /**
      * Encapsulates data about an [artifact](https://maven.apache.org/repositories/artifacts.html).
