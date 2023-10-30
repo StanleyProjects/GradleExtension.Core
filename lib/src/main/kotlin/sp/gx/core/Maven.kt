@@ -27,6 +27,8 @@ object Maven {
             check(id.isNotEmpty()) { "Artifact ID is empty!" }
         }
 
+        // todo module name group:id/group:id:version
+
         override fun toString(): String {
             return "Artifact($group/$id)"
         }
