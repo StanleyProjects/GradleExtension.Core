@@ -252,6 +252,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
         dokkaSourceSets.getByName("main") {
             val path = "src/$name/kotlin"
             reportUndocumented = false
+//            externalDocumentationLinks // todo https://docs.gradle.org/current/javadoc/org/gradle/api/file/RegularFile.html
             sourceLink {
                 localDirectory = file(path)
                 remoteUrl = GitHub.url(gh.owner, gh.name).resolve("tree/${moduleVersion.get()}/lib/$path")
