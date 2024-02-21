@@ -8,6 +8,7 @@ internal class SlashCaseTest {
     fun checkSlashCase() {
         Assertions.assertEquals("foo/bar/baz", slashCase("foo", "bar", "baz"))
         Assertions.assertEquals("foo/baz", slashCase("foo", "", "baz"))
+        Assertions.assertEquals("foo/baz", slashCase("foo", " ", "baz"))
         Assertions.assertEquals("foo/bar", slashCase("foo", "bar", ""))
         Assertions.assertEquals("foo/bar", slashCase("foo", "bar"))
         Assertions.assertEquals("foo", slashCase("foo", "", ""))

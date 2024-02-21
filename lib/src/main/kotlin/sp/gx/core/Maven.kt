@@ -27,6 +27,15 @@ object Maven {
             check(id.isNotEmpty()) { "Artifact ID is empty!" }
         }
 
+        fun name(): String {
+            return "$group:$id"
+        }
+
+        fun name(version: String): String {
+            check(version.isNotBlank())
+            return "$group:$id:$version"
+        }
+
         override fun toString(): String {
             return "Artifact($group/$id)"
         }

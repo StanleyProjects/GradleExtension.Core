@@ -1,4 +1,4 @@
-# 2023/10/27
+# 2024/01/07
 
 style:
   active: true
@@ -9,9 +9,7 @@ style:
     singleLine: 'consistent'
     multiLine: 'always'
   BracesOnWhenStatements:
-    active: true
-    singleLine: 'consistent'
-    multiLine: 'necessary'
+    active: false
   CanBeNonNullable:
     active: true
   CascadingCallWrapping:
@@ -68,7 +66,7 @@ style:
     allowedPatterns: ''
   ForbiddenImport:
     active: true
-    imports: []
+    imports: ['org.json.JSONObject']
     forbiddenPatterns: ''
   ForbiddenMethodCall:
     active: true
@@ -85,21 +83,9 @@ style:
     ignoreActualFunction: true
     excludedFunctions: []
   LoopWithTooManyJumpStatements:
-    active: true
-    maxJumpCount: 1
+    active: false
   MagicNumber:
     active: true
-    ignoreNumbers: ['-1', '0', '1', '2']
-    ignoreHashCodeFunction: false
-    ignorePropertyDeclaration: false
-    ignoreLocalVariableDeclaration: false
-    ignoreConstantDeclaration: true
-    ignoreCompanionObjectPropertyDeclaration: false
-    ignoreAnnotation: false
-    ignoreNamedArgument: false
-    ignoreEnums: false
-    ignoreRanges: false
-    ignoreExtensionFunctions: false
   MandatoryBracesLoops:
     active: true
   MaxChainedCallsOnSameLine:
@@ -129,7 +115,7 @@ style:
   NoTabs:
     active: true
   NullableBooleanCheck:
-    active: true
+    active: false
   ObjectLiteralToLambda:
     active: true
   OptionalAbstractKeyword:
@@ -192,7 +178,7 @@ style:
   UnnecessaryInnerClass:
     active: true
   UnnecessaryLet:
-    active: true
+    active: false
   UnnecessaryParentheses:
     active: true
   UntilInsteadOfRangeTo:
@@ -206,7 +192,7 @@ style:
     active: true
   UnusedPrivateMember:
     active: true
-    allowedNames: ''
+    allowedNames: '^\w+Preview$'
   UnusedPrivateProperty:
     active: true
     allowedNames: '_|ignored'
@@ -226,11 +212,11 @@ style:
   UseIfEmptyOrIfBlank:
     active: true
   UseIfInsteadOfWhen:
-    active: true
+    active: false
   UseIsNullOrEmpty:
     active: true
   UseLet:
-    active: true
+    active: false
   UseOrEmpty:
     active: true
   UseRequire:

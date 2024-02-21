@@ -1,10 +1,10 @@
-# 2023/10/27
+# 2024/01/15
 
 naming:
   active: true
   BooleanPropertyNaming:
     active: true
-    allowedPattern: '^(is|has|are)'
+    allowedPattern: '^(is|has|are)[A-Z]\w+|loading|exists|contains|actual|\w+Exists$|\w+ed$'
   ClassNaming:
     active: true
     classPattern: '[A-Z][a-zA-Z0-9]*'
@@ -24,11 +24,9 @@ naming:
     maximumFunctionNameLength: 30
   FunctionMinLength:
     active: true
-    minimumFunctionNameLength: 3
+    minimumFunctionNameLength: 2
   FunctionNaming:
     active: true
-    functionPattern: '[a-z][a-zA-Z0-9]*'
-    excludeClassPattern: '$^'
   FunctionParameterNaming:
     active: true
     parameterPattern: '[a-z][A-Za-z0-9]*'
