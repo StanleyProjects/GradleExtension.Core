@@ -20,6 +20,30 @@ internal class BadgeTest {
         Assertions.assertThrows(IllegalStateException::class.java) {
             @Suppress("IgnoredReturnValue")
             Badge.url(
+                label = " ",
+                message = "",
+                color = "",
+            )
+        }
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Badge.url(
+                label = "foo",
+                message = " ",
+                color = "",
+            )
+        }
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Badge.url(
+                label = "foo",
+                message = "bar",
+                color = " ",
+            )
+        }
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Badge.url(
                 label = "",
                 message = "",
                 color = "",

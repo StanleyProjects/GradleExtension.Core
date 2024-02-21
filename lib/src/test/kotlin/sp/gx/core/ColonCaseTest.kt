@@ -8,6 +8,7 @@ internal class ColonCaseTest {
     fun checkColonCase() {
         Assertions.assertEquals("foo:bar:baz", colonCase("foo", "bar", "baz"))
         Assertions.assertEquals("foo:baz", colonCase("foo", "", "baz"))
+        Assertions.assertEquals("foo:baz", colonCase("foo", " ", "baz"))
         Assertions.assertEquals("foo:bar", colonCase("foo", "bar", ""))
         Assertions.assertEquals("foo:bar", colonCase("foo", "bar"))
         Assertions.assertEquals("foo", colonCase("foo", "", ""))

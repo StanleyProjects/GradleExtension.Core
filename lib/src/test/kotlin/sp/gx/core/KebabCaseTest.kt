@@ -8,6 +8,7 @@ internal class KebabCaseTest {
     fun checkKebabCase() {
         Assertions.assertEquals("foo-bar-baz", kebabCase("foo", "bar", "baz"))
         Assertions.assertEquals("foo-baz", kebabCase("foo", "", "baz"))
+        Assertions.assertEquals("foo-baz", kebabCase("foo", " ", "baz"))
         Assertions.assertEquals("foo-bar", kebabCase("foo", "bar", ""))
         Assertions.assertEquals("foo-bar", kebabCase("foo", "bar"))
         Assertions.assertEquals("foo", kebabCase("foo", "", ""))

@@ -17,6 +17,7 @@ import sp.gx.core.resolve
 import java.net.URL
 import java.util.Locale
 
+// todo "isNotEmpty" -> "isNotBlank"
 version = "0.5.0"
 
 val maven = Maven.Artifact(

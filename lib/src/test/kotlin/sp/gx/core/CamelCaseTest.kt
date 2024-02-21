@@ -8,6 +8,7 @@ internal class CamelCaseTest {
     fun checkCamelCase() {
         Assertions.assertEquals("fooBarBaz", camelCase("foo", "bar", "baz"))
         Assertions.assertEquals("fooBaz", camelCase("foo", "", "baz"))
+        Assertions.assertEquals("fooBaz", camelCase("foo", " ", "baz"))
         Assertions.assertEquals("fooBar", camelCase("foo", "bar", ""))
         Assertions.assertEquals("fooBar", camelCase("foo", "bar"))
         Assertions.assertEquals("foo", camelCase("foo", "", ""))

@@ -19,6 +19,12 @@ internal class URLUtilTest {
     }
 
     @Test
+    fun resolveBlankTest() {
+        val actual = URL("http://foo").resolve("bar", " ", "baz")
+        Assertions.assertEquals(URL("http://foo/bar/baz"), actual)
+    }
+
+    @Test
     fun resolveErrorTest() {
         Assertions.assertThrows(IllegalStateException::class.java) {
             @Suppress("IgnoredReturnValue")
