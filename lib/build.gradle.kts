@@ -15,6 +15,9 @@ import java.util.Locale
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.dokka.gradle.DokkaTask
 import io.gitlab.arturbosch.detekt.Detekt
+import org.jetbrains.dokka.ExternalDocumentationLink
+import org.jetbrains.dokka.gradle.GradleExternalDocumentationLinkBuilder
+import java.net.URL
 
 version = "0.4.6"
 
@@ -253,7 +256,9 @@ task<Detekt>("checkDocumentation") {
         dokkaSourceSets.getByName("main") {
             val path = "src/$name/kotlin"
             reportUndocumented = false
-//            externalDocumentationLinks // todo https://docs.gradle.org/current/javadoc/org/gradle/api/file/RegularFile.html
+            externalDocumentationLink {
+                url = URL("https://docs.gradle.org/current/javadoc/")
+            }
             sourceLink {
                 localDirectory = file(path)
                 remoteUrl = gh.url().resolve("tree/${moduleVersion.get()}/lib", path)
