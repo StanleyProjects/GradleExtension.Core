@@ -12,6 +12,9 @@ import sp.gx.core.filled
 import sp.gx.core.kebabCase
 import sp.gx.core.resolve
 import java.util.Locale
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.dokka.gradle.DokkaTask
+import io.gitlab.arturbosch.detekt.Detekt
 
 version = "0.4.6"
 
@@ -46,7 +49,7 @@ tasks.getByName<JavaCompile>("compileJava") {
     targetCompatibility = Version.JVM_TARGET
 }
 
-val compileKotlinTask = tasks.getByName<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
+val compileKotlinTask = tasks.getByName<KotlinCompile>("compileKotlin") {
     kotlinOptions {
         jvmTarget = Version.JVM_TARGET
         freeCompilerArgs = freeCompilerArgs + setOf("-module-name", colonCase(maven.group, maven.id))
@@ -57,7 +60,7 @@ tasks.getByName<JavaCompile>("compileTestJava") {
     targetCompatibility = Version.JVM_TARGET
 }
 
-tasks.getByName<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestKotlin") {
+tasks.getByName<KotlinCompile>("compileTestKotlin") {
     kotlinOptions.jvmTarget = Version.JVM_TARGET
 }
 
@@ -137,7 +140,7 @@ setOf("main", "test").also { types ->
             "test" -> "UnitTest"
             else -> error("Type \"$type\" is not supported!")
         }
-        task<io.gitlab.arturbosch.detekt.Detekt>(camelCase("check", "CodeQuality", postfix)) {
+        task<Detekt>(camelCase("check", "CodeQuality", postfix)) {
             jvmTarget = Version.JVM_TARGET
             source = sourceSets.getByName(type).allSource
             config.setFrom(configs)
@@ -155,7 +158,7 @@ setOf("main", "test").also { types ->
                 txt.required = false
                 xml.required = false
             }
-            val detektTask = tasks.getByName<io.gitlab.arturbosch.detekt.Detekt>(camelCase("detekt", type))
+            val detektTask = tasks.getByName<Detekt>(camelCase("detekt", type))
             classpath.setFrom(detektTask.classpath)
             doFirst {
                 println("Analysis report: ${report.absolutePath}")
@@ -164,7 +167,7 @@ setOf("main", "test").also { types ->
     }
 }
 
-task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
+task<Detekt>("checkDocumentation") {
     val configs = setOf(
         "common",
         "documentation",
@@ -191,7 +194,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
         txt.required = false
         xml.required = false
     }
-    val detektTask = tasks.getByName<io.gitlab.arturbosch.detekt.Detekt>("detektMain")
+    val detektTask = tasks.getByName<Detekt>("detektMain")
     classpath.setFrom(detektTask.classpath)
     doFirst {
         println("Analysis report: ${report.absolutePath}")
@@ -243,7 +246,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             println("Maven metadata: ${file.absolutePath}")
         }
     }
-    task<org.jetbrains.dokka.gradle.DokkaTask>(camelCase("assemble", variant, "Documentation")) {
+    task<DokkaTask>(camelCase("assemble", variant, "Documentation")) {
         outputDirectory = layout.buildDirectory.dir("documentation/$variant")
         moduleName = gh.name
         moduleVersion = version
