@@ -18,7 +18,7 @@ import java.net.URL
 import java.util.Locale
 
 // todo "isNotEmpty" -> "isNotBlank"
-version = "0.5.0"
+version = "0.5.1"
 
 val maven = Maven.Artifact(
     group = "com.github.kepocnhh",
