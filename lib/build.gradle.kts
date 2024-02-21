@@ -319,3 +319,32 @@ task<Detekt>("checkDocumentation") {
         }
     }
 }
+
+"unstable".also { variant ->
+    val version = "${version}u-SNAPSHOT"
+    task(camelCase("check", variant, "Readme")) {
+        doLast {
+            val badge = Markdown.image(
+                text = "version",
+                url = Badge.url(
+                    label = "version",
+                    message = version,
+                    color = "2962ff",
+                ),
+            )
+            val expected = setOf(
+                badge,
+                Markdown.link("Maven", Maven.Snapshot.url(maven, version)),
+                "implementation(\"${colonCase(maven.group, maven.id, version)}\")",
+            )
+            val report = layout.buildDirectory.get()
+                .dir("reports/analysis/readme")
+                .file("index.html")
+                .asFile
+            rootDir.resolve("README.md").check(
+                expected = expected,
+                report = report,
+            )
+        }
+    }
+}
