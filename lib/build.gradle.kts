@@ -255,7 +255,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
 //            externalDocumentationLinks // todo https://docs.gradle.org/current/javadoc/org/gradle/api/file/RegularFile.html
             sourceLink {
                 localDirectory = file(path)
-                remoteUrl = GitHub.url(gh.owner, gh.name).resolve("tree/${moduleVersion.get()}/lib/$path")
+                remoteUrl = gh.url().resolve("tree/${moduleVersion.get()}/lib/$path")
             }
             jdkVersion = Version.JVM_TARGET.toInt()
         }
@@ -301,7 +301,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
                 Markdown.link("Maven", Maven.Snapshot.url(maven.group, maven.id, version)),
                 Markdown.link(
                     "Documentation",
-                    GitHub.pages(gh.owner, gh.name).resolve("doc").resolve(version),
+                    gh.pages().resolve("doc").resolve(version),
                 ), // todo slash case
                 "implementation(\"${colonCase(maven.group, maven.id, version)}\")",
             )
