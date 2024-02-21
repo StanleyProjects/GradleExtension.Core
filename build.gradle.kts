@@ -12,6 +12,22 @@ task<Delete>("clean") {
     delete = setOf(layout.buildDirectory.get(), "buildSrc/build")
 }
 
+task("checkLicense") {
+    doLast {
+        val author = "Stanley Wintergreen" // todo
+        val report =
+            layout.buildDirectory.get()
+                .dir("reports/analysis/license")
+                .file("index.html")
+                .asFile
+        file("LICENSE").check(
+            expected = emptySet(),
+            regexes = setOf("^Copyright 2\\d{3} $author${'$'}".toRegex()),
+            report = report,
+        )
+    }
+}
+
 repositories.mavenCentral()
 
 val ktlint: Configuration by configurations.creating
@@ -42,22 +58,4 @@ task<JavaExec>("checkCodeStyle") {
         "lib/build.gradle.kts",
         "--reporter=$reporter,output=${output.absolutePath}",
     )
-}
-
-task("checkLicense") {
-    doLast {
-        val report = layout.buildDirectory.get()
-            .dir("reports/analysis/license")
-            .file("index.html")
-            .asFile
-        rootDir.resolve("LICENSE").check(
-            expected = emptySet(),
-            report = report,
-        )
-        val author = "Stanley Wintergreen" // todo
-        val regex = "^Copyright 2\\d{3} $author${'$'}".toRegex()
-        rootDir.resolve("LICENSE").readLines().also {
-            if (it.none(regex::containsMatchIn)) TODO()
-        }
-    }
 }
