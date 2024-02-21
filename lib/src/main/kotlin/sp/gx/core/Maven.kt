@@ -153,6 +153,7 @@ object Maven {
      * @author [Stanley Wintergreen](https://github.com/kepocnhh)
      * @since 0.2.3
      */
+    @Deprecated(message = "deprecated in 0.5.0 | use {varinant}/maven/assemble/metadata.sh", level = DeprecationLevel.WARNING)
     fun metadata(
         groupId: String,
         artifactId: String,
@@ -191,6 +192,7 @@ object Maven {
      * @author [Stanley Wintergreen](https://github.com/kepocnhh)
      * @since 0.4.3
      */
+    @Deprecated(message = "deprecated in 0.5.0 | use {varinant}/maven/assemble/metadata.sh", level = DeprecationLevel.WARNING)
     fun metadata(
         artifact: Artifact,
         version: String,

@@ -347,4 +347,47 @@ task<Detekt>("checkDocumentation") {
             )
         }
     }
+    task(camelCase("assemble", variant, "MavenMetadata")) {
+        doLast {
+            val file = layout.buildDirectory.get()
+                .dir("yml")
+                .file("maven-metadata.yml")
+                .assemble(
+                    """
+                        repository:
+                         groupId: '${maven.group}'
+                         artifactId: '${maven.id}'
+                        version: '$version'
+                    """.trimIndent(),
+                )
+            println("Metadata: ${file.absolutePath}")
+        }
+    }
+    task<Jar>(camelCase("assemble", variant, "Jar")) {
+        dependsOn(compileKotlinTask)
+        archiveBaseName = maven.id
+        archiveVersion = version
+        from(compileKotlinTask.destinationDirectory.asFileTree)
+    }
+    task<Jar>(camelCase("assemble", variant, "Source")) {
+        archiveBaseName = maven.id
+        archiveVersion = version
+        archiveClassifier = "sources"
+        from(sourceSets.main.get().allSource)
+    }
+    task(camelCase("assemble", variant, "Pom")) {
+        doLast {
+            val file = layout.buildDirectory.get()
+                .dir("libs")
+                .file("${kebabCase(maven.id, version)}.pom")
+                .assemble(
+                    Maven.pom(
+                        artifact = maven,
+                        version = version,
+                        packaging = "jar",
+                    ),
+                )
+            println("POM: ${file.absolutePath}")
+        }
+    }
 }
