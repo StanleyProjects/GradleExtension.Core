@@ -7,10 +7,11 @@ import java.net.URL
 internal class GitHubTest {
     @Test
     fun pagesTest() {
-        val actual = GitHub.pages(
-            owner = "foo",
-            name = "bar",
-        )
+        val actual =
+            GitHub.pages(
+                owner = "foo",
+                name = "bar",
+            )
         val expected = URL("https://foo.github.io/bar")
         Assertions.assertEquals(expected, actual)
     }
@@ -29,10 +30,11 @@ internal class GitHubTest {
 
     @Test
     fun urlTest() {
-        val actual = GitHub.url(
-            owner = "foo",
-            name = "bar",
-        )
+        val actual =
+            GitHub.url(
+                owner = "foo",
+                name = "bar",
+            )
         val expected = URL("https://github.com/foo/bar")
         Assertions.assertEquals(expected, actual)
     }

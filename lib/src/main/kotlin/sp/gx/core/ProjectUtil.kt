@@ -17,10 +17,3 @@ inline fun <reified T : Task> Project.task(
     val name = camelCase(camelCase(nameSegment, secondNameSegment), *otherNameSegments)
     return tasks.create(name, T::class.java, block)
 }
-
-private fun foo(project: Project) {
-    val task = project.task<Task>("foo", "bar") {
-        TODO()
-    }
-    TODO()
-}

@@ -57,20 +57,22 @@ internal class GitHubRepositoryTest {
 
     @Test
     fun pagesTest() {
-        val actual = GitHub.Repository(
-            owner = "foo",
-            name = "bar",
-        ).pages()
+        val actual =
+            GitHub.Repository(
+                owner = "foo",
+                name = "bar",
+            ).pages()
         val expected = URL("https://foo.github.io/bar")
         Assertions.assertEquals(expected, actual)
     }
 
     @Test
     fun urlTest() {
-        val actual = GitHub.Repository(
-            owner = "foo",
-            name = "bar",
-        ).url()
+        val actual =
+            GitHub.Repository(
+                owner = "foo",
+                name = "bar",
+            ).url()
         val expected = URL("https://github.com/foo/bar")
         Assertions.assertEquals(expected, actual)
     }

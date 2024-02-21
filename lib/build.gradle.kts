@@ -35,7 +35,7 @@ repositories.mavenCentral()
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.gradle.jacoco")
-    id("io.gitlab.arturbosch.detekt") version Version.DETEKT
+    id("io.gitlab.arturbosch.detekt") version Version.detekt
     id("org.jetbrains.dokka") version Version.dokka
 }
 
@@ -48,22 +48,22 @@ dependencies {
 jacoco.toolVersion = Version.jacoco
 
 tasks.getByName<JavaCompile>("compileJava") {
-    targetCompatibility = Version.JVM_TARGET
+    targetCompatibility = Version.jvmTarget
 }
 
 val compileKotlinTask = tasks.getByName<KotlinCompile>("compileKotlin") {
     kotlinOptions {
-        jvmTarget = Version.JVM_TARGET
+        jvmTarget = Version.jvmTarget
         freeCompilerArgs = freeCompilerArgs + setOf("-module-name", colonCase(maven.group, maven.id))
     }
 }
 
 tasks.getByName<JavaCompile>("compileTestJava") {
-    targetCompatibility = Version.JVM_TARGET
+    targetCompatibility = Version.jvmTarget
 }
 
 tasks.getByName<KotlinCompile>("compileTestKotlin") {
-    kotlinOptions.jvmTarget = Version.JVM_TARGET
+    kotlinOptions.jvmTarget = Version.jvmTarget
 }
 
 fun Test.getExecutionData(): File {
@@ -143,7 +143,7 @@ setOf("main", "test").also { types ->
             else -> error("Type \"$type\" is not supported!")
         }
         task<Detekt>(camelCase("check", "CodeQuality", postfix)) {
-            jvmTarget = Version.JVM_TARGET
+            jvmTarget = Version.jvmTarget
             source = sourceSets.getByName(type).allSource
             config.setFrom(configs)
             val report = layout.buildDirectory.get()
@@ -179,7 +179,7 @@ task<Detekt>("checkDocumentation") {
             .file()
             .filled()
     }
-    jvmTarget = Version.JVM_TARGET
+    jvmTarget = Version.jvmTarget
     source = sourceSets.main.get().allSource
     config.setFrom(configs)
     val report = layout.buildDirectory.get()
@@ -262,7 +262,7 @@ task<Detekt>("checkDocumentation") {
                 localDirectory = file(path)
                 remoteUrl = gh.url().resolve("tree/${moduleVersion.get()}/lib", path)
             }
-            jdkVersion = Version.JVM_TARGET.toInt()
+            jdkVersion = Version.jvmTarget.toInt()
         }
         doLast {
             val index = outputDirectory.get()
@@ -307,10 +307,11 @@ task<Detekt>("checkDocumentation") {
                 Markdown.link("Documentation", gh.pages().resolve("doc", version)),
                 "implementation(\"${colonCase(maven.group, maven.id, version)}\")",
             )
-            val report = layout.buildDirectory.get()
-                .dir("reports/analysis/readme")
-                .file("index.html")
-                .asFile
+            val report =
+                layout.buildDirectory.get()
+                    .dir("reports/analysis/readme")
+                    .file("index.html")
+                    .asFile
             rootDir.resolve("README.md").check(
                 expected = expected,
                 report = report,
