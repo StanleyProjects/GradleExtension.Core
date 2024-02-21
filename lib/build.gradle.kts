@@ -1,3 +1,6 @@
+import io.gitlab.arturbosch.detekt.Detekt
+import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import sp.gx.core.Badge
 import sp.gx.core.GitHub
 import sp.gx.core.Markdown
@@ -11,15 +14,10 @@ import sp.gx.core.file
 import sp.gx.core.filled
 import sp.gx.core.kebabCase
 import sp.gx.core.resolve
-import java.util.Locale
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.dokka.gradle.DokkaTask
-import io.gitlab.arturbosch.detekt.Detekt
-import org.jetbrains.dokka.ExternalDocumentationLink
-import org.jetbrains.dokka.gradle.GradleExternalDocumentationLinkBuilder
 import java.net.URL
+import java.util.Locale
 
-version = "0.4.6"
+version = "0.5.0"
 
 val maven = Maven.Artifact(
     group = "com.github.kepocnhh",
