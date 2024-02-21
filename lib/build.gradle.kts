@@ -220,8 +220,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
                 .asFile
             file.assemble(
                 Maven.pom(
-                    groupId = maven.group,
-                    artifactId = maven.id,
+                    artifact = maven,
                     version = version,
                     packaging = "jar",
                 ),
@@ -237,8 +236,7 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
                 .asFile
             file.assemble(
                 Maven.metadata(
-                    groupId = maven.group,
-                    artifactId = maven.id,
+                    artifact = maven,
                     version = version,
                 ),
             )
@@ -298,11 +296,8 @@ task<io.gitlab.arturbosch.detekt.Detekt>("checkDocumentation") {
             )
             val expected = setOf(
                 badge,
-                Markdown.link("Maven", Maven.Snapshot.url(maven.group, maven.id, version)),
-                Markdown.link(
-                    "Documentation",
-                    gh.pages().resolve("doc").resolve(version),
-                ), // todo slash case
+                Markdown.link("Maven", Maven.Snapshot.url(maven, version)),
+                Markdown.link("Documentation", gh.pages().resolve("doc").resolve(version)), // todo slash case
                 "implementation(\"${colonCase(maven.group, maven.id, version)}\")",
             )
             val report = layout.buildDirectory.get()
