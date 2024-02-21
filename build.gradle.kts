@@ -33,7 +33,7 @@ repositories.mavenCentral()
 val ktlint: Configuration by configurations.creating
 
 dependencies {
-    ktlint("com.pinterest:ktlint:${Version.ktlint}") {
+    ktlint("com.pinterest.ktlint:ktlint-cli:${Version.KTLINT}") {
         attributes {
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
         }
