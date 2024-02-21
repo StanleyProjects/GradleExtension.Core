@@ -27,13 +27,19 @@ object Maven {
             check(id.isNotEmpty()) { "Artifact ID is empty!" }
         }
 
-        fun name(): String {
+        fun moduleName(): String {
             return "$group:$id"
         }
 
-        fun name(version: String): String {
-            check(version.isNotBlank())
+        fun moduleName(version: String): String {
+            require(version.isNotBlank())
             return "$group:$id:$version"
+        }
+
+
+        fun name(version: String): String {
+            require(version.isNotBlank())
+            return "$id:$version"
         }
 
         override fun toString(): String {
