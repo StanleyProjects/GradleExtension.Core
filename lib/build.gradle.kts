@@ -35,7 +35,7 @@ repositories.mavenCentral()
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.gradle.jacoco")
-    id("io.gitlab.arturbosch.detekt") version Version.detekt
+    id("io.gitlab.arturbosch.detekt") version Version.DETEKT
     id("org.jetbrains.dokka") version Version.dokka
 }
 

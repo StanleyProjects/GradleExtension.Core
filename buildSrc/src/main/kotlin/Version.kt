@@ -1,5 +1,5 @@
 object Version {
-    const val detekt = "1.23.1"
+    const val DETEKT = "1.23.5"
     const val dokka = "1.9.10"
     const val jacoco = "0.8.11"
     const val jupiter = "5.10.0"
