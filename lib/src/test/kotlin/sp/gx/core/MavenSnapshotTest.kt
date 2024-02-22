@@ -29,6 +29,14 @@ internal class MavenSnapshotTest {
         Assertions.assertThrows(IllegalStateException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.Snapshot.url(
+                groupId = " ",
+                artifactId = "",
+                version = "",
+            )
+        }
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.Snapshot.url(
                 groupId = "foo",
                 artifactId = "",
                 version = "",

@@ -16,15 +16,15 @@ object Maven {
      * Encapsulates data about an [artifact](https://maven.apache.org/repositories/artifacts.html).
      * @property group The artifact group.
      * @property id The artifact id.
-     * @throws IllegalStateException if [group] is empty.
-     * @throws IllegalStateException if [id] is empty.
+     * @throws IllegalArgumentException if [group] is blank.
+     * @throws IllegalArgumentException if [id] is blank.
      * @author [Stanley Wintergreen](https://github.com/kepocnhh)
-     * @since 0.2.3
+     * @since 0.5.1
      */
     class Artifact(val group: String, val id: String) {
         init {
-            check(group.isNotEmpty()) { "Group ID is empty!" }
-            check(id.isNotEmpty()) { "Artifact ID is empty!" }
+            require(group.isNotBlank()) { "The group ID is blank!" }
+            require(id.isNotBlank()) { "The artifact ID is blank!" }
         }
 
         fun moduleName(): String {
@@ -67,14 +67,14 @@ object Maven {
      * )
      * assertEquals(XMLParser.parse(xml).getNode("project").getString("version"), "42")
      * ```
-     * @throws IllegalStateException if [modelVersion] is empty.
-     * @throws IllegalStateException if [groupId] is empty.
-     * @throws IllegalStateException if [artifactId] is empty.
-     * @throws IllegalStateException if [version] is empty.
-     * @throws IllegalStateException if [packaging] is empty.
+     * @throws IllegalArgumentException if [modelVersion] is blank.
+     * @throws IllegalArgumentException if [groupId] is blank.
+     * @throws IllegalArgumentException if [artifactId] is blank.
+     * @throws IllegalArgumentException if [version] is blank.
+     * @throws IllegalArgumentException if [packaging] is blank.
      * @return The [String] XML in Maven [POM](https://maven.apache.org/pom.html) format.
      * @author [Stanley Wintergreen](https://github.com/kepocnhh)
-     * @since 0.2.3
+     * @since 0.5.1
      */
     fun pom(
         modelVersion: String = "4.0.0",
@@ -83,11 +83,11 @@ object Maven {
         version: String,
         packaging: String,
     ): String {
-        check(modelVersion.isNotEmpty()) { "Model version is empty!" }
-        check(groupId.isNotEmpty()) { "Group ID is empty!" }
-        check(artifactId.isNotEmpty()) { "Artifact ID is empty!" }
-        check(version.isNotEmpty()) { "Version is empty!" }
-        check(packaging.isNotEmpty()) { "Packaging is empty!" }
+        require(modelVersion.isNotBlank()) { "The model version is blank!" }
+        require(groupId.isNotBlank()) { "The group ID is blank!" }
+        require(artifactId.isNotBlank()) { "The artifact ID is blank!" }
+        require(version.isNotBlank()) { "The version is blank!" }
+        require(packaging.isNotBlank()) { "The packaging is blank!" }
         val host = "http://maven.apache.org"
         val url = "$host/POM/$modelVersion"
         val project = setOf(
@@ -152,12 +152,12 @@ object Maven {
      * )
      * assertEquals(XMLParser.parse(xml).getNode("metadata").getString("groupId"), "foo")
      * ```
-     * @throws IllegalStateException if [groupId] is empty.
-     * @throws IllegalStateException if [artifactId] is empty.
-     * @throws IllegalStateException if [version] is empty.
+     * @throws IllegalArgumentException if [groupId] is blank.
+     * @throws IllegalArgumentException if [artifactId] is blank.
+     * @throws IllegalArgumentException if [version] is blank.
      * @return The [String] XML in Maven [metadata](https://maven.apache.org/repositories/metadata.html) format.
      * @author [Stanley Wintergreen](https://github.com/kepocnhh)
-     * @since 0.2.3
+     * @since 0.5.1
      */
     @Deprecated(message = "deprecated in 0.5.0 | use {varinant}/maven/assemble/metadata.sh", level = DeprecationLevel.WARNING)
     fun metadata(
@@ -167,9 +167,9 @@ object Maven {
         dateTime: LocalDateTime = LocalDateTime.now(),
         dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss"),
     ): String {
-        check(groupId.isNotEmpty()) { "Group ID is empty!" }
-        check(artifactId.isNotEmpty()) { "Artifact ID is empty!" }
-        check(version.isNotEmpty()) { "Version is empty!" }
+        require(groupId.isNotBlank()) { "The group ID is blank!" }
+        require(artifactId.isNotBlank()) { "The artifact ID is blank!" }
+        require(version.isNotBlank()) { "The version is blank!" }
         return """
             <metadata>
                 <groupId>$groupId</groupId>
@@ -226,21 +226,21 @@ object Maven {
          * val url = Maven.Snapshot.url(groupId = "foo", artifactId = "bar", version = "42")
          * assertEquals(cURL.get(url).code, 200)
          * ```
-         * @throws IllegalStateException if [groupId] is empty.
-         * @throws IllegalStateException if [artifactId] is empty.
-         * @throws IllegalStateException if [version] is empty.
+         * @throws IllegalArgumentException if [groupId] is blank.
+         * @throws IllegalArgumentException if [artifactId] is blank.
+         * @throws IllegalArgumentException if [version] is blank.
          * @return The [URL] to the Maven artifact.
          * @author [Stanley Wintergreen](https://github.com/kepocnhh)
-         * @since 0.2.3
+         * @since 0.5.1
          */
         fun url(
             groupId: String,
             artifactId: String,
             version: String,
         ): URL {
-            check(groupId.isNotEmpty()) { "Group ID is empty!" }
-            check(artifactId.isNotEmpty()) { "Artifact ID is empty!" }
-            check(version.isNotEmpty()) { "Version is empty!" }
+            require(groupId.isNotBlank()) { "The group ID is blank!" }
+            require(artifactId.isNotBlank()) { "The artifact ID is blank!" }
+            require(version.isNotBlank()) { "The version is blank!" }
             val host = "https://s01.oss.sonatype.org"
             val path = "content/repositories/snapshots"
             val spec = "$host/$path/${groupId.replace('.', '/')}/$artifactId/$version"

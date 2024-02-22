@@ -46,6 +46,16 @@ internal class MavenTest {
         Assertions.assertThrows(IllegalStateException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.pom(
+                modelVersion = " ",
+                groupId = "",
+                artifactId = "",
+                version = "",
+                packaging = "",
+            )
+        }
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.pom(
                 modelVersion = "0",
                 groupId = "",
                 artifactId = "",
@@ -111,6 +121,14 @@ internal class MavenTest {
             @Suppress("IgnoredReturnValue")
             Maven.metadata(
                 groupId = "",
+                artifactId = "",
+                version = "",
+            )
+        }
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.metadata(
+                groupId = " ",
                 artifactId = "",
                 version = "",
             )
