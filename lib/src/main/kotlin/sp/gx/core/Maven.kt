@@ -36,7 +36,6 @@ object Maven {
             return "$group:$id:$version"
         }
 
-
         fun name(version: String): String {
             require(version.isNotBlank())
             return "$id:$version"

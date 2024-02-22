@@ -47,7 +47,7 @@ private class DelegatedProjectLayout(
 val Project.buildSrc: ProjectLayout get() {
     return DelegatedProjectLayout(
         objectFactory = rootProject.objects,
-        projectDirectory = rootProject.layout.projectDirectory.dir("buildSrc")
+        projectDirectory = rootProject.layout.projectDirectory.dir("buildSrc"),
     )
 }
 
