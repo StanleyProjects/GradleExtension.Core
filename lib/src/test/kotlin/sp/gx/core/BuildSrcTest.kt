@@ -13,8 +13,9 @@ internal class BuildSrcTest {
             FileUtils.canonicalize(it)
         }
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
-        val buildSrc = project.buildSrc
-        Assertions.assertEquals(projectDir.resolve("buildSrc").absolutePath, buildSrc.projectDirectory.asFile.absolutePath)
+        val expected = projectDir.resolve("buildSrc").absolutePath
+        val actual = project.buildSrc.projectDirectory.asFile.absolutePath
+        Assertions.assertEquals(expected, actual)
     }
 
     @Test
@@ -23,7 +24,23 @@ internal class BuildSrcTest {
             FileUtils.canonicalize(it)
         }
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
-        val buildSrc = project.buildSrc
-        Assertions.assertEquals(projectDir.resolve("buildSrc/build").absolutePath, buildSrc.buildDirectory.get().asFile.absolutePath)
+        val expected = projectDir.resolve("buildSrc/build").absolutePath
+        val actual = project.buildSrc.buildDirectory.get().asFile.absolutePath
+        Assertions.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun fileTest() {
+        TODO("BuildSrcTest:fileTest")
+    }
+
+    @Test
+    fun dirTest() {
+        TODO("BuildSrcTest:dirTest")
+    }
+
+    @Test
+    fun filesTest() {
+        TODO("BuildSrcTest:filesTest")
     }
 }
