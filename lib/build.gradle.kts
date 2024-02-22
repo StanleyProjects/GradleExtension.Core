@@ -5,7 +5,9 @@ import sp.gx.core.Badge
 import sp.gx.core.GitHub
 import sp.gx.core.Markdown
 import sp.gx.core.Maven
+import sp.gx.core.asFile
 import sp.gx.core.assemble
+import sp.gx.core.buildDir
 import sp.gx.core.camelCase
 import sp.gx.core.check
 import sp.gx.core.existing
@@ -65,10 +67,9 @@ tasks.getByName<KotlinCompile>("compileTestKotlin") {
 }
 
 fun Test.getExecutionData(): File {
-    return layout.buildDirectory.get()
+    return buildDir()
         .dir("jacoco")
-        .file("$name.exec")
-        .asFile
+        .asFile("$name.exec")
 }
 
 val taskUnitTest = task<Test>("checkUnitTest") {
@@ -92,10 +93,9 @@ val taskCoverageReport = task<JacocoReport>("assembleCoverageReport") {
     classDirectories.setFrom(sourceSets.main.get().output.classesDirs)
     executionData(taskUnitTest.getExecutionData())
     doLast {
-        val report = layout.buildDirectory.get()
+        val report = buildDir()
             .dir("reports/jacoco/$name/html")
             .file("index.html")
-            .asFile
             .existing()
             .file()
             .filled()
@@ -144,10 +144,9 @@ setOf("main", "test").also { types ->
             jvmTarget = Version.jvmTarget
             source = sourceSets.getByName(type).allSource
             config.setFrom(configs)
-            val report = layout.buildDirectory.get()
+            val report = buildDir()
                 .dir("reports/analysis/code/quality/$type/html")
-                .file("index.html")
-                .asFile
+                .asFile("index.html")
             reports {
                 html {
                     required = true
@@ -180,10 +179,9 @@ task<Detekt>("checkDocumentation") {
     jvmTarget = Version.jvmTarget
     source = sourceSets.main.get().allSource
     config.setFrom(configs)
-    val report = layout.buildDirectory.get()
+    val report = buildDir()
         .dir("reports/analysis/documentation/html")
-        .file("index.html")
-        .asFile
+        .asFile("index.html")
     reports {
         html {
             required = true
@@ -217,32 +215,30 @@ task<Detekt>("checkDocumentation") {
     }
     task(camelCase("assemble", variant, "Pom")) {
         doLast {
-            val file = layout.buildDirectory.get()
+            val file = buildDir()
                 .dir("libs")
                 .file("${kebabCase(maven.id, version)}.pom")
-                .asFile
-            file.assemble(
-                Maven.pom(
-                    artifact = maven,
-                    version = version,
-                    packaging = "jar",
-                ),
-            )
+                .assemble(
+                    Maven.pom(
+                        artifact = maven,
+                        version = version,
+                        packaging = "jar",
+                    ),
+                )
             println("POM: ${file.absolutePath}")
         }
     }
     task(camelCase("assemble", variant, "MavenMetadata")) {
         doLast {
-            val file = layout.buildDirectory.get()
+            val file = buildDir()
                 .dir("xml")
                 .file("maven-metadata.xml")
-                .asFile
-            file.assemble(
-                Maven.metadata(
-                    artifact = maven,
-                    version = version,
-                ),
-            )
+                .assemble(
+                    Maven.metadata(
+                        artifact = maven,
+                        version = version,
+                    ),
+                )
             println("Maven metadata: ${file.absolutePath}")
         }
     }
@@ -265,7 +261,6 @@ task<Detekt>("checkDocumentation") {
         doLast {
             val index = outputDirectory.get()
                 .file("index.html")
-                .asFile
                 .existing()
                 .file()
                 .filled()
@@ -274,18 +269,17 @@ task<Detekt>("checkDocumentation") {
     }
     task(camelCase("assemble", variant, "Metadata")) {
         doLast {
-            val file = layout.buildDirectory.get()
+            val file = buildDir()
                 .dir("yml")
                 .file("metadata.yml")
-                .asFile
-            file.assemble(
-                """
-                    repository:
-                     owner: '${gh.owner}'
-                     name: '${gh.name}'
-                    version: '$version'
-                """.trimIndent(),
-            )
+                .assemble(
+                    """
+                        repository:
+                         owner: '${gh.owner}'
+                         name: '${gh.name}'
+                        version: '$version'
+                    """.trimIndent(),
+                )
             println("Metadata: ${file.absolutePath}")
         }
     }
@@ -305,14 +299,11 @@ task<Detekt>("checkDocumentation") {
                 Markdown.link("Documentation", gh.pages().resolve("doc", version)),
                 "implementation(\"${maven.moduleName(version)}\")",
             )
-            val report =
-                layout.buildDirectory.get()
-                    .dir("reports/analysis/readme")
-                    .file("index.html")
-                    .asFile
             rootDir.resolve("README.md").check(
                 expected = expected,
-                report = report,
+                report = buildDir()
+                    .dir("reports/analysis/readme")
+                    .asFile("index.html"),
             )
         }
     }
@@ -335,19 +326,17 @@ task<Detekt>("checkDocumentation") {
                 Markdown.link("Maven", Maven.Snapshot.url(maven, version)),
                 "implementation(\"${maven.moduleName(version)}\")",
             )
-            val report = layout.buildDirectory.get()
-                .dir("reports/analysis/readme")
-                .file("index.html")
-                .asFile
             rootDir.resolve("README.md").check(
                 expected = expected,
-                report = report,
+                report = buildDir()
+                    .dir("reports/analysis/readme")
+                    .asFile("index.html"),
             )
         }
     }
     task(camelCase("assemble", variant, "MavenMetadata")) {
         doLast {
-            val file = layout.buildDirectory.get()
+            val file = buildDir()
                 .dir("yml")
                 .file("maven-metadata.yml")
                 .assemble(
@@ -375,7 +364,7 @@ task<Detekt>("checkDocumentation") {
     }
     task(camelCase("assemble", variant, "Pom")) {
         doLast {
-            val file = layout.buildDirectory.get()
+            val file = buildDir()
                 .dir("libs")
                 .file("${kebabCase(maven.id, version)}.pom")
                 .assemble(
