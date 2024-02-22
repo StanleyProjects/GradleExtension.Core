@@ -26,9 +26,13 @@ internal class URLUtilTest {
 
     @Test
     fun resolveErrorTest() {
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             URL("http://foo").resolve("")
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            URL("http://foo").resolve(" ")
         }
     }
 }

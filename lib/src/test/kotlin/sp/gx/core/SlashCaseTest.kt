@@ -18,9 +18,13 @@ internal class SlashCaseTest {
 
     @Test
     fun slashCaseErrorTest() {
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             slashCase("", "bar")
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            slashCase(" ", "bar")
         }
     }
 }

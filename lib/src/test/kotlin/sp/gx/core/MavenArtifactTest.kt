@@ -21,13 +21,21 @@ internal class MavenArtifactTest {
 
     @Test
     fun constructorErrorTest() {
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.Artifact(group = "", id = "")
         }
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.Artifact(group = " ", id = "")
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.Artifact(group = "foo", id = "")
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.Artifact(group = "foo", id = " ")
         }
     }
 

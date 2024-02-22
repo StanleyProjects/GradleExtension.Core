@@ -16,11 +16,15 @@ internal class GitHubRepositoryTest {
 
     @Test
     fun constructorErrorTest() {
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             GitHub.Repository(owner = "", name = "")
         }
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            GitHub.Repository(owner = " ", name = "")
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             GitHub.Repository(owner = "foo", name = "")
         }

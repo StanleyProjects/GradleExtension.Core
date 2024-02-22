@@ -17,9 +17,13 @@ internal class CamelCaseTest {
 
     @Test
     fun camelCaseErrorTest() {
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             camelCase("", "foo")
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            camelCase(" ", "foo")
         }
     }
 }
