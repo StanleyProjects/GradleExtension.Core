@@ -8,7 +8,6 @@ import sp.gx.core.Maven
 import sp.gx.core.assemble
 import sp.gx.core.camelCase
 import sp.gx.core.check
-import sp.gx.core.colonCase
 import sp.gx.core.existing
 import sp.gx.core.file
 import sp.gx.core.filled
@@ -53,7 +52,7 @@ tasks.getByName<JavaCompile>("compileJava") {
 val compileKotlinTask = tasks.getByName<KotlinCompile>("compileKotlin") {
     kotlinOptions {
         jvmTarget = Version.jvmTarget
-        freeCompilerArgs = freeCompilerArgs + setOf("-module-name", colonCase(maven.group, maven.id))
+        freeCompilerArgs = freeCompilerArgs + setOf("-module-name", maven.moduleName())
     }
 }
 
@@ -304,7 +303,7 @@ task<Detekt>("checkDocumentation") {
                 badge,
                 Markdown.link("Maven", Maven.Snapshot.url(maven, version)),
                 Markdown.link("Documentation", gh.pages().resolve("doc", version)),
-                "implementation(\"${colonCase(maven.group, maven.id, version)}\")",
+                "implementation(\"${maven.moduleName(version)}\")",
             )
             val report =
                 layout.buildDirectory.get()
@@ -334,7 +333,7 @@ task<Detekt>("checkDocumentation") {
             val expected = setOf(
                 badge,
                 Markdown.link("Maven", Maven.Snapshot.url(maven, version)),
-                "implementation(\"${colonCase(maven.group, maven.id, version)}\")",
+                "implementation(\"${maven.moduleName(version)}\")",
             )
             val report = layout.buildDirectory.get()
                 .dir("reports/analysis/readme")

@@ -36,6 +36,7 @@ object Maven {
             return "$group:$id:$version"
         }
 
+        // todo kebab case
         fun name(version: String): String {
             require(version.isNotBlank())
             return "$id:$version"
@@ -126,6 +127,7 @@ object Maven {
      * @author [Stanley Wintergreen](https://github.com/kepocnhh)
      * @since 0.4.3
      */
+    // todo Artifact fun
     fun pom(
         modelVersion: String = "4.0.0",
         artifact: Artifact,
