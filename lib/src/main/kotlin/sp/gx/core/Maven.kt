@@ -36,10 +36,23 @@ object Maven {
             return "$group:$id:$version"
         }
 
-        // todo kebab case
         fun name(version: String): String {
             require(version.isNotBlank())
-            return "$id:$version"
+            return "$id-$version"
+        }
+
+        fun pom(
+            modelVersion: String = "4.0.0",
+            version: String,
+            packaging: String,
+        ): String {
+            return pom(
+                modelVersion = modelVersion,
+                groupId = group,
+                artifactId = id,
+                version = version,
+                packaging = packaging,
+            )
         }
 
         override fun toString(): String {
@@ -127,7 +140,7 @@ object Maven {
      * @author [Stanley Wintergreen](https://github.com/kepocnhh)
      * @since 0.4.3
      */
-    // todo Artifact fun
+    @Deprecated(message = "replace with Artifact:pom", level = DeprecationLevel.WARNING)
     fun pom(
         modelVersion: String = "4.0.0",
         artifact: Artifact,
