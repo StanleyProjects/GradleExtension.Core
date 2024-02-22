@@ -19,6 +19,10 @@ fun ProjectLayout.buildDir(): Directory {
     return buildDirectory.get()
 }
 
+fun ProjectLayout.dir(path: String): Directory {
+    return projectDirectory.dir(path)
+}
+
 private class DelegatedProjectLayout(
     private val objectFactory: ObjectFactory,
     private val projectDirectory: Directory,

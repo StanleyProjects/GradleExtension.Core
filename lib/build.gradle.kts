@@ -8,6 +8,7 @@ import sp.gx.core.Maven
 import sp.gx.core.asFile
 import sp.gx.core.assemble
 import sp.gx.core.buildDir
+import sp.gx.core.buildSrc
 import sp.gx.core.camelCase
 import sp.gx.core.check
 import sp.gx.core.existing
@@ -129,7 +130,8 @@ setOf("main", "test").also { types ->
         "potential-bugs",
         "style",
     ).map { config ->
-        rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml")
+        // todo buildSrc.projectDirectory.dir -> buildSrc.dir
+        buildSrc.projectDirectory.dir("src/main/resources/detekt/config").file("$config.yml")
             .existing()
             .file()
             .filled()
@@ -171,6 +173,7 @@ task<Detekt>("checkDocumentation") {
         "common",
         "documentation",
     ).map { config ->
+        // todo buildSrc.projectDirectory.dir -> buildSrc.dir
         rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml")
             .existing()
             .file()
