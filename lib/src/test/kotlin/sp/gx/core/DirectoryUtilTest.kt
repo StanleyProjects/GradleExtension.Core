@@ -7,7 +7,7 @@ import java.nio.file.Files
 
 internal class DirectoryUtilTest {
     @Test
-    fun fooTest() {
+    fun asFileTest() {
         val projectDir = Files.createTempDirectory("unittest").toFile()
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
         check(projectDir.resolve("foo").mkdirs())
