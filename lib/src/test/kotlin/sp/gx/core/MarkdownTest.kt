@@ -19,6 +19,13 @@ internal class MarkdownTest {
         Assertions.assertThrows(IllegalStateException::class.java) {
             @Suppress("IgnoredReturnValue")
             Markdown.link(
+                text = " ",
+                url = URL("https://github.com/bar"),
+            )
+        }
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Markdown.link(
                 text = "",
                 url = URL("https://github.com/bar"),
             )

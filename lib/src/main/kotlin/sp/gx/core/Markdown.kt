@@ -12,15 +12,15 @@ object Markdown {
      * @return a URL with a description in [link](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#links) format.
      * @param text The description.
      * @param url The value of the link.
-     * @throws IllegalStateException if [text] is empty.
+     * @throws IllegalArgumentException if [text] is blank.
      * @author [Stanley Wintergreen](https://github.com/kepocnhh)
-     * @since 0.2.2
+     * @since 0.5.1
      */
     fun link(
         text: String,
         url: URL,
     ): String {
-        check(text.isNotEmpty())
+        require(text.isNotBlank()) { "The text is blank!" }
         return "[$text]($url)"
     }
 

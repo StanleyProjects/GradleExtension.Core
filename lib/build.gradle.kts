@@ -17,8 +17,7 @@ import sp.gx.core.resolve
 import java.net.URL
 import java.util.Locale
 
-// todo "isNotEmpty" -> "isNotBlank"
-version = "0.5.0"
+version = "0.5.1"
 
 val maven = Maven.Artifact(
     group = "com.github.kepocnhh",
@@ -345,6 +344,49 @@ task<Detekt>("checkDocumentation") {
                 expected = expected,
                 report = report,
             )
+        }
+    }
+    task(camelCase("assemble", variant, "MavenMetadata")) {
+        doLast {
+            val file = layout.buildDirectory.get()
+                .dir("yml")
+                .file("maven-metadata.yml")
+                .assemble(
+                    """
+                        repository:
+                         groupId: '${maven.group}'
+                         artifactId: '${maven.id}'
+                        version: '$version'
+                    """.trimIndent(),
+                )
+            println("Metadata: ${file.absolutePath}")
+        }
+    }
+    task<Jar>(camelCase("assemble", variant, "Jar")) {
+        dependsOn(compileKotlinTask)
+        archiveBaseName = maven.id
+        archiveVersion = version
+        from(compileKotlinTask.destinationDirectory.asFileTree)
+    }
+    task<Jar>(camelCase("assemble", variant, "Source")) {
+        archiveBaseName = maven.id
+        archiveVersion = version
+        archiveClassifier = "sources"
+        from(sourceSets.main.get().allSource)
+    }
+    task(camelCase("assemble", variant, "Pom")) {
+        doLast {
+            val file = layout.buildDirectory.get()
+                .dir("libs")
+                .file("${kebabCase(maven.id, version)}.pom")
+                .assemble(
+                    Maven.pom(
+                        artifact = maven,
+                        version = version,
+                        packaging = "jar",
+                    ),
+                )
+            println("POM: ${file.absolutePath}")
         }
     }
 }
