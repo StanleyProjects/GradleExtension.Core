@@ -1,9 +1,11 @@
 package sp.gx.core
 
+import org.gradle.api.internal.provider.DefaultProvider
 import org.gradle.internal.FileUtils
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.io.File
 import java.nio.file.Files
 
 internal class BuildSrcTest {
@@ -31,16 +33,56 @@ internal class BuildSrcTest {
 
     @Test
     fun fileTest() {
-        TODO("BuildSrcTest:fileTest")
+        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+            FileUtils.canonicalize(it)
+        }
+        val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
+        val expected = "foobarbaz"
+        projectDir.resolve("buildSrc").mkdirs()
+        projectDir.resolve("buildSrc").resolve("foo").writeText(expected)
+        val expectedFile = projectDir.resolve("buildSrc").resolve("foo")
+        val actualFile = project.buildSrc.file(DefaultProvider { File("foo") }).get().asFile
+        Assertions.assertEquals(expectedFile.absolutePath, actualFile.absolutePath)
+        Assertions.assertEquals(expected, actualFile.readText())
     }
 
     @Test
     fun dirTest() {
-        TODO("BuildSrcTest:dirTest")
+        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+            FileUtils.canonicalize(it)
+        }
+        val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
+        projectDir.resolve("buildSrc").mkdirs()
+        val expected = projectDir.resolve("buildSrc/foo").absolutePath
+        val actual = project.buildSrc.dir("foo").asFile.absolutePath
+        Assertions.assertEquals(expected, actual)
+        Assertions.assertFalse(project.buildSrc.dir("foo").asFile.exists())
+        Assertions.assertFalse(project.buildSrc.dir("foo").asFile.isDirectory)
+        projectDir.resolve("buildSrc/foo").mkdirs()
+        Assertions.assertTrue(project.buildSrc.dir("foo").asFile.exists())
+        Assertions.assertTrue(project.buildSrc.dir("foo").asFile.isDirectory)
     }
 
     @Test
     fun filesTest() {
-        TODO("BuildSrcTest:filesTest")
+        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+            FileUtils.canonicalize(it)
+        }
+        val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
+        val texts = mapOf(
+            "foo" to "footext",
+            "bar" to "bartext",
+            "baz" to "baztext",
+        )
+        check(texts.values.size == 3)
+        check(texts.values.size == texts.values.toSet().size)
+        projectDir.resolve("buildSrc").mkdirs()
+        texts.forEach { (path, text) ->
+            projectDir.resolve("buildSrc").resolve(path).writeText(text)
+        }
+        project.buildSrc.files(texts.keys).forEach { file ->
+            val expected = texts[file.name] ?: error("No text by \"${file.name}\"!")
+            Assertions.assertEquals(expected, file.readText())
+        }
     }
 }

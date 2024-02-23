@@ -22,11 +22,11 @@ internal class DelegatedProjectLayout(
     }
 
     override fun file(file: Provider<File>): Provider<RegularFile> {
-        return projectDirectory.file(file.map { it.absolutePath })
+        return projectDirectory.file(file.map { it.path })
     }
 
     override fun dir(file: Provider<File>): Provider<Directory> {
-        return projectDirectory.dir(file.map { it.absolutePath })
+        return projectDirectory.dir(file.map { it.path })
     }
 
     override fun files(vararg paths: Any?): FileCollection {
