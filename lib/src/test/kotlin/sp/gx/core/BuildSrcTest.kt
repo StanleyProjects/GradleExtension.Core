@@ -53,14 +53,15 @@ internal class BuildSrcTest {
         }
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
         projectDir.resolve("buildSrc").mkdirs()
-        val expected = projectDir.resolve("buildSrc/foo").absolutePath
-        val actual = project.buildSrc.dir("foo").asFile.absolutePath
+        val expected = projectDir.resolve("buildSrc/foo/bar").absolutePath
+        val provider = DefaultProvider { File("foo/bar") }
+        val actual = project.buildSrc.dir(provider).get().asFile.absolutePath
         Assertions.assertEquals(expected, actual)
-        Assertions.assertFalse(project.buildSrc.dir("foo").asFile.exists())
-        Assertions.assertFalse(project.buildSrc.dir("foo").asFile.isDirectory)
-        projectDir.resolve("buildSrc/foo").mkdirs()
-        Assertions.assertTrue(project.buildSrc.dir("foo").asFile.exists())
-        Assertions.assertTrue(project.buildSrc.dir("foo").asFile.isDirectory)
+        Assertions.assertFalse(project.buildSrc.dir(provider).get().asFile.exists())
+        Assertions.assertFalse(project.buildSrc.dir(provider).get().asFile.isDirectory)
+        projectDir.resolve("buildSrc/foo/bar").mkdirs()
+        Assertions.assertTrue(project.buildSrc.dir(provider).get().asFile.exists())
+        Assertions.assertTrue(project.buildSrc.dir(provider).get().asFile.isDirectory)
     }
 
     @Test
