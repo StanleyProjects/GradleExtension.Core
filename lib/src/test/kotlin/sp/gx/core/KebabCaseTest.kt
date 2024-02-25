@@ -17,9 +17,13 @@ internal class KebabCaseTest {
 
     @Test
     fun kebabCaseErrorTest() {
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             kebabCase("", "foo")
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            kebabCase(" ", "foo")
         }
     }
 }

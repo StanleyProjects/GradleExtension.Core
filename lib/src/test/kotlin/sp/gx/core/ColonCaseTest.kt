@@ -17,9 +17,13 @@ internal class ColonCaseTest {
 
     @Test
     fun colonCaseErrorTest() {
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             colonCase("", "bar")
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            colonCase(" ", "bar")
         }
     }
 }

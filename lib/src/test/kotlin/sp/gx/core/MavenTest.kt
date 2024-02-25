@@ -33,7 +33,7 @@ internal class MavenTest {
 
     @Test
     fun pomErrorTest() {
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.pom(
                 modelVersion = "",
@@ -43,7 +43,7 @@ internal class MavenTest {
                 packaging = "",
             )
         }
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.pom(
                 modelVersion = " ",
@@ -53,7 +53,7 @@ internal class MavenTest {
                 packaging = "",
             )
         }
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.pom(
                 modelVersion = "0",
@@ -63,7 +63,17 @@ internal class MavenTest {
                 packaging = "",
             )
         }
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.pom(
+                modelVersion = "0",
+                groupId = " ",
+                artifactId = "",
+                version = "",
+                packaging = "",
+            )
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.pom(
                 modelVersion = "0",
@@ -73,7 +83,17 @@ internal class MavenTest {
                 packaging = "",
             )
         }
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.pom(
+                modelVersion = "0",
+                groupId = "foo",
+                artifactId = " ",
+                version = "",
+                packaging = "",
+            )
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.pom(
                 modelVersion = "0",
@@ -83,7 +103,17 @@ internal class MavenTest {
                 packaging = "",
             )
         }
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.pom(
+                modelVersion = "0",
+                groupId = "foo",
+                artifactId = "bar",
+                version = " ",
+                packaging = "",
+            )
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.pom(
                 modelVersion = "0",
@@ -91,6 +121,16 @@ internal class MavenTest {
                 artifactId = "bar",
                 version = "42",
                 packaging = "",
+            )
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.pom(
+                modelVersion = "0",
+                groupId = "foo",
+                artifactId = "bar",
+                version = "42",
+                packaging = " ",
             )
         }
     }
@@ -117,7 +157,7 @@ internal class MavenTest {
 
     @Test
     fun metadataErrorTest() {
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.metadata(
                 groupId = "",
@@ -125,7 +165,7 @@ internal class MavenTest {
                 version = "",
             )
         }
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.metadata(
                 groupId = " ",
@@ -133,7 +173,7 @@ internal class MavenTest {
                 version = "",
             )
         }
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.metadata(
                 groupId = "foo",
@@ -141,12 +181,28 @@ internal class MavenTest {
                 version = "",
             )
         }
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.metadata(
+                groupId = "foo",
+                artifactId = " ",
+                version = "",
+            )
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.metadata(
                 groupId = "foo",
                 artifactId = "bar",
                 version = "",
+            )
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.metadata(
+                groupId = "foo",
+                artifactId = "bar",
+                version = " ",
             )
         }
     }

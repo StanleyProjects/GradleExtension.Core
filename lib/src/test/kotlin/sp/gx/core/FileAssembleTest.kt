@@ -39,7 +39,7 @@ internal class FileAssembleTest {
     @Test
     fun assembleEmptyTest() {
         val file = File.createTempFile("foo", "bar")
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             file.assemble("")
         }
     }
