@@ -9,7 +9,6 @@ import sp.gx.core.asFile
 import sp.gx.core.assemble
 import sp.gx.core.buildDir
 import sp.gx.core.buildSrc
-import sp.gx.core.camelCase
 import sp.gx.core.check
 import sp.gx.core.create
 import sp.gx.core.dir
@@ -208,19 +207,19 @@ task<Detekt>("checkDocumentation") {
 
 "snapshot".also { variant ->
     val version = kebabCase(version.toString(), variant.uppercase(Locale.US))
-    task<Jar>(camelCase("assemble", variant, "Jar")) {
+    task<Jar>("assemble", variant, "Jar") {
         dependsOn(compileKotlinTask)
         archiveBaseName = maven.id
         archiveVersion = version
         from(compileKotlinTask.destinationDirectory.asFileTree)
     }
-    task<Jar>(camelCase("assemble", variant, "Source")) {
+    task<Jar>("assemble", variant, "Source") {
         archiveBaseName = maven.id
         archiveVersion = version
         archiveClassifier = "sources"
         from(sourceSets.main.get().allSource)
     }
-    task(camelCase("assemble", variant, "Pom")) {
+    tasks.create("assemble", variant, "Pom") {
         doLast {
             val file = buildDir()
                 .dir("libs")
@@ -235,7 +234,7 @@ task<Detekt>("checkDocumentation") {
             println("POM: ${file.absolutePath}")
         }
     }
-    task(camelCase("assemble", variant, "MavenMetadata")) {
+    tasks.create("assemble", variant, "MavenMetadata") {
         doLast {
             val file = buildDir()
                 .dir("xml")
@@ -249,7 +248,7 @@ task<Detekt>("checkDocumentation") {
             println("Maven metadata: ${file.absolutePath}")
         }
     }
-    task<DokkaTask>(camelCase("assemble", variant, "Documentation")) {
+    task<DokkaTask>("assemble", variant, "Documentation") {
         outputDirectory = layout.buildDirectory.dir("documentation/$variant")
         moduleName = gh.name
         moduleVersion = version
@@ -274,7 +273,7 @@ task<Detekt>("checkDocumentation") {
             println("Documentation: ${index.absolutePath}")
         }
     }
-    task(camelCase("assemble", variant, "Metadata")) {
+    tasks.create("assemble", variant, "Metadata") {
         doLast {
             val file = buildDir()
                 .dir("yml")
@@ -290,7 +289,7 @@ task<Detekt>("checkDocumentation") {
             println("Metadata: ${file.absolutePath}")
         }
     }
-    task(camelCase("check", variant, "Readme")) {
+    tasks.create("check", variant, "Readme") {
         doLast {
             val badge = Markdown.image(
                 text = "version",
