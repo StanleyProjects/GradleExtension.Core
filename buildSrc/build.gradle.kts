@@ -8,5 +8,5 @@ plugins {
 }
 
 dependencies {
-    implementation("com.github.kepocnhh:GradleExtension.Core:0.5.3u-SNAPSHOT")
+    implementation("com.github.kepocnhh:GradleExtension.Core:0.5.4u-SNAPSHOT")
 }
