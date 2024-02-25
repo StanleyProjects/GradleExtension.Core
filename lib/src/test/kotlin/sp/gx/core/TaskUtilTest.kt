@@ -20,7 +20,7 @@ internal class TaskUtilTest {
     }
 
     @Test
-    fun taskTypeTest() {
+    fun taskBlockTest() {
         val projectDir = Files.createTempDirectory("unittest").toFile().let {
             FileUtils.canonicalize(it)
         }
@@ -30,6 +30,58 @@ internal class TaskUtilTest {
         val task = project.task<DefaultTask>("foo", "bar", "", "baz", " ", "qux") {
             taskBuild.set(true)
         }
+        Assertions.assertEquals("fooBarBazQux", task.name)
+        Assertions.assertTrue(taskBuild.get())
+    }
+
+    @Test
+    fun taskWithNoTypeTest() {
+        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+            FileUtils.canonicalize(it)
+        }
+        val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
+        val task = project.tasks.create("foo", "bar", "", "baz", " ", "qux")
+        Assertions.assertEquals("fooBarBazQux", task.name)
+    }
+
+    @Test
+    fun taskWithNoTypeBlockTest() {
+        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+            FileUtils.canonicalize(it)
+        }
+        val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
+        val taskBuild = AtomicBoolean(false)
+        Assertions.assertFalse(taskBuild.get())
+        val task = project.tasks.create("foo", "bar", "", "baz", " ", "qux") {
+            taskBuild.set(true)
+        }
+        Assertions.assertEquals("fooBarBazQux", task.name)
+        Assertions.assertTrue(taskBuild.get())
+    }
+
+    @Test
+    fun getByNameTest() {
+        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+            FileUtils.canonicalize(it)
+        }
+        val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
+        project.tasks.create("foo", "bar", "", "baz", " ", "qux")
+        val task = project.tasks.getByName<DefaultTask>("foo", "bar", "", "baz", " ", "qux")
+        Assertions.assertEquals("fooBarBazQux", task.name)
+    }
+
+    @Test
+    fun getByNameBlockTest() {
+        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+            FileUtils.canonicalize(it)
+        }
+        val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
+        val taskBuild = AtomicBoolean(false)
+        Assertions.assertFalse(taskBuild.get())
+        project.task<DefaultTask>("foo", "bar", "", "baz", " ", "qux") {
+            taskBuild.set(true)
+        }
+        val task = project.tasks.getByName<DefaultTask>("foo", "bar", "", "baz", " ", "qux")
         Assertions.assertEquals("fooBarBazQux", task.name)
         Assertions.assertTrue(taskBuild.get())
     }

@@ -11,6 +11,7 @@ import sp.gx.core.buildDir
 import sp.gx.core.buildSrc
 import sp.gx.core.camelCase
 import sp.gx.core.check
+import sp.gx.core.dir
 import sp.gx.core.existing
 import sp.gx.core.file
 import sp.gx.core.filled
@@ -19,7 +20,7 @@ import sp.gx.core.resolve
 import java.net.URL
 import java.util.Locale
 
-version = "0.5.3"
+version = "0.5.4"
 
 val maven = Maven.Artifact(
     group = "com.github.kepocnhh",
@@ -49,22 +50,22 @@ dependencies {
 jacoco.toolVersion = Version.jacoco
 
 tasks.getByName<JavaCompile>("compileJava") {
-    targetCompatibility = Version.jvmTarget
+    targetCompatibility = Version.jvmTarget.toString()
 }
 
 val compileKotlinTask = tasks.getByName<KotlinCompile>("compileKotlin") {
     kotlinOptions {
-        jvmTarget = Version.jvmTarget
+        jvmTarget = Version.jvmTarget.toString()
         freeCompilerArgs = freeCompilerArgs + setOf("-module-name", maven.moduleName())
     }
 }
 
 tasks.getByName<JavaCompile>("compileTestJava") {
-    targetCompatibility = Version.jvmTarget
+    targetCompatibility = Version.jvmTarget.toString()
 }
 
 tasks.getByName<KotlinCompile>("compileTestKotlin") {
-    kotlinOptions.jvmTarget = Version.jvmTarget
+    kotlinOptions.jvmTarget = Version.jvmTarget.toString()
 }
 
 fun Test.getExecutionData(): File {
@@ -130,8 +131,8 @@ setOf("main", "test").also { types ->
         "potential-bugs",
         "style",
     ).map { config ->
-        // todo buildSrc.projectDirectory.dir -> buildSrc.dir
-        buildSrc.projectDirectory.dir("src/main/resources/detekt/config").file("$config.yml")
+        buildSrc.dir("src/main/resources/detekt/config")
+            .file("$config.yml")
             .existing()
             .file()
             .filled()
@@ -143,7 +144,7 @@ setOf("main", "test").also { types ->
             else -> error("Type \"$type\" is not supported!")
         }
         task<Detekt>(camelCase("check", "CodeQuality", postfix)) {
-            jvmTarget = Version.jvmTarget
+            jvmTarget = Version.jvmTarget.toString()
             source = sourceSets.getByName(type).allSource
             config.setFrom(configs)
             val report = buildDir()
@@ -173,13 +174,13 @@ task<Detekt>("checkDocumentation") {
         "common",
         "documentation",
     ).map { config ->
-        // todo buildSrc.projectDirectory.dir -> buildSrc.dir
-        rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml")
+        buildSrc.dir("src/main/resources/detekt/config")
+            .file("$config.yml")
             .existing()
             .file()
             .filled()
     }
-    jvmTarget = Version.jvmTarget
+    jvmTarget = Version.jvmTarget.toString()
     source = sourceSets.main.get().allSource
     config.setFrom(configs)
     val report = buildDir()
@@ -259,7 +260,7 @@ task<Detekt>("checkDocumentation") {
                 localDirectory = file(path)
                 remoteUrl = gh.url().resolve("tree/${moduleVersion.get()}/lib", path)
             }
-            jdkVersion = Version.jvmTarget.toInt()
+            jdkVersion = Version.jvmTarget.majorVersion.toInt()
         }
         doLast {
             val index = outputDirectory.get()
