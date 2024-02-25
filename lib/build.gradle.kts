@@ -11,12 +11,12 @@ import sp.gx.core.buildDir
 import sp.gx.core.buildSrc
 import sp.gx.core.camelCase
 import sp.gx.core.check
+import sp.gx.core.dir
 import sp.gx.core.existing
 import sp.gx.core.file
 import sp.gx.core.filled
 import sp.gx.core.kebabCase
 import sp.gx.core.resolve
-import sp.gx.core.task
 import java.net.URL
 import java.util.Locale
 
@@ -131,8 +131,8 @@ setOf("main", "test").also { types ->
         "potential-bugs",
         "style",
     ).map { config ->
-        // todo buildSrc.projectDirectory.dir -> buildSrc.dir
-        buildSrc.projectDirectory.dir("src/main/resources/detekt/config").file("$config.yml")
+        buildSrc.dir("src/main/resources/detekt/config")
+            .file("$config.yml")
             .existing()
             .file()
             .filled()
@@ -174,8 +174,8 @@ task<Detekt>("checkDocumentation") {
         "common",
         "documentation",
     ).map { config ->
-        // todo buildSrc.projectDirectory.dir -> buildSrc.dir
-        rootDir.resolve("buildSrc/src/main/resources/detekt/config/$config.yml")
+        buildSrc.dir("src/main/resources/detekt/config")
+            .file("$config.yml")
             .existing()
             .file()
             .filled()
