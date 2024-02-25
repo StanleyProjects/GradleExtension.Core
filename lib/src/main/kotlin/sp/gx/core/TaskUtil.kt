@@ -21,3 +21,22 @@ inline fun <reified T : Task> Project.task(
     val name = camelCase(camelCase(nameSegment, secondNameSegment), *otherNameSegments)
     return tasks.create(name, T::class.java)
 }
+
+fun Project.task(
+    nameSegment: String,
+    secondNameSegment: String,
+    vararg otherNameSegments: String,
+    block: Task.() -> Unit,
+): Task {
+    val name = camelCase(camelCase(nameSegment, secondNameSegment), *otherNameSegments)
+    return tasks.create(name, block)
+}
+
+fun Project.task(
+    nameSegment: String,
+    secondNameSegment: String,
+    vararg otherNameSegments: String,
+): Task {
+    val name = camelCase(camelCase(nameSegment, secondNameSegment), *otherNameSegments)
+    return tasks.create(name)
+}
