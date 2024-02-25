@@ -1,5 +1,6 @@
 package sp.gx.core
 
+import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.tasks.TaskContainer
@@ -27,19 +28,19 @@ fun Project.task(
     nameSegment: String,
     secondNameSegment: String,
     vararg otherNameSegments: String,
-    block: Task.() -> Unit,
+    block: Action<in Task>,
 ): Task {
     val name = camelCase(camelCase(nameSegment, secondNameSegment), *otherNameSegments)
     return tasks.create(name, block)
 }
 
-fun Project.task(
+fun TaskContainer.create(
     nameSegment: String,
     secondNameSegment: String,
     vararg otherNameSegments: String,
 ): Task {
     val name = camelCase(camelCase(nameSegment, secondNameSegment), *otherNameSegments)
-    return tasks.create(name)
+    return create(name)
 }
 
 inline fun <reified T : Task> TaskContainer.getByName(
