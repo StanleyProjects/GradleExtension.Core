@@ -2,11 +2,6 @@ package sp.gx.core
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import org.xml.sax.InputSource
-import sp.gx.core.util.element
-import sp.gx.core.util.single
-import java.io.StringReader
-import javax.xml.parsers.DocumentBuilderFactory
 
 internal class MavenTest {
     @Test
