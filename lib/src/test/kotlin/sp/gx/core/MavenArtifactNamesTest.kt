@@ -27,9 +27,11 @@ internal class MavenArtifactNamesTest {
         val artifactId = "bar"
         val artifact = Maven.Artifact(group = groupId, id = artifactId)
         Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
             artifact.moduleName(version = "")
         }
         Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
             artifact.moduleName(version = " ")
         }
     }
@@ -49,9 +51,11 @@ internal class MavenArtifactNamesTest {
         val artifactId = "bar"
         val artifact = Maven.Artifact(group = groupId, id = artifactId)
         Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
             artifact.name(version = "")
         }
         Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
             artifact.name(version = " ")
         }
     }

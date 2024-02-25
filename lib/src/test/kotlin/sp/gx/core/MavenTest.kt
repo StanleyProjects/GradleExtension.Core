@@ -27,6 +27,7 @@ internal class MavenTest {
     }
 
     @Test
+    @Suppress("LongMethod")
     fun pomErrorTest() {
         Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
