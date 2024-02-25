@@ -16,6 +16,7 @@ import sp.gx.core.file
 import sp.gx.core.filled
 import sp.gx.core.kebabCase
 import sp.gx.core.resolve
+import sp.gx.core.task
 import java.net.URL
 import java.util.Locale
 
@@ -49,22 +50,22 @@ dependencies {
 jacoco.toolVersion = Version.jacoco
 
 tasks.getByName<JavaCompile>("compileJava") {
-    targetCompatibility = Version.jvmTarget
+    targetCompatibility = Version.jvmTarget.toString()
 }
 
 val compileKotlinTask = tasks.getByName<KotlinCompile>("compileKotlin") {
     kotlinOptions {
-        jvmTarget = Version.jvmTarget
+        jvmTarget = Version.jvmTarget.toString()
         freeCompilerArgs = freeCompilerArgs + setOf("-module-name", maven.moduleName())
     }
 }
 
 tasks.getByName<JavaCompile>("compileTestJava") {
-    targetCompatibility = Version.jvmTarget
+    targetCompatibility = Version.jvmTarget.toString()
 }
 
 tasks.getByName<KotlinCompile>("compileTestKotlin") {
-    kotlinOptions.jvmTarget = Version.jvmTarget
+    kotlinOptions.jvmTarget = Version.jvmTarget.toString()
 }
 
 fun Test.getExecutionData(): File {
@@ -143,7 +144,7 @@ setOf("main", "test").also { types ->
             else -> error("Type \"$type\" is not supported!")
         }
         task<Detekt>(camelCase("check", "CodeQuality", postfix)) {
-            jvmTarget = Version.jvmTarget
+            jvmTarget = Version.jvmTarget.toString()
             source = sourceSets.getByName(type).allSource
             config.setFrom(configs)
             val report = buildDir()
@@ -179,7 +180,7 @@ task<Detekt>("checkDocumentation") {
             .file()
             .filled()
     }
-    jvmTarget = Version.jvmTarget
+    jvmTarget = Version.jvmTarget.toString()
     source = sourceSets.main.get().allSource
     config.setFrom(configs)
     val report = buildDir()
@@ -259,7 +260,7 @@ task<Detekt>("checkDocumentation") {
                 localDirectory = file(path)
                 remoteUrl = gh.url().resolve("tree/${moduleVersion.get()}/lib", path)
             }
-            jdkVersion = Version.jvmTarget.toInt()
+            jdkVersion = Version.jvmTarget.majorVersion.toInt()
         }
         doLast {
             val index = outputDirectory.get()
