@@ -24,14 +24,14 @@ inline fun <reified T : Task> Project.task(
     return tasks.create(name, T::class.java)
 }
 
-fun Project.task(
+fun TaskContainer.create(
     nameSegment: String,
     secondNameSegment: String,
     vararg otherNameSegments: String,
     block: Action<in Task>,
 ): Task {
     val name = camelCase(camelCase(nameSegment, secondNameSegment), *otherNameSegments)
-    return tasks.create(name, block)
+    return create(name, block)
 }
 
 fun TaskContainer.create(
