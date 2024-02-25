@@ -18,6 +18,7 @@ object GitHub {
      * @author [Stanley Wintergreen](https://github.com/kepocnhh)
      * @since 0.5.0
      */
+    @Suppress("StringLiteralDuplication")
     class Repository(val owner: String, val name: String) {
         init {
             require(owner.isNotBlank()) { "The owner is blank!" }
@@ -80,6 +81,7 @@ object GitHub {
      * @author [Stanley Wintergreen](https://github.com/kepocnhh)
      * @since 0.5.0
      */
+    @Suppress("StringLiteralDuplication")
     fun pages(
         owner: String,
         name: String,
@@ -105,6 +107,7 @@ object GitHub {
      * @author [Stanley Wintergreen](https://github.com/kepocnhh)
      * @since 0.2.4
      */
+    @Suppress("StringLiteralDuplication")
     fun url(
         owner: String,
         name: String,

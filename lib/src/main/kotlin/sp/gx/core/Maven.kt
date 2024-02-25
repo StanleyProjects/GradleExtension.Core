@@ -1,8 +1,6 @@
 package sp.gx.core
 
 import java.net.URL
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Objects
 
 /**
@@ -123,109 +121,6 @@ object Maven {
         ) { (key, value) ->
             "<$key>$value</$key>"
         }
-    }
-
-    /**
-     * Usage:
-     * ```
-     * val artifact = Maven.Artifact(group = "foo", id = "bar")
-     * val xml = Maven.pom(
-     *     artifact = artifact,
-     *     version = "42",
-     *     packaging = "jar",
-     * )
-     * assertEquals(XMLParser.parse(xml).getNode("project").getString("version"), "42")
-     * ```
-     * @return The [String] XML in Maven [POM](https://maven.apache.org/pom.html) format.
-     * @author [Stanley Wintergreen](https://github.com/kepocnhh)
-     * @since 0.4.3
-     */
-    @Deprecated(message = "replace with Artifact:pom", level = DeprecationLevel.WARNING)
-    fun pom(
-        modelVersion: String = "4.0.0",
-        artifact: Artifact,
-        version: String,
-        packaging: String,
-    ): String {
-        return pom(
-            modelVersion = modelVersion,
-            groupId = artifact.group,
-            artifactId = artifact.id,
-            version = version,
-            packaging = packaging,
-        )
-    }
-
-    /**
-     * Usage:
-     * ```
-     * val xml = Maven.metadata(
-     *     groupId = "foo",
-     *     artifactId = "bar",
-     *     version = "42",
-     * )
-     * assertEquals(XMLParser.parse(xml).getNode("metadata").getString("groupId"), "foo")
-     * ```
-     * @throws IllegalArgumentException if [groupId] is blank.
-     * @throws IllegalArgumentException if [artifactId] is blank.
-     * @throws IllegalArgumentException if [version] is blank.
-     * @return The [String] XML in Maven [metadata](https://maven.apache.org/repositories/metadata.html) format.
-     * @author [Stanley Wintergreen](https://github.com/kepocnhh)
-     * @since 0.5.1
-     */
-    @Deprecated(message = "deprecated in 0.5.0 | use {varinant}/maven/assemble/metadata.sh", level = DeprecationLevel.WARNING)
-    fun metadata(
-        groupId: String,
-        artifactId: String,
-        version: String,
-        dateTime: LocalDateTime = LocalDateTime.now(),
-        dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss"),
-    ): String {
-        require(groupId.isNotBlank()) { "The group ID is blank!" }
-        require(artifactId.isNotBlank()) { "The artifact ID is blank!" }
-        require(version.isNotBlank()) { "The version is blank!" }
-        return """
-            <metadata>
-                <groupId>$groupId</groupId>
-                <artifactId>$artifactId</artifactId>
-                <versioning>
-                    <versions>
-                        <version>$version</version>
-                    </versions>
-                    <lastUpdated>${dateTimeFormatter.format(dateTime)}</lastUpdated>
-                </versioning>
-            </metadata>
-        """.trimIndent()
-    }
-
-    /**
-     * Usage:
-     * ```
-     * val artifact = Maven.Artifact(group = "foo", id = "bar")
-     * val xml = Maven.metadata(
-     *     artifact = artifact,
-     *     version = "42",
-     * )
-     * assertEquals(XMLParser.parse(xml).getNode("metadata").getString("groupId"), "foo")
-     * ```
-     * @return The [String] XML in Maven [metadata](https://maven.apache.org/repositories/metadata.html) format.
-     * @author [Stanley Wintergreen](https://github.com/kepocnhh)
-     * @since 0.4.3
-     */
-    @Deprecated(message = "deprecated in 0.5.0 | use {varinant}/maven/assemble/metadata.sh", level = DeprecationLevel.WARNING)
-    fun metadata(
-        artifact: Artifact,
-        version: String,
-        dateTime: LocalDateTime = LocalDateTime.now(),
-        dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss"),
-    ): String {
-        return metadata(
-            groupId = artifact.group,
-            artifactId = artifact.id,
-            version = version,
-            dateTime = dateTime,
-            dateTimeFormatter = dateTimeFormatter,
-        )
     }
 
     /**
