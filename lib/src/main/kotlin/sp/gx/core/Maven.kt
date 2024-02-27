@@ -25,20 +25,66 @@ object Maven {
             require(id.isNotBlank()) { "The artifact ID is blank!" }
         }
 
+        /**
+         * Usage:
+         * ```
+         * val artifact = Maven.Artifact(group = "foo", id = "bar")
+         * assertEquals("foo:bar", artifact.moduleName())
+         * ```
+         * @return the [String] name of the entire artifact module according to Maven format.
+         * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+         * @since 0.5.4
+         */
         fun moduleName(): String {
             return "$group:$id"
         }
 
+        /**
+         * Usage:
+         * ```
+         * val artifact = Maven.Artifact(group = "foo", id = "bar")
+         * assertEquals("foo:bar:0.1.2", artifact.moduleName("0.1.2"))
+         * ```
+         * @param version will be used in the name of the entire artifact module according to the Maven format.
+         * @throws IllegalArgumentException if [version] is blank.
+         * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+         * @since 0.5.4
+         */
         fun moduleName(version: String): String {
             require(version.isNotBlank())
             return "$group:$id:$version"
         }
 
+        /**
+         * Usage:
+         * ```
+         * val artifact = Maven.Artifact(group = "foo", id = "bar")
+         * assertEquals("bar-0.1.2", artifact.name("0.1.2"))
+         * ```
+         * @param version will be used in the artifact name according to the Maven format.
+         * @throws IllegalArgumentException if [version] is blank.
+         * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+         * @since 0.5.4
+         */
         fun name(version: String): String {
             require(version.isNotBlank())
             return "$id-$version"
         }
 
+        /**
+         * Usage:
+         * ```
+         * val artifact = Maven.Artifact(group = "foo", id = "bar")
+         * val xml = artifact.pom(
+         *     version = "42",
+         *     packaging = "jar",
+         * )
+         * assertEquals(XMLParser.parse(xml).getNode("project").getString("version"), "42")
+         * ```
+         * @return The [String] XML in Maven [POM](https://maven.apache.org/pom.html) format.
+         * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+         * @since 0.5.4
+         */
         fun pom(
             modelVersion: String = "4.0.0",
             version: String,

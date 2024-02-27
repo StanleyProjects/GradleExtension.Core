@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 
 internal class TaskUtilTest {
     @Test
@@ -82,13 +83,15 @@ internal class TaskUtilTest {
             FileUtils.canonicalize(it)
         }
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
-        val taskBuild = AtomicBoolean(false)
-        Assertions.assertFalse(taskBuild.get())
+        val counter = AtomicInteger(0)
+        Assertions.assertEquals(0, counter.get())
         project.task<DefaultTask>("foo", "bar", "", "baz", " ", "qux") {
-            taskBuild.set(true)
+            counter.incrementAndGet()
         }
-        val task = project.tasks.getByName<DefaultTask>("foo", "bar", "", "baz", " ", "qux")
+        val task = project.tasks.getByName<DefaultTask>("foo", "bar", "", "baz", " ", "qux") {
+            counter.incrementAndGet()
+        }
         Assertions.assertEquals("fooBarBazQux", task.name)
-        Assertions.assertTrue(taskBuild.get())
+        Assertions.assertEquals(2, counter.get())
     }
 }
