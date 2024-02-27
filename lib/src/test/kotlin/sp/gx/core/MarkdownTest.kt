@@ -16,10 +16,17 @@ internal class MarkdownTest {
 
     @Test
     fun urlErrorTest() {
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Markdown.link(
                 text = "",
+                url = URL("https://github.com/bar"),
+            )
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Markdown.link(
+                text = " ",
                 url = URL("https://github.com/bar"),
             )
         }

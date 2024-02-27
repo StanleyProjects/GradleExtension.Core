@@ -5,20 +5,21 @@ import java.net.URL
 /**
  * Usage:
  * ```
- * val url = URL("https://github.com").resolve("foo", "", "bar")
- * assertEquals(URL("https://github.com/foo/bar"), url)
+ * val url = URL("https://github.com").resolve("foo", "", "bar", " ", "baz")
+ * assertEquals(URL("https://github.com/foo/bar/baz"), url)
  * ```
- * @return concatenated [this], first [segment] and all the not empty [other] segments separated using "/".
+ * @return concatenated [this], first [segment] and all the not blank [other] segments separated using "/".
+ * @throws IllegalArgumentException if [segment] is blank.
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
- * @since 0.4.4
+ * @since 0.5.0
  */
 fun URL.resolve(segment: String, vararg other: String): URL {
-    check(segment.isNotEmpty()) { "First segment is empty!" }
+    require(segment.isNotBlank()) { "The first segment is blank!" }
     val builder = StringBuilder(toString())
         .append("/")
         .append(segment)
     for (it in other) {
-        if (it.isNotEmpty()) {
+        if (it.isNotBlank()) {
             builder.append("/")
                 .append(it)
         }

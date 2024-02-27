@@ -1,10 +1,9 @@
-# 2023/10/27
+# 2024/01/07
 
 potential-bugs:
   active: true
   AvoidReferentialEquality:
-    active: true
-    forbiddenTypePatterns: ['*']
+    active: false
   CastToNullableType:
     active: true
   Deprecation:
@@ -24,7 +23,7 @@ potential-bugs:
       'java.util.HashMap'
     ]
   ElseCaseInsteadOfExhaustiveWhen:
-    active: true
+    active: false
   EqualsAlwaysReturnsTrueOrFalse:
     active: true
   EqualsWithHashCodeExist:
@@ -39,14 +38,19 @@ potential-bugs:
     active: true
     restrictToConfig: false
     ignoreFunctionCall: [
+      java.io.File.delete,
       java.lang.StringBuilder.append,
+      java.util.concurrent.atomic.AtomicReference.compareAndSet,
       kotlin.TODO,
       kotlin.also,
+      kotlin.checkNotNull,
       kotlin.collections.MutableList.add,
+      kotlin.collections.MutableMap.remove,
       kotlin.collections.MutableSet.add,
       kotlin.collections.MutableSet.addAll,
       kotlin.collections.removeAll,
       kotlin.error,
+      kotlinx.coroutines.flow.SharedFlow.collect,
       kotlinx.coroutines.launch,
       kotlinx.coroutines.withContext,
       org.junit.jupiter.api.Assertions.assertThrows

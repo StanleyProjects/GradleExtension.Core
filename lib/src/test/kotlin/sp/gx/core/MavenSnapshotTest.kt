@@ -18,7 +18,7 @@ internal class MavenSnapshotTest {
 
     @Test
     fun urlErrorTest() {
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.Snapshot.url(
                 groupId = "",
@@ -26,7 +26,15 @@ internal class MavenSnapshotTest {
                 version = "",
             )
         }
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.Snapshot.url(
+                groupId = " ",
+                artifactId = "",
+                version = "",
+            )
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.Snapshot.url(
                 groupId = "foo",
@@ -34,12 +42,28 @@ internal class MavenSnapshotTest {
                 version = "",
             )
         }
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.Snapshot.url(
+                groupId = "foo",
+                artifactId = " ",
+                version = "",
+            )
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.Snapshot.url(
                 groupId = "foo",
                 artifactId = "bar",
                 version = "",
+            )
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.Snapshot.url(
+                groupId = "foo",
+                artifactId = "bar",
+                version = " ",
             )
         }
     }

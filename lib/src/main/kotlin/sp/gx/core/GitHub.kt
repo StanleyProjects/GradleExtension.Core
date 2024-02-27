@@ -13,15 +13,16 @@ object GitHub {
      * Encapsulates data about a GitHub [repository](https://docs.github.com/en/rest/repos).
      * @property owner The account owner of the GitHub repository.
      * @property name The name of the GitHub repository.
-     * @throws IllegalStateException if [owner] is empty.
-     * @throws IllegalStateException if [name] is empty.
+     * @throws IllegalArgumentException if [owner] is blank.
+     * @throws IllegalArgumentException if [name] is blank.
      * @author [Stanley Wintergreen](https://github.com/kepocnhh)
-     * @since 0.2.4
+     * @since 0.5.0
      */
+    @Suppress("StringLiteralDuplication")
     class Repository(val owner: String, val name: String) {
         init {
-            check(owner.isNotEmpty())
-            check(name.isNotEmpty())
+            require(owner.isNotBlank()) { "The owner is blank!" }
+            require(name.isNotBlank()) { "The name is blank!" }
         }
 
         /**
@@ -75,17 +76,18 @@ object GitHub {
      * assertEquals(cURL.get(url).code, 200)
      * ```
      * @return The [URL] from the GitHub [pages](https://pages.github.com) of the repository.
-     * @throws IllegalStateException if [owner] is empty.
-     * @throws IllegalStateException if [name] is empty.
+     * @throws IllegalArgumentException if [owner] is blank.
+     * @throws IllegalArgumentException if [name] is blank.
      * @author [Stanley Wintergreen](https://github.com/kepocnhh)
-     * @since 0.2.4
+     * @since 0.5.0
      */
+    @Suppress("StringLiteralDuplication")
     fun pages(
         owner: String,
         name: String,
     ): URL {
-        check(owner.isNotEmpty())
-        check(name.isNotEmpty())
+        require(owner.isNotBlank()) { "The owner is blank!" }
+        require(name.isNotBlank()) { "The name is blank!" }
         val spec = StringBuilder("https://$owner.github.io")
             .append("/")
             .append(name)
@@ -100,17 +102,18 @@ object GitHub {
      * assertEquals(cURL.get(url).code, 200)
      * ```
      * @return The [URL] of the GitHub repository.
-     * @throws IllegalStateException if [owner] is empty.
-     * @throws IllegalStateException if [name] is empty.
+     * @throws IllegalArgumentException if [owner] is blank.
+     * @throws IllegalArgumentException if [name] is blank.
      * @author [Stanley Wintergreen](https://github.com/kepocnhh)
      * @since 0.2.4
      */
+    @Suppress("StringLiteralDuplication")
     fun url(
         owner: String,
         name: String,
     ): URL {
-        check(owner.isNotEmpty())
-        check(name.isNotEmpty())
+        require(owner.isNotBlank()) { "The owner is blank!" }
+        require(name.isNotBlank()) { "The name is blank!" }
         val spec = StringBuilder("https://github.com")
             .append("/")
             .append(owner)

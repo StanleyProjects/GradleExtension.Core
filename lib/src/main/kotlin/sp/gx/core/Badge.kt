@@ -21,13 +21,13 @@ object Badge {
      * @param labelColor HEX or name of color like "white" on the left. Default is "212121".
      * @param color HEX or name of color like "white" on the right.
      * @param style One of "flat", "flat-square", "plastic" etc. Default is "flat".
-     * @throws IllegalStateException if [label] is empty.
-     * @throws IllegalStateException if [message] is empty.
-     * @throws IllegalStateException if [labelColor] is empty.
-     * @throws IllegalStateException if [color] is empty.
-     * @throws IllegalStateException if [style] is empty.
+     * @throws IllegalArgumentException if [label] is blank.
+     * @throws IllegalArgumentException if [message] is blank.
+     * @throws IllegalArgumentException if [labelColor] is blank.
+     * @throws IllegalArgumentException if [color] is blank.
+     * @throws IllegalArgumentException if [style] is blank.
      * @author [Stanley Wintergreen](https://github.com/kepocnhh)
-     * @since 0.2.2
+     * @since 0.5.0
      */
     fun url(
         label: String,
@@ -36,11 +36,11 @@ object Badge {
         color: String,
         style: String = "flat",
     ): URL {
-        check(label.isNotEmpty())
-        check(message.isNotEmpty())
-        check(labelColor.isNotEmpty())
-        check(color.isNotEmpty())
-        check(style.isNotEmpty())
+        require(label.isNotBlank()) { "The label is blank!" }
+        require(message.isNotBlank()) { "The message is blank!" }
+        require(labelColor.isNotBlank()) { "The label color is blank!" }
+        require(color.isNotBlank()) { "The color is blank!" }
+        require(style.isNotBlank()) { "The style is blank!" }
         val host = "https://img.shields.io"
         val spec = mapOf(
             "label" to label,

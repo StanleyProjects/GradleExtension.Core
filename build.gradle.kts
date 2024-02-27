@@ -1,3 +1,6 @@
+import sp.gx.core.asFile
+import sp.gx.core.buildDir
+import sp.gx.core.buildSrc
 import sp.gx.core.check
 
 buildscript {
@@ -9,7 +12,20 @@ buildscript {
 }
 
 task<Delete>("clean") {
-    delete = setOf(layout.buildDirectory.get(), "buildSrc/build")
+    delete = setOf(buildDir(), buildSrc.buildDir())
+}
+
+task("checkLicense") {
+    doLast {
+        val author = "Stanley Wintergreen" // todo
+        file("LICENSE").check(
+            expected = emptySet(),
+            regexes = setOf("^Copyright 2\\d{3} $author${'$'}".toRegex()),
+            report = buildDir()
+                .dir("reports/analysis/license")
+                .asFile("index.html"),
+        )
+    }
 }
 
 repositories.mavenCentral()
@@ -28,10 +44,9 @@ task<JavaExec>("checkCodeStyle") {
     classpath = ktlint
     mainClass = "com.pinterest.ktlint.Main"
     val reporter = "html"
-    val output = layout.buildDirectory.get()
+    val output = buildDir()
         .dir("reports/analysis/code/style/html")
-        .file("index.html")
-        .asFile
+        .asFile("index.html")
     args(
         "build.gradle.kts",
         "settings.gradle.kts",
@@ -42,22 +57,4 @@ task<JavaExec>("checkCodeStyle") {
         "lib/build.gradle.kts",
         "--reporter=$reporter,output=${output.absolutePath}",
     )
-}
-
-task("checkLicense") {
-    doLast {
-        val report = layout.buildDirectory.get()
-            .dir("reports/analysis/license")
-            .file("index.html")
-            .asFile
-        rootDir.resolve("LICENSE").check(
-            expected = emptySet(),
-            report = report,
-        )
-        val author = "Stanley Wintergreen" // todo
-        val regex = "^Copyright 2\\d{3} $author${'$'}".toRegex()
-        rootDir.resolve("LICENSE").readLines().also {
-            if (it.none(regex::containsMatchIn)) TODO()
-        }
-    }
 }

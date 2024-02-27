@@ -7,23 +7,32 @@ import java.net.URL
 internal class GitHubTest {
     @Test
     fun pagesTest() {
-        val actual = GitHub.pages(
-            owner = "foo",
-            name = "bar",
-        )
+        val actual =
+            GitHub.pages(
+                owner = "foo",
+                name = "bar",
+            )
         val expected = URL("https://foo.github.io/bar")
         Assertions.assertEquals(expected, actual)
     }
 
     @Test
     fun pagesErrorTest() {
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             GitHub.pages(owner = "", name = "")
         }
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            GitHub.pages(owner = " ", name = "")
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             GitHub.pages(owner = "foo", name = "")
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            GitHub.pages(owner = "foo", name = " ")
         }
     }
 
@@ -39,13 +48,21 @@ internal class GitHubTest {
 
     @Test
     fun urlErrorTest() {
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             GitHub.url(owner = "", name = "")
         }
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            GitHub.url(owner = " ", name = "")
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             GitHub.url(owner = "foo", name = "")
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            GitHub.url(owner = "foo", name = " ")
         }
     }
 }

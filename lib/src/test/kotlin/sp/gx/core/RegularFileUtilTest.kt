@@ -74,7 +74,7 @@ internal class RegularFileUtilTest {
         val project = ProjectBuilder.builder().build()
         val dir = project.layout.buildDirectory.get()
         val regularFile = dir.file("foobar")
-        assertThrows(IllegalStateException::class.java) {
+        assertThrows(IllegalArgumentException::class.java) {
             regularFile.assemble("")
         }
     }

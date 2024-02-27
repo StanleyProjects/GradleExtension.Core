@@ -58,13 +58,13 @@ fun File.filled(): File {
  * assertEquals(text, file.readText())
  * ```
  * @receiver The [File] to which the [text] will be written.
- * @throws IllegalStateException if [text] is empty.
+ * @throws IllegalArgumentException if [text] is empty.
  * @throws IllegalStateException if [this] receiver [File] exists and not a file.
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
- * @since 0.2.1
+ * @since 0.5.3
  */
 fun File.assemble(text: String) {
-    check(text.isNotEmpty())
+    require(text.isNotEmpty())
     if (exists()) {
         file()
         check(delete()) { "Failed to delete \"$absolutePath\" file!" }

@@ -2,12 +2,7 @@ package sp.gx.core
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import org.xml.sax.InputSource
-import sp.gx.core.util.element
-import sp.gx.core.util.single
-import java.io.StringReader
 import java.net.URL
-import javax.xml.parsers.DocumentBuilderFactory
 
 internal class MavenArtifactTest {
     @Test
@@ -21,13 +16,21 @@ internal class MavenArtifactTest {
 
     @Test
     fun constructorErrorTest() {
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.Artifact(group = "", id = "")
         }
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.Artifact(group = " ", id = "")
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
             Maven.Artifact(group = "foo", id = "")
+        }
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            @Suppress("IgnoredReturnValue")
+            Maven.Artifact(group = "foo", id = " ")
         }
     }
 
@@ -65,10 +68,20 @@ internal class MavenArtifactTest {
     }
 
     @Test
+    fun snapshotUrlTest() {
+        val artifact = Maven.Artifact(group = "foo", id = "bar")
+        val actual = Maven.Snapshot.url(
+            artifact = artifact,
+            version = "42",
+        )
+        val expected = URL("https://s01.oss.sonatype.org/content/repositories/snapshots/foo/bar/42")
+        Assertions.assertEquals(expected, actual)
+    }
+
+    @Test
     fun pomTest() {
         val artifact = Maven.Artifact(group = "foo", id = "bar")
-        val actual = Maven.pom(
-            artifact = artifact,
+        val actual = artifact.pom(
             version = "42",
             packaging = "baz",
         )
@@ -83,37 +96,6 @@ internal class MavenArtifactTest {
             <packaging>baz</packaging>
             </project>
         """.trimIndent().replace("\n", "")
-        Assertions.assertEquals(expected, actual)
-    }
-
-    @Test
-    fun metadataTest() {
-        val artifact = Maven.Artifact(group = "foo", id = "bar")
-        val actual = Maven.metadata(
-            artifact = artifact,
-            version = "42",
-        )
-        val root = DocumentBuilderFactory.newInstance()
-            .newDocumentBuilder()
-            .parse(InputSource(StringReader(actual)))
-            .documentElement
-        Assertions.assertEquals("metadata", root.tagName)
-        Assertions.assertEquals("foo", root.single("groupId").textContent)
-        Assertions.assertEquals("bar", root.single("artifactId").textContent)
-        root.single("versioning").element().also { versioning ->
-            Assertions.assertEquals("42", versioning.single("versions").element().single("version").textContent)
-            Assertions.assertFalse(versioning.single("lastUpdated").textContent.isEmpty())
-        }
-    }
-
-    @Test
-    fun snapshotUrlTest() {
-        val artifact = Maven.Artifact(group = "foo", id = "bar")
-        val actual = Maven.Snapshot.url(
-            artifact = artifact,
-            version = "42",
-        )
-        val expected = URL("https://s01.oss.sonatype.org/content/repositories/snapshots/foo/bar/42")
         Assertions.assertEquals(expected, actual)
     }
 }

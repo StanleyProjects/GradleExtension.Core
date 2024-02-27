@@ -25,17 +25,18 @@ fun String.uppercaseFirstChar(): String {
  * val cased = camelCase("foo", "bar", "baz")
  * assertEquals("fooBarBaz", cased)
  * ```
- * @return The string from first [segment] and all the not empty capitalized [other] segments.
- * @throws IllegalStateException if [segment] is empty.
+ * @return The string from first [segment] and all the not blank capitalized [other] segments.
+ * @throws IllegalArgumentException if [segment] is blank.
  * @see [Iterable.joinToString]
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
- * @since 0.1.1
+ * @since 0.5.0
  */
+@Suppress("StringLiteralDuplication")
 fun camelCase(segment: String, vararg other: String): String {
-    check(segment.isNotEmpty())
+    require(segment.isNotBlank()) { "The first segment is blank!" }
     val builder = StringBuilder(segment)
     for (it in other) {
-        if (it.isNotEmpty()) {
+        if (it.isNotBlank()) {
             builder.append(it.uppercaseFirstChar())
         }
     }
@@ -48,17 +49,18 @@ fun camelCase(segment: String, vararg other: String): String {
  * val version = kebabCase("0.1", "bar", "baz")
  * assertEquals("0.1-bar-baz", version)
  * ```
- * @return The string from first [segment] and all the not empty [other] segments separated using "-".
- * @throws IllegalStateException if [segment] is empty.
+ * @return The string from first [segment] and all the not blank [other] segments separated using "-".
+ * @throws IllegalArgumentException if [segment] is blank.
  * @see [Iterable.joinToString]
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
- * @since 0.1.1
+ * @since 0.5.0
  */
+@Suppress("StringLiteralDuplication")
 fun kebabCase(segment: String, vararg other: String): String {
-    check(segment.isNotEmpty())
+    require(segment.isNotBlank()) { "The first segment is blank!" }
     val builder = StringBuilder(segment)
     for (it in other) {
-        if (it.isNotEmpty()) {
+        if (it.isNotBlank()) {
             builder.append("-")
                 .append(it)
         }
@@ -88,17 +90,18 @@ fun String.filled(): String {
  * val cased = colonCase("foo", "bar", "baz")
  * assertEquals("foo:bar:baz", cased)
  * ```
- * @return The string from first [segment] and all the not empty [other] segments separated using ":".
- * @throws IllegalStateException if [segment] is empty.
+ * @return The string from first [segment] and all the not blank [other] segments separated using ":".
+ * @throws IllegalArgumentException if [segment] is blank.
  * @see [Iterable.joinToString]
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
- * @since 0.3.0
+ * @since 0.5.0
  */
+@Suppress("StringLiteralDuplication")
 fun colonCase(segment: String, vararg other: String): String {
-    check(segment.isNotEmpty())
+    require(segment.isNotBlank()) { "The first segment is blank!" }
     val builder = StringBuilder(segment)
     for (it in other) {
-        if (it.isNotEmpty()) {
+        if (it.isNotBlank()) {
             builder.append(":")
                 .append(it)
         }
@@ -112,17 +115,18 @@ fun colonCase(segment: String, vararg other: String): String {
  * val cased = slashCase("foo", "bar", "baz")
  * assertEquals("foo/bar/baz", cased)
  * ```
- * @return The string from first [segment] and all the not empty [other] segments separated using "/".
- * @throws IllegalStateException if [segment] is empty.
+ * @return The string from first [segment] and all the not blank [other] segments separated using "/".
+ * @throws IllegalArgumentException if [segment] is blank.
  * @see [Iterable.joinToString]
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
- * @since 0.3.0
+ * @since 0.5.0
  */
+@Suppress("StringLiteralDuplication")
 fun slashCase(segment: String, vararg other: String): String {
-    check(segment.isNotEmpty())
+    require(segment.isNotBlank()) { "The first segment is blank!" }
     val builder = StringBuilder(segment)
     for (it in other) {
-        if (it.isNotEmpty()) {
+        if (it.isNotBlank()) {
             builder.append("/")
                 .append(it)
         }
