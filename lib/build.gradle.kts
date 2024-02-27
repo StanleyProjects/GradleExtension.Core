@@ -237,15 +237,17 @@ task<Detekt>("checkDocumentation") {
     tasks.create("assemble", variant, "MavenMetadata") {
         doLast {
             val file = buildDir()
-                .dir("xml")
-                .file("maven-metadata.xml")
+                .dir("yml")
+                .file("maven-metadata.yml")
                 .assemble(
-                    Maven.metadata(
-                        artifact = maven,
-                        version = version,
-                    ),
+                    """
+                        repository:
+                         groupId: '${maven.group}'
+                         artifactId: '${maven.id}'
+                        version: '$version'
+                    """.trimIndent(),
                 )
-            println("Maven metadata: ${file.absolutePath}")
+            println("Metadata: ${file.absolutePath}")
         }
     }
     task<DokkaTask>("assemble", variant, "Documentation") {
