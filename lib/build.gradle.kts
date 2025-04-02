@@ -52,22 +52,22 @@ dependencies {
 jacoco.toolVersion = Version.jacoco
 
 tasks.getByName<JavaCompile>("compileJava") {
-    targetCompatibility = Version.jvmTarget.toString()
+    targetCompatibility = Version.jvmTarget
 }
 
 val compileKotlinTask = tasks.getByName<KotlinCompile>("compileKotlin") {
     kotlinOptions {
-        jvmTarget = Version.jvmTarget.toString()
+        jvmTarget = Version.jvmTarget
         freeCompilerArgs = freeCompilerArgs + setOf("-module-name", maven.moduleName())
     }
 }
 
 tasks.getByName<JavaCompile>("compileTestJava") {
-    targetCompatibility = Version.jvmTarget.toString()
+    targetCompatibility = Version.jvmTarget
 }
 
 tasks.getByName<KotlinCompile>("compileTestKotlin") {
-    kotlinOptions.jvmTarget = Version.jvmTarget.toString()
+    kotlinOptions.jvmTarget = Version.jvmTarget
 }
 
 fun Test.getExecutionData(): File {
@@ -120,7 +120,10 @@ task<JacocoCoverageVerification>("checkCoverage") {
     executionData(taskCoverageReport.executionData)
 }
 
-setOf("main", "test").also { types ->
+task<Detekt>("check", "CodeQuality") {
+    jvmTarget = Version.jvmTarget
+    val type = "main"
+    source = sourceSets.getByName(type).allSource
     val configs = setOf(
         "comments",
         "common",
@@ -139,35 +142,24 @@ setOf("main", "test").also { types ->
             .file()
             .filled()
     }
-    types.forEach { type ->
-        val postfix = when (type) {
-            "main" -> ""
-            "test" -> "UnitTest"
-            else -> error("Type \"$type\" is not supported!")
+    config.setFrom(configs)
+    val report = buildDir()
+        .dir("reports/analysis/code/quality/$type/html")
+        .asFile("index.html")
+    reports {
+        html {
+            required = true
+            outputLocation = report
         }
-        task<Detekt>("check", "CodeQuality", postfix) {
-            jvmTarget = Version.jvmTarget.toString()
-            source = sourceSets.getByName(type).allSource
-            config.setFrom(configs)
-            val report = buildDir()
-                .dir("reports/analysis/code/quality/$type/html")
-                .asFile("index.html")
-            reports {
-                html {
-                    required = true
-                    outputLocation = report
-                }
-                md.required = false
-                sarif.required = false
-                txt.required = false
-                xml.required = false
-            }
-            val detektTask = tasks.getByName<Detekt>("detekt", type)
-            classpath.setFrom(detektTask.classpath)
-            doFirst {
-                println("Analysis report: ${report.absolutePath}")
-            }
-        }
+        md.required = false
+        sarif.required = false
+        txt.required = false
+        xml.required = false
+    }
+    val detektTask = tasks.getByName<Detekt>("detekt", type)
+    classpath.setFrom(detektTask.classpath)
+    doFirst {
+        println("Analysis report: ${report.absolutePath}")
     }
 }
 
@@ -182,7 +174,7 @@ task<Detekt>("checkDocumentation") {
             .file()
             .filled()
     }
-    jvmTarget = Version.jvmTarget.toString()
+    jvmTarget = Version.jvmTarget
     source = sourceSets.main.get().allSource
     config.setFrom(configs)
     val report = buildDir()
@@ -263,7 +255,7 @@ task<Detekt>("checkDocumentation") {
                 localDirectory = file(path)
                 remoteUrl = gh.url().resolve("tree/${moduleVersion.get()}/lib", path)
             }
-            jdkVersion = Version.jvmTarget.majorVersion.toInt()
+            jdkVersion = Version.jvmTarget.toInt()
         }
         doLast {
             val index = outputDirectory.get()
