@@ -225,8 +225,7 @@ task<Detekt>("checkDocumentation") {
                 .dir("libs")
                 .file("${kebabCase(maven.id, version)}.pom")
                 .assemble(
-                    Maven.pom(
-                        artifact = maven,
+                    maven.pom(
                         version = version,
                         packaging = "jar",
                     ),
@@ -376,8 +375,7 @@ task<Detekt>("checkDocumentation") {
                 .dir("libs")
                 .file("${kebabCase(maven.id, version)}.pom")
                 .assemble(
-                    Maven.pom(
-                        artifact = maven,
+                    maven.pom(
                         version = version,
                         packaging = "jar",
                     ),
