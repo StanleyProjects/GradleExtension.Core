@@ -1,7 +1,7 @@
 import org.gradle.api.JavaVersion
 
 object Version {
-    const val detekt = "1.23.5"
+    const val detekt = "1.23.6"
     const val dokka = "1.9.10"
     const val jacoco = "0.8.11"
     const val jupiter = "5.10.2"
