@@ -22,7 +22,7 @@ import sp.gx.core.task
 import java.net.URL
 import java.util.Locale
 
-version = "0.5.4"
+version = "0.6.0"
 
 val maven = Maven.Artifact(
     group = "com.github.kepocnhh",
