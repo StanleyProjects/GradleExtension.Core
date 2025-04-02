@@ -18,3 +18,11 @@ import java.io.File
 fun Directory.asFile(path: String): File {
     return file(path).asFile
 }
+
+fun Directory.eff(path: String): File {
+    val file = file(path).asFile
+    check(file.exists()) { "Location \"${file.absolutePath}\" does not exist!" }
+    check(file.isFile) { "Location \"${file.absolutePath}\" is not a file!" }
+    check(file.length() > 0) { "File \"${file.absolutePath}\" is empty!" }
+    return file
+}
