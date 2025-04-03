@@ -73,3 +73,16 @@ fun File.assemble(text: String) {
     }
     writeText(text)
 }
+
+fun File.eff(): File {
+    if (!exists()) {
+        error("Location \"$absolutePath\" does not exist!")
+    }
+    if (!isFile) {
+        error("Location \"$absolutePath\" is not a file!")
+    }
+    if (length() == 0L) {
+        error("File \"$absolutePath\" is empty!")
+    }
+    return this
+}
