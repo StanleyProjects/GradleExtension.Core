@@ -2,11 +2,6 @@ package sp.gx.core
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import org.xml.sax.InputSource
-import sp.gx.core.util.element
-import sp.gx.core.util.single
-import java.io.StringReader
-import javax.xml.parsers.DocumentBuilderFactory
 
 internal class MavenTest {
     @Test
@@ -32,6 +27,7 @@ internal class MavenTest {
     }
 
     @Test
+    @Suppress("LongMethod")
     fun pomErrorTest() {
         Assertions.assertThrows(IllegalArgumentException::class.java) {
             @Suppress("IgnoredReturnValue")
@@ -131,78 +127,6 @@ internal class MavenTest {
                 artifactId = "bar",
                 version = "42",
                 packaging = " ",
-            )
-        }
-    }
-
-    @Test
-    fun metadataTest() {
-        val actual = Maven.metadata(
-            groupId = "foo",
-            artifactId = "bar",
-            version = "42",
-        )
-        val factory = DocumentBuilderFactory.newInstance()
-        val builder = factory.newDocumentBuilder()
-        val document = builder.parse(InputSource(StringReader(actual)))
-        val root = document.documentElement
-        Assertions.assertEquals("metadata", root.tagName)
-        Assertions.assertEquals("foo", root.single("groupId").textContent)
-        Assertions.assertEquals("bar", root.single("artifactId").textContent)
-        root.single("versioning").element().also { versioning ->
-            Assertions.assertEquals("42", versioning.single("versions").element().single("version").textContent)
-            Assertions.assertFalse(versioning.single("lastUpdated").textContent.isEmpty())
-        }
-    }
-
-    @Test
-    fun metadataErrorTest() {
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
-            @Suppress("IgnoredReturnValue")
-            Maven.metadata(
-                groupId = "",
-                artifactId = "",
-                version = "",
-            )
-        }
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
-            @Suppress("IgnoredReturnValue")
-            Maven.metadata(
-                groupId = " ",
-                artifactId = "",
-                version = "",
-            )
-        }
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
-            @Suppress("IgnoredReturnValue")
-            Maven.metadata(
-                groupId = "foo",
-                artifactId = "",
-                version = "",
-            )
-        }
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
-            @Suppress("IgnoredReturnValue")
-            Maven.metadata(
-                groupId = "foo",
-                artifactId = " ",
-                version = "",
-            )
-        }
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
-            @Suppress("IgnoredReturnValue")
-            Maven.metadata(
-                groupId = "foo",
-                artifactId = "bar",
-                version = "",
-            )
-        }
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
-            @Suppress("IgnoredReturnValue")
-            Maven.metadata(
-                groupId = "foo",
-                artifactId = "bar",
-                version = " ",
             )
         }
     }

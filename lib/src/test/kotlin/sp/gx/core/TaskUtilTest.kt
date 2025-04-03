@@ -7,11 +7,13 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 
 internal class TaskUtilTest {
     @Test
+    @Suppress("StringLiteralDuplication")
     fun taskTest() {
-        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+        val projectDir = Files.createTempDirectory("TaskUtilTest:taskTest").toFile().let {
             FileUtils.canonicalize(it)
         }
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
@@ -20,8 +22,9 @@ internal class TaskUtilTest {
     }
 
     @Test
+    @Suppress("StringLiteralDuplication")
     fun taskBlockTest() {
-        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+        val projectDir = Files.createTempDirectory("TaskUtilTest:taskBlockTest").toFile().let {
             FileUtils.canonicalize(it)
         }
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
@@ -35,8 +38,9 @@ internal class TaskUtilTest {
     }
 
     @Test
+    @Suppress("StringLiteralDuplication")
     fun taskWithNoTypeTest() {
-        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+        val projectDir = Files.createTempDirectory("TaskUtilTest:taskWithNoTypeTest").toFile().let {
             FileUtils.canonicalize(it)
         }
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
@@ -45,8 +49,9 @@ internal class TaskUtilTest {
     }
 
     @Test
+    @Suppress("StringLiteralDuplication")
     fun taskWithNoTypeBlockTest() {
-        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+        val projectDir = Files.createTempDirectory("TaskUtilTest:taskWithNoTypeBlockTest").toFile().let {
             FileUtils.canonicalize(it)
         }
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
@@ -60,8 +65,9 @@ internal class TaskUtilTest {
     }
 
     @Test
+    @Suppress("StringLiteralDuplication", "IgnoredReturnValue")
     fun getByNameTest() {
-        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+        val projectDir = Files.createTempDirectory("TaskUtilTest:getByNameTest").toFile().let {
             FileUtils.canonicalize(it)
         }
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
@@ -71,18 +77,21 @@ internal class TaskUtilTest {
     }
 
     @Test
+    @Suppress("StringLiteralDuplication", "IgnoredReturnValue")
     fun getByNameBlockTest() {
-        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+        val projectDir = Files.createTempDirectory("TaskUtilTest:getByNameBlockTest").toFile().let {
             FileUtils.canonicalize(it)
         }
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
-        val taskBuild = AtomicBoolean(false)
-        Assertions.assertFalse(taskBuild.get())
+        val counter = AtomicInteger(0)
+        Assertions.assertEquals(0, counter.get())
         project.task<DefaultTask>("foo", "bar", "", "baz", " ", "qux") {
-            taskBuild.set(true)
+            counter.incrementAndGet()
         }
-        val task = project.tasks.getByName<DefaultTask>("foo", "bar", "", "baz", " ", "qux")
+        val task = project.tasks.getByName<DefaultTask>("foo", "bar", "", "baz", " ", "qux") {
+            counter.incrementAndGet()
+        }
         Assertions.assertEquals("fooBarBazQux", task.name)
-        Assertions.assertTrue(taskBuild.get())
+        Assertions.assertEquals(2, counter.get())
     }
 }

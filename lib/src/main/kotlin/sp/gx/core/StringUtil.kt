@@ -31,6 +31,7 @@ fun String.uppercaseFirstChar(): String {
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
  * @since 0.5.0
  */
+@Suppress("StringLiteralDuplication")
 fun camelCase(segment: String, vararg other: String): String {
     require(segment.isNotBlank()) { "The first segment is blank!" }
     val builder = StringBuilder(segment)
@@ -54,6 +55,7 @@ fun camelCase(segment: String, vararg other: String): String {
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
  * @since 0.5.0
  */
+@Suppress("StringLiteralDuplication")
 fun kebabCase(segment: String, vararg other: String): String {
     require(segment.isNotBlank()) { "The first segment is blank!" }
     val builder = StringBuilder(segment)
@@ -94,6 +96,7 @@ fun String.filled(): String {
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
  * @since 0.5.0
  */
+@Suppress("StringLiteralDuplication")
 fun colonCase(segment: String, vararg other: String): String {
     require(segment.isNotBlank()) { "The first segment is blank!" }
     val builder = StringBuilder(segment)
@@ -118,6 +121,7 @@ fun colonCase(segment: String, vararg other: String): String {
  * @author [Stanley Wintergreen](https://github.com/kepocnhh)
  * @since 0.5.0
  */
+@Suppress("StringLiteralDuplication")
 fun slashCase(segment: String, vararg other: String): String {
     require(segment.isNotBlank()) { "The first segment is blank!" }
     val builder = StringBuilder(segment)

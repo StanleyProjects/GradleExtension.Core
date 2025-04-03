@@ -9,7 +9,7 @@ import java.nio.file.Files
 internal class ProjectUtilTest {
     @Test
     fun buildDirTest() {
-        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+        val projectDir = Files.createTempDirectory("ProjectUtilTest:buildDirTest").toFile().let {
             FileUtils.canonicalize(it)
         }
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
@@ -18,7 +18,7 @@ internal class ProjectUtilTest {
 
     @Test
     fun buildDirLayoutTest() {
-        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+        val projectDir = Files.createTempDirectory("ProjectUtilTest:buildDirLayoutTest").toFile().let {
             FileUtils.canonicalize(it)
         }
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
@@ -27,7 +27,7 @@ internal class ProjectUtilTest {
 
     @Test
     fun dirLayoutTest() {
-        val projectDir = Files.createTempDirectory("unittest").toFile().let {
+        val projectDir = Files.createTempDirectory("ProjectUtilTest:dirLayoutTest").toFile().let {
             FileUtils.canonicalize(it)
         }
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build()

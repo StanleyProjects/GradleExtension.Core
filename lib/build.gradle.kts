@@ -9,18 +9,20 @@ import sp.gx.core.asFile
 import sp.gx.core.assemble
 import sp.gx.core.buildDir
 import sp.gx.core.buildSrc
-import sp.gx.core.camelCase
 import sp.gx.core.check
+import sp.gx.core.create
 import sp.gx.core.dir
 import sp.gx.core.existing
 import sp.gx.core.file
 import sp.gx.core.filled
+import sp.gx.core.getByName
 import sp.gx.core.kebabCase
 import sp.gx.core.resolve
+import sp.gx.core.task
 import java.net.URL
 import java.util.Locale
 
-version = "0.5.4"
+version = "0.6.0"
 
 val maven = Maven.Artifact(
     group = "com.github.kepocnhh",
@@ -50,22 +52,22 @@ dependencies {
 jacoco.toolVersion = Version.jacoco
 
 tasks.getByName<JavaCompile>("compileJava") {
-    targetCompatibility = Version.jvmTarget.toString()
+    targetCompatibility = Version.jvmTarget
 }
 
 val compileKotlinTask = tasks.getByName<KotlinCompile>("compileKotlin") {
     kotlinOptions {
-        jvmTarget = Version.jvmTarget.toString()
+        jvmTarget = Version.jvmTarget
         freeCompilerArgs = freeCompilerArgs + setOf("-module-name", maven.moduleName())
     }
 }
 
 tasks.getByName<JavaCompile>("compileTestJava") {
-    targetCompatibility = Version.jvmTarget.toString()
+    targetCompatibility = Version.jvmTarget
 }
 
 tasks.getByName<KotlinCompile>("compileTestKotlin") {
-    kotlinOptions.jvmTarget = Version.jvmTarget.toString()
+    kotlinOptions.jvmTarget = Version.jvmTarget
 }
 
 fun Test.getExecutionData(): File {
@@ -118,7 +120,10 @@ task<JacocoCoverageVerification>("checkCoverage") {
     executionData(taskCoverageReport.executionData)
 }
 
-setOf("main", "test").also { types ->
+task<Detekt>("check", "CodeQuality") {
+    jvmTarget = Version.jvmTarget
+    val type = "main"
+    source = sourceSets.getByName(type).allSource
     val configs = setOf(
         "comments",
         "common",
@@ -137,35 +142,24 @@ setOf("main", "test").also { types ->
             .file()
             .filled()
     }
-    types.forEach { type ->
-        val postfix = when (type) {
-            "main" -> ""
-            "test" -> "UnitTest"
-            else -> error("Type \"$type\" is not supported!")
+    config.setFrom(configs)
+    val report = buildDir()
+        .dir("reports/analysis/code/quality/$type/html")
+        .asFile("index.html")
+    reports {
+        html {
+            required = true
+            outputLocation = report
         }
-        task<Detekt>(camelCase("check", "CodeQuality", postfix)) {
-            jvmTarget = Version.jvmTarget.toString()
-            source = sourceSets.getByName(type).allSource
-            config.setFrom(configs)
-            val report = buildDir()
-                .dir("reports/analysis/code/quality/$type/html")
-                .asFile("index.html")
-            reports {
-                html {
-                    required = true
-                    outputLocation = report
-                }
-                md.required = false
-                sarif.required = false
-                txt.required = false
-                xml.required = false
-            }
-            val detektTask = tasks.getByName<Detekt>(camelCase("detekt", type))
-            classpath.setFrom(detektTask.classpath)
-            doFirst {
-                println("Analysis report: ${report.absolutePath}")
-            }
-        }
+        md.required = false
+        sarif.required = false
+        txt.required = false
+        xml.required = false
+    }
+    val detektTask = tasks.getByName<Detekt>("detekt", type)
+    classpath.setFrom(detektTask.classpath)
+    doFirst {
+        println("Analysis report: ${report.absolutePath}")
     }
 }
 
@@ -180,7 +174,7 @@ task<Detekt>("checkDocumentation") {
             .file()
             .filled()
     }
-    jvmTarget = Version.jvmTarget.toString()
+    jvmTarget = Version.jvmTarget
     source = sourceSets.main.get().allSource
     config.setFrom(configs)
     val report = buildDir()
@@ -205,26 +199,25 @@ task<Detekt>("checkDocumentation") {
 
 "snapshot".also { variant ->
     val version = kebabCase(version.toString(), variant.uppercase(Locale.US))
-    task<Jar>(camelCase("assemble", variant, "Jar")) {
+    task<Jar>("assemble", variant, "Jar") {
         dependsOn(compileKotlinTask)
         archiveBaseName = maven.id
         archiveVersion = version
         from(compileKotlinTask.destinationDirectory.asFileTree)
     }
-    task<Jar>(camelCase("assemble", variant, "Source")) {
+    task<Jar>("assemble", variant, "Source") {
         archiveBaseName = maven.id
         archiveVersion = version
         archiveClassifier = "sources"
         from(sourceSets.main.get().allSource)
     }
-    task(camelCase("assemble", variant, "Pom")) {
+    tasks.create("assemble", variant, "Pom") {
         doLast {
             val file = buildDir()
                 .dir("libs")
                 .file("${kebabCase(maven.id, version)}.pom")
                 .assemble(
-                    Maven.pom(
-                        artifact = maven,
+                    maven.pom(
                         version = version,
                         packaging = "jar",
                     ),
@@ -232,21 +225,23 @@ task<Detekt>("checkDocumentation") {
             println("POM: ${file.absolutePath}")
         }
     }
-    task(camelCase("assemble", variant, "MavenMetadata")) {
+    tasks.create("assemble", variant, "MavenMetadata") {
         doLast {
             val file = buildDir()
-                .dir("xml")
-                .file("maven-metadata.xml")
+                .dir("yml")
+                .file("maven-metadata.yml")
                 .assemble(
-                    Maven.metadata(
-                        artifact = maven,
-                        version = version,
-                    ),
+                    """
+                        repository:
+                         groupId: '${maven.group}'
+                         artifactId: '${maven.id}'
+                        version: '$version'
+                    """.trimIndent(),
                 )
-            println("Maven metadata: ${file.absolutePath}")
+            println("Metadata: ${file.absolutePath}")
         }
     }
-    task<DokkaTask>(camelCase("assemble", variant, "Documentation")) {
+    task<DokkaTask>("assemble", variant, "Documentation") {
         outputDirectory = layout.buildDirectory.dir("documentation/$variant")
         moduleName = gh.name
         moduleVersion = version
@@ -260,7 +255,7 @@ task<Detekt>("checkDocumentation") {
                 localDirectory = file(path)
                 remoteUrl = gh.url().resolve("tree/${moduleVersion.get()}/lib", path)
             }
-            jdkVersion = Version.jvmTarget.majorVersion.toInt()
+            jdkVersion = Version.jvmTarget.toInt()
         }
         doLast {
             val index = outputDirectory.get()
@@ -271,7 +266,7 @@ task<Detekt>("checkDocumentation") {
             println("Documentation: ${index.absolutePath}")
         }
     }
-    task(camelCase("assemble", variant, "Metadata")) {
+    tasks.create("assemble", variant, "Metadata") {
         doLast {
             val file = buildDir()
                 .dir("yml")
@@ -287,7 +282,7 @@ task<Detekt>("checkDocumentation") {
             println("Metadata: ${file.absolutePath}")
         }
     }
-    task(camelCase("check", variant, "Readme")) {
+    tasks.create("check", variant, "Readme") {
         doLast {
             val badge = Markdown.image(
                 text = "version",
@@ -315,7 +310,7 @@ task<Detekt>("checkDocumentation") {
 
 "unstable".also { variant ->
     val version = "${version}u-SNAPSHOT"
-    task(camelCase("check", variant, "Readme")) {
+    tasks.create("check", variant, "Readme") {
         doLast {
             val badge = Markdown.image(
                 text = "version",
@@ -338,7 +333,7 @@ task<Detekt>("checkDocumentation") {
             )
         }
     }
-    task(camelCase("assemble", variant, "MavenMetadata")) {
+    tasks.create("assemble", variant, "MavenMetadata") {
         doLast {
             val file = buildDir()
                 .dir("yml")
@@ -354,26 +349,25 @@ task<Detekt>("checkDocumentation") {
             println("Metadata: ${file.absolutePath}")
         }
     }
-    task<Jar>(camelCase("assemble", variant, "Jar")) {
+    task<Jar>("assemble", variant, "Jar") {
         dependsOn(compileKotlinTask)
         archiveBaseName = maven.id
         archiveVersion = version
         from(compileKotlinTask.destinationDirectory.asFileTree)
     }
-    task<Jar>(camelCase("assemble", variant, "Source")) {
+    task<Jar>("assemble", variant, "Source") {
         archiveBaseName = maven.id
         archiveVersion = version
         archiveClassifier = "sources"
         from(sourceSets.main.get().allSource)
     }
-    task(camelCase("assemble", variant, "Pom")) {
+    tasks.create("assemble", variant, "Pom") {
         doLast {
             val file = buildDir()
                 .dir("libs")
                 .file("${kebabCase(maven.id, version)}.pom")
                 .assemble(
-                    Maven.pom(
-                        artifact = maven,
+                    maven.pom(
                         version = version,
                         packaging = "jar",
                     ),

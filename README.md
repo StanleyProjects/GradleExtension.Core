@@ -5,10 +5,10 @@ A few Gradle extensions.
 
 ## Snapshot
 
-![version](https://img.shields.io/static/v1?label=version&message=0.4.5-SNAPSHOT&labelColor=212121&color=2962ff&style=flat)
+![version](https://img.shields.io/static/v1?label=version&message=0.5.4-SNAPSHOT&labelColor=212121&color=2962ff&style=flat)
 
-- [Maven](https://s01.oss.sonatype.org/content/repositories/snapshots/com/github/kepocnhh/GradleExtension.Core/0.4.5-SNAPSHOT)
-- [Documentation](https://StanleyProjects.github.io/GradleExtension.Core/doc/0.4.5-SNAPSHOT)
+- [Maven](https://s01.oss.sonatype.org/content/repositories/snapshots/com/github/kepocnhh/GradleExtension.Core/0.5.4-SNAPSHOT)
+- [Documentation](https://StanleyProjects.github.io/GradleExtension.Core/doc/0.5.4-SNAPSHOT)
 
 ### Build
 ```
@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.kepocnhh:GradleExtension.Core:0.4.5-SNAPSHOT")
+    implementation("com.github.kepocnhh:GradleExtension.Core:0.5.4-SNAPSHOT")
 }
 ```
 
@@ -30,9 +30,9 @@ dependencies {
 
 ## Unstable
 
-![version](https://img.shields.io/static/v1?label=version&message=0.5.4u-SNAPSHOT&labelColor=212121&color=2962ff&style=flat)
+![version](https://img.shields.io/static/v1?label=version&message=0.6.0u-SNAPSHOT&labelColor=212121&color=2962ff&style=flat)
 
-- [Maven](https://s01.oss.sonatype.org/content/repositories/snapshots/com/github/kepocnhh/GradleExtension.Core/0.5.4u-SNAPSHOT)
+- [Maven](https://s01.oss.sonatype.org/content/repositories/snapshots/com/github/kepocnhh/GradleExtension.Core/0.6.0u-SNAPSHOT)
 
 ### Build
 ```
@@ -46,6 +46,6 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.kepocnhh:GradleExtension.Core:0.5.4u-SNAPSHOT")
+    implementation("com.github.kepocnhh:GradleExtension.Core:0.6.0u-SNAPSHOT")
 }
 ```
