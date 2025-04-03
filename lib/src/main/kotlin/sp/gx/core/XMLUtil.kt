@@ -9,10 +9,6 @@ fun Directory.xml(path: String): Node {
     return XmlParser().parse(file(path).asFile)
 }
 
-fun String.xml(): Node {
-    return XmlParser().parseText(this)
-}
-
 fun String.qn(): QName {
     return QName.valueOf(this)
 }

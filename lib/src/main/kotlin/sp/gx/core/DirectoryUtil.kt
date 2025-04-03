@@ -21,8 +21,14 @@ fun Directory.asFile(path: String): File {
 
 fun Directory.eff(path: String): File {
     val file = file(path).asFile
-    check(file.exists()) { "Location \"${file.absolutePath}\" does not exist!" }
-    check(file.isFile) { "Location \"${file.absolutePath}\" is not a file!" }
-    check(file.length() > 0) { "File \"${file.absolutePath}\" is empty!" }
+    if (!file.exists()) {
+        error("Location \"${file.absolutePath}\" does not exist!")
+    }
+    if (!file.isFile) {
+        error("Location \"${file.absolutePath}\" is not a file!")
+    }
+    if (file.length() == 0L) {
+        error("File \"${file.absolutePath}\" is empty!")
+    }
     return file
 }
