@@ -81,7 +81,6 @@ fun Node.string(key: QName): String {
  */
 fun <T : Any> Node.map(name: QName, transform: (Node) -> T): List<T> {
     val list = getAt(name)
-    list.map {  }
     val size = list.size
     if (size == 0) return emptyList()
     val result = ArrayList<T>(size)
