@@ -73,3 +73,32 @@ fun File.assemble(text: String) {
     }
     writeText(text)
 }
+
+/**
+ * Usage:
+ * ```
+ * val file = File("/tmp/bar").eff()
+ * assertTrue(file.exists())
+ * assertTrue(file.isFile)
+ * assertTrue(file.length() > 0)
+ * ```
+ *
+ * @return [this] receiver file.
+ * @throws IllegalStateException if [this] receiver file does not exist.
+ * @throws IllegalStateException if [this] receiver file is not a normal file.
+ * @throws IllegalStateException if [this] receiver file is empty.
+ * @author [Stanley Wintergreen](https://github.com/kepocnhh)
+ * @since 0.6.1
+ */
+fun File.eff(): File {
+    if (!exists()) {
+        error("Location \"$absolutePath\" does not exist!")
+    }
+    if (!isFile) {
+        error("Location \"$absolutePath\" is not a file!")
+    }
+    if (length() == 0L) {
+        error("File \"$absolutePath\" is empty!")
+    }
+    return this
+}

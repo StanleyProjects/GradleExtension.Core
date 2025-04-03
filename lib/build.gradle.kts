@@ -12,17 +12,14 @@ import sp.gx.core.buildSrc
 import sp.gx.core.check
 import sp.gx.core.create
 import sp.gx.core.dir
-import sp.gx.core.existing
-import sp.gx.core.file
-import sp.gx.core.filled
-import sp.gx.core.getByName
+import sp.gx.core.eff
 import sp.gx.core.kebabCase
 import sp.gx.core.resolve
 import sp.gx.core.task
 import java.net.URL
 import java.util.Locale
 
-version = "0.5.4"
+version = "0.6.1"
 
 val maven = Maven.Artifact(
     group = "com.github.kepocnhh",
@@ -52,22 +49,22 @@ dependencies {
 jacoco.toolVersion = Version.jacoco
 
 tasks.getByName<JavaCompile>("compileJava") {
-    targetCompatibility = Version.jvmTarget.toString()
+    targetCompatibility = Version.jvmTarget
 }
 
 val compileKotlinTask = tasks.getByName<KotlinCompile>("compileKotlin") {
     kotlinOptions {
-        jvmTarget = Version.jvmTarget.toString()
+        jvmTarget = Version.jvmTarget
         freeCompilerArgs = freeCompilerArgs + setOf("-module-name", maven.moduleName())
     }
 }
 
 tasks.getByName<JavaCompile>("compileTestJava") {
-    targetCompatibility = Version.jvmTarget.toString()
+    targetCompatibility = Version.jvmTarget
 }
 
 tasks.getByName<KotlinCompile>("compileTestKotlin") {
-    kotlinOptions.jvmTarget = Version.jvmTarget.toString()
+    kotlinOptions.jvmTarget = Version.jvmTarget
 }
 
 fun Test.getExecutionData(): File {
@@ -82,7 +79,7 @@ val taskUnitTest = task<Test>("checkUnitTest") {
     classpath = sourceSets.test.get().runtimeClasspath
     jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED") // https://github.com/gradle/gradle/issues/18647
     doLast {
-        getExecutionData().existing().file().filled()
+        getExecutionData().eff()
     }
 }
 
@@ -99,10 +96,7 @@ val taskCoverageReport = task<JacocoReport>("assembleCoverageReport") {
     doLast {
         val report = buildDir()
             .dir("reports/jacoco/$name/html")
-            .file("index.html")
-            .existing()
-            .file()
-            .filled()
+            .eff("index.html")
         println("Coverage report: ${report.absolutePath}")
     }
 }
@@ -120,7 +114,9 @@ task<JacocoCoverageVerification>("checkCoverage") {
     executionData(taskCoverageReport.executionData)
 }
 
-setOf("main", "test").also { types ->
+task<Detekt>("check", "CodeQuality") {
+    jvmTarget = Version.jvmTarget
+    source = sourceSets.main.get().allSource
     val configs = setOf(
         "comments",
         "common",
@@ -134,40 +130,26 @@ setOf("main", "test").also { types ->
         "style",
     ).map { config ->
         buildSrc.dir("src/main/resources/detekt/config")
-            .file("$config.yml")
-            .existing()
-            .file()
-            .filled()
+            .eff("$config.yml")
     }
-    types.forEach { type ->
-        val postfix = when (type) {
-            "main" -> ""
-            "test" -> "UnitTest"
-            else -> error("Type \"$type\" is not supported!")
+    config.setFrom(configs)
+    val report = buildDir()
+        .dir("reports/analysis/code/quality/html")
+        .asFile("index.html")
+    reports {
+        html {
+            required = true
+            outputLocation = report
         }
-        task<Detekt>("check", "CodeQuality", postfix) {
-            jvmTarget = Version.jvmTarget.toString()
-            source = sourceSets.getByName(type).allSource
-            config.setFrom(configs)
-            val report = buildDir()
-                .dir("reports/analysis/code/quality/$type/html")
-                .asFile("index.html")
-            reports {
-                html {
-                    required = true
-                    outputLocation = report
-                }
-                md.required = false
-                sarif.required = false
-                txt.required = false
-                xml.required = false
-            }
-            val detektTask = tasks.getByName<Detekt>("detekt", type)
-            classpath.setFrom(detektTask.classpath)
-            doFirst {
-                println("Analysis report: ${report.absolutePath}")
-            }
-        }
+        md.required = false
+        sarif.required = false
+        txt.required = false
+        xml.required = false
+    }
+    val detektTask = tasks.getByName<Detekt>("detektMain")
+    classpath.setFrom(detektTask.classpath)
+    doFirst {
+        println("Analysis report: ${report.absolutePath}")
     }
 }
 
@@ -177,12 +159,9 @@ task<Detekt>("checkDocumentation") {
         "documentation",
     ).map { config ->
         buildSrc.dir("src/main/resources/detekt/config")
-            .file("$config.yml")
-            .existing()
-            .file()
-            .filled()
+            .eff("$config.yml")
     }
-    jvmTarget = Version.jvmTarget.toString()
+    jvmTarget = Version.jvmTarget
     source = sourceSets.main.get().allSource
     config.setFrom(configs)
     val report = buildDir()
@@ -225,8 +204,7 @@ task<Detekt>("checkDocumentation") {
                 .dir("libs")
                 .file("${kebabCase(maven.id, version)}.pom")
                 .assemble(
-                    Maven.pom(
-                        artifact = maven,
+                    maven.pom(
                         version = version,
                         packaging = "jar",
                     ),
@@ -264,14 +242,11 @@ task<Detekt>("checkDocumentation") {
                 localDirectory = file(path)
                 remoteUrl = gh.url().resolve("tree/${moduleVersion.get()}/lib", path)
             }
-            jdkVersion = Version.jvmTarget.majorVersion.toInt()
+            jdkVersion = Version.jvmTarget.toInt()
         }
         doLast {
             val index = outputDirectory.get()
-                .file("index.html")
-                .existing()
-                .file()
-                .filled()
+                .eff("index.html")
             println("Documentation: ${index.absolutePath}")
         }
     }
@@ -376,8 +351,7 @@ task<Detekt>("checkDocumentation") {
                 .dir("libs")
                 .file("${kebabCase(maven.id, version)}.pom")
                 .assemble(
-                    Maven.pom(
-                        artifact = maven,
+                    maven.pom(
                         version = version,
                         packaging = "jar",
                     ),
