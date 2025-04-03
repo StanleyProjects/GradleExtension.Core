@@ -15,7 +15,6 @@ import sp.gx.core.dir
 import sp.gx.core.existing
 import sp.gx.core.file
 import sp.gx.core.filled
-import sp.gx.core.getByName
 import sp.gx.core.kebabCase
 import sp.gx.core.resolve
 import sp.gx.core.task
@@ -122,8 +121,7 @@ task<JacocoCoverageVerification>("checkCoverage") {
 
 task<Detekt>("check", "CodeQuality") {
     jvmTarget = Version.jvmTarget
-    val type = "main"
-    source = sourceSets.getByName(type).allSource
+    source = sourceSets.main.get().allSource
     val configs = setOf(
         "comments",
         "common",
@@ -144,7 +142,7 @@ task<Detekt>("check", "CodeQuality") {
     }
     config.setFrom(configs)
     val report = buildDir()
-        .dir("reports/analysis/code/quality/$type/html")
+        .dir("reports/analysis/code/quality/html")
         .asFile("index.html")
     reports {
         html {
@@ -156,7 +154,7 @@ task<Detekt>("check", "CodeQuality") {
         txt.required = false
         xml.required = false
     }
-    val detektTask = tasks.getByName<Detekt>("detekt", type)
+    val detektTask = tasks.getByName<Detekt>("detektMain")
     classpath.setFrom(detektTask.classpath)
     doFirst {
         println("Analysis report: ${report.absolutePath}")
