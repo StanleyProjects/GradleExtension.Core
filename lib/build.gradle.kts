@@ -12,9 +12,7 @@ import sp.gx.core.buildSrc
 import sp.gx.core.check
 import sp.gx.core.create
 import sp.gx.core.dir
-import sp.gx.core.existing
-import sp.gx.core.file
-import sp.gx.core.filled
+import sp.gx.core.eff
 import sp.gx.core.kebabCase
 import sp.gx.core.resolve
 import sp.gx.core.task
@@ -81,7 +79,7 @@ val taskUnitTest = task<Test>("checkUnitTest") {
     classpath = sourceSets.test.get().runtimeClasspath
     jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED") // https://github.com/gradle/gradle/issues/18647
     doLast {
-        getExecutionData().existing().file().filled()
+        getExecutionData().eff()
     }
 }
 
@@ -98,10 +96,7 @@ val taskCoverageReport = task<JacocoReport>("assembleCoverageReport") {
     doLast {
         val report = buildDir()
             .dir("reports/jacoco/$name/html")
-            .file("index.html")
-            .existing()
-            .file()
-            .filled()
+            .eff("index.html")
         println("Coverage report: ${report.absolutePath}")
     }
 }
@@ -135,10 +130,7 @@ task<Detekt>("check", "CodeQuality") {
         "style",
     ).map { config ->
         buildSrc.dir("src/main/resources/detekt/config")
-            .file("$config.yml")
-            .existing()
-            .file()
-            .filled()
+            .eff("$config.yml")
     }
     config.setFrom(configs)
     val report = buildDir()
@@ -167,10 +159,7 @@ task<Detekt>("checkDocumentation") {
         "documentation",
     ).map { config ->
         buildSrc.dir("src/main/resources/detekt/config")
-            .file("$config.yml")
-            .existing()
-            .file()
-            .filled()
+            .eff("$config.yml")
     }
     jvmTarget = Version.jvmTarget
     source = sourceSets.main.get().allSource
@@ -257,10 +246,7 @@ task<Detekt>("checkDocumentation") {
         }
         doLast {
             val index = outputDirectory.get()
-                .file("index.html")
-                .existing()
-                .file()
-                .filled()
+                .eff("index.html")
             println("Documentation: ${index.absolutePath}")
         }
     }
